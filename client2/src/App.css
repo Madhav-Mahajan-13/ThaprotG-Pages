@@ -1,0 +1,31 @@
+/* Main Layout */
+.app-container {
+  display: flex; /* Flexbox layout */
+  flex-direction: row; /* Sidebar on the left, content on the right */
+}
+
+.sidebar {
+  width: 250px; /* Fixed width for sidebar */
+  height: 100vh; /* Full viewport height */
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #333; /* Sidebar background color */
+  color: white;
+  overflow-y: auto; /* Enable scrolling if content overflows */
+}
+
+.gallery-container {
+  margin-left: 250px; /* Start gallery after the sidebar */
+  flex: 1; /* Take up remaining space */
+  padding: 2rem; /* Add padding to prevent content from touching edges */
+  background-color: #f9f9f9; /* Gallery background */
+  min-height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Enable scrolling if gallery content exceeds viewport */
+}
+.main-content {
+  flex: 1;
+  margin-left: 300px;
+  transition: margin-right 0.3s ease;
+  padding: 2rem;
+}
