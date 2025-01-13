@@ -20,6 +20,7 @@ app.use("/api/alumprojects",alumProjectRouter);
 
 app.use("/api/gallery",galleryRouter)
 
+
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
 });
