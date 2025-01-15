@@ -3,7 +3,10 @@ import "../styling/Sidebar.css";
 
 const Sidebar = () => {
   const [showChat, setShowChat] = useState(false);
-
+  const [showProject, setShowProject]=useState(false)
+  const toggleYourProject =() =>{
+    setShowProject(!showProject);
+  }
   const toggleChat = () => {
     setShowChat(!showChat);
   };
@@ -64,7 +67,7 @@ const Sidebar = () => {
             <button className="chat-button" >
              Quick Post
             </button>
-            <button className="chat-button" onClick={toggleChat}>
+            <button className="chat-button" onClick={toggleYourProject}>
               Your Projects
             </button>
             <button className="chat-button" onClick={toggleChat}>
@@ -95,6 +98,21 @@ const Sidebar = () => {
         </div>
         <div className="chat-body">
           <p>Welcome to the chat!</p>
+          {/* Add your chat content here */}
+        </div>
+      </div>
+
+
+      {/* Your Project Window */}
+      <div className={`chat-window ${showProject ? "open" : ""}`}>
+        <div className="chat-header">
+          <span>Your Projects</span>
+          <button onClick={toggleYourProject} className="chat-close-button">
+            ✖
+          </button>
+        </div>
+        <div className="chat-body">
+          <p>render the project elememt</p>
           {/* Add your chat content here */}
         </div>
       </div>

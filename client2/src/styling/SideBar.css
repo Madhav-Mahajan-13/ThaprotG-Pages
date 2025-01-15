@@ -5,7 +5,12 @@
   top: 0;
   height: 100%;
   width: 20%;
-  background: linear-gradient(to bottom, #6a11cb, #2575fc);
+  background: linear-gradient(to bottom, #000000, #ff1a1a, #000000);
+  background: linear-gradient(135deg, #ff0000, #000000);
+  background: radial-gradient(circle, #ff0000, #8b0000, #000000);
+  background: radial-gradient(circle, #ff4500, #ff0000, #000000);
+
+
   color: white;
   box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
   padding: 1rem 0;
