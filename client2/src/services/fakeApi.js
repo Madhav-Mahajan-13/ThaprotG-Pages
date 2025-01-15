@@ -4,7 +4,7 @@ export const fetchImages = async (page = 1, limit = 20) => {
     const totalImages = 100;
     const images = Array.from({ length: totalImages }, (_, i) => ({
       id: i + 1,
-      imageUrl: `https://via.placeholder.com/200x150?text=Image+${i + 1}`,
+      imageUrl: `https://picsum.photos/200`,
       text: `Image Description ${i + 1}`,
     }));
   
