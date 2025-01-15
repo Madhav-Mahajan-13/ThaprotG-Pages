@@ -18,7 +18,9 @@ app.use(cors());
 
 app.use("/api/alumprojects",alumProjectRouter);
 
-app.use("/api/gallery",galleryRouter)
+app.use("/api/gallery",galleryRouter);
+
+app.use("/api/",);
 
 
 app.listen(port, () => {
