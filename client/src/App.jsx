@@ -26,15 +26,15 @@ function App() {
     <Container>
     <Routes>
     <Route path="/" element={<Landing/>} ></Route>
+    <Route path='/login' element={<SignIn/>}/>
+    <Route path='/register' element={<SignUp/>}/>
+    <Route path='/forgot' element={<Forgot/>}/>
+    <Route path='/otp/:token/:email' element={<OTP/>}/>
+    <Route path='/passreset/:token/:email' element={<Reset/>}/>
     <Route path="/studentproject" element={<StudentProject/>} ></Route>
     <Route path="/alumachievements" element={<AlumAchievement/>} ></Route>
     <Route path="/alumproject" element={<AlumProject/>} ></Route>
     <Route path="/campusgallery" element={<CampusGallery/>} ></Route>
-    {/* <Route path='/login' element={<SignIn/>}/>
-    <Route path='/register' element={<SignUp/>}/>
-    <Route path='/forgot' element={<Forgot/>}/>
-    <Route path='/otp/:token/:email' element={<OTP/>}/>
-    <Route path='/passreset/:token/:email' element={<Reset/>}/> */}
     </Routes>
 
     </Container>
