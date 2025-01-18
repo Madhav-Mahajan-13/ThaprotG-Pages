@@ -128,104 +128,102 @@ export default function SignIn(props) {
   }
 
   return (
-    // <AppTheme {...props}>
-    // <AppTheme {...props}>
-    //   <CssBaseline enableColorScheme />
-    //   <ToastContainer/>
-    //   <SignInContainer direction="column" justifyContent="space-between">
-    //     <Card variant="outlined">
-    //       <Typography
-    //         component="h1"
-    //         variant="h4"
-    //         sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-    //       >
-    //         Sign in
-    //       </Typography>
-    //       <Box
-    //         component="form"
-    //         noValidate
-    //         sx={{
-    //           display: 'flex',
-    //           flexDirection: 'column',
-    //           width: '100%',
-    //           gap: 2,
-    //         }}
-    //       >
-    //         <FormControl>
-    //           <FormLabel htmlFor="email">Email</FormLabel>
-    //           <TextField
-    //             id="email"
-    //             type="email"
-    //             name="email"
-    //             placeholder="your@email.com"
-    //             autoComplete="email"
-    //             autoFocus
-    //             required
-    //             fullWidth
-    //             variant="outlined"
-    //             color={'primary'}
-    //             sx={{ ariaLabel: 'email' }}
-    //           />
-    //         </FormControl>
-    //         <FormControl>
-    //           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-    //             <FormLabel htmlFor="password">Password</FormLabel>
-    //             <span>
-    //             <Link
-    //               to="/forgot"
-    //               component="button"
-    //               type="button"
-    //               variant="body2"
-    //               sx={{ alignSelf: 'baseline' }}
-    //             >
-    //               Forgot your password ?
-    //             </Link>
-    //             </span>
-    //           </Box>
-    //           <TextField
-    //             name="password"
-    //             placeholder="••••••"
-    //             type="password"
-    //             id="password"
-    //             autoComplete="current-password"
-    //             autoFocus
-    //             required
-    //             fullWidth
-    //             variant="outlined"
-    //             color={'primary'}
-    //           />
-    //         </FormControl>
-    //         <FormControlLabel
-    //           control={<Checkbox value="remember" color="primary" />}
-    //           label="Remember me"
-    //           onClick={() => {
-    //             check?setCheck(false):setCheck(true);
-    //           }}
-    //         />
-    //         <Button
-    //           type="submit"
-    //           fullWidth
-    //           variant="contained"
-    //           onClick={handleSubmit}
-    //         >
-    //           Sign in
-    //         </Button>
-    //         <Typography sx={{ textAlign: 'center' }}>
-    //           Don&apos;t have an account?{' '}
-    //           <span>
-    //             <Link
-    //              to="/register"
-    //               variant="body2"
-    //               sx={{ alignSelf: 'center' }}
-    //             >
-    //               Sign up
-    //             </Link>
-    //           </span>
-    //         </Typography>
-    //       </Box>
-    //     </Card>
-    //   </SignInContainer>
-    // </AppTheme>
-    <h1>HELLO WORLD</h1>
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <ToastContainer/>
+      <SignInContainer direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+          >
+            Sign in
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              gap: 2,
+            }}
+          >
+            <FormControl>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <TextField
+                id="email"
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                autoComplete="email"
+                autoFocus
+                required
+                fullWidth
+                variant="outlined"
+                color={'primary'}
+                sx={{ ariaLabel: 'email' }}
+              />
+            </FormControl>
+            <FormControl>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <FormLabel htmlFor="password">Password</FormLabel>
+                <span>
+                <Link
+                  to="/forgot"
+                  component="button"
+                  type="button"
+                  variant="body2"
+                  sx={{ alignSelf: 'baseline' }}
+                >
+                  Forgot your password ?
+                </Link>
+                </span>
+              </Box>
+              <TextField
+                name="password"
+                placeholder="••••••"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                autoFocus
+                required
+                fullWidth
+                variant="outlined"
+                color={'primary'}
+              />
+            </FormControl>
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+              onClick={() => {
+                check?setCheck(false):setCheck(true);
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              Sign in
+            </Button>
+            <Typography sx={{ textAlign: 'center' }}>
+              Don&apos;t have an account?{' '}
+              <span>
+                <Link
+                 to="/register"
+                  variant="body2"
+                  sx={{ alignSelf: 'center' }}
+                >
+                  Sign up
+                </Link>
+              </span>
+            </Typography>
+          </Box>
+        </Card>
+      </SignInContainer>
+    </AppTheme>
   );
 }
