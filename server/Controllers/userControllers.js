@@ -64,7 +64,7 @@ export const postProject = async(req,res)=>{
 
 
         //  user type se define bhi karna hai 
-        
+
         const { name, description } = req.body;
         const image = req.files.image[0];
         const pdf = req.files.pdf[0];
@@ -82,3 +82,28 @@ export const postProject = async(req,res)=>{
 
 // const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+export const getYourProjects = async (req, res) => {
+    const id = req.body._id; // Get user ID from the request body
+
+    try {
+        // Query the database for projects associated with the user ID
+        const result = await db.query(
+            `SELECT title, project_id, status, created_at, pdf_link 
+             FROM projects 
+             WHERE user_id = $1`, 
+            [id]
+        );
+
+        // Send the result as a JSON response
+        return res.status(200).json(result.rows);
+    } catch (error) {
+        console.error("Error fetching projects:", error);
+
+        // Send an error response
+        return res.status(500).json({ error: "Failed to fetch projects" });
+    }
+};
+
+

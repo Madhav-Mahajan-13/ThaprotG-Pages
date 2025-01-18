@@ -74,8 +74,8 @@ const generateRandomProjects = (count) => {
         "React", "Node.js", "Python", "Machine Learning", 
         "Docker", "TensorFlow", "Blockchain"
       ].sort(() => 0.5 - Math.random()).slice(0, 3),
-      image: `/images/project-placeholder-${(i % 5) + 1}.jpg`,
-      githubLink: `https://github.com/alumni-projects/project-${i + 1}`,
+      image: `https://picsum.photos/200`,
+      githubLink: `https://www.youtube.com/watch?v=k85UB5b6pJU`,
       status: ["Completed", "In Progress", "Looking for Collaborators"][Math.floor(Math.random() * 3)]
     });
   }

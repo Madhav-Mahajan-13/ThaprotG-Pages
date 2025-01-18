@@ -1,8 +1,12 @@
 import React from "react";
 import "../styling/AlumProject/ProjectCard.css"
 const ProjectCard = ({ project }) => {
+
+  const handleclick =()=>{
+    window.open(project.githubLink, "_blank");
+  };
   return (
-    <div className="project-card">
+    <div className="project-card" onClick={handleclick}>
       <div className="image-section">
         <img src={project.image} alt={project.name} className="project-image" />
       </div>
