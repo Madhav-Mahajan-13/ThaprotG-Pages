@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import "../styling/SideBar3.css";
+import { Dashboard } from "./Dashboard";
 
 const SectionWindow = ({ title, show, toggle, children }) => (
   <div className={`side-window ${show ? "open" : ""}`}>
@@ -128,11 +129,11 @@ const Sidebar = () => {
   const [showChat, setShowChat] = useState(false);
   const [showProject, setShowProject] = useState(false);
   const [showQuickPost, setQuickPost] = useState(false);
-
+  const [showProfile, setShowProfile] = useState(false);
   const toggleChat = () => setShowChat(!showChat);
   const toggleYourProject = () => setShowProject(!showProject);
   const toggleQuickPost = () => setQuickPost(!showQuickPost);
-
+  const toggleYourProfile =()=> setShowProfile(!showProfile)
   return (
     <div className={`app-container ${showChat ? "chat-active" : ""}`}>
       {/* Sidebar */}
@@ -194,7 +195,10 @@ const Sidebar = () => {
             <button className="chat-button" onClick={toggleYourProject}>
               Your Projects
             </button>
-            <button className="chat-button">Your Profile</button>
+            {/* <button className="chat-button"><a href="/profile">Your Profile</a></button> */}
+            <button className="chat-button" onClick={toggleYourProfile}>
+              Your Profile
+            </button>
           </div>
 
           {/* Logout Button */}
@@ -230,6 +234,13 @@ const Sidebar = () => {
         toggle={toggleQuickPost}
       >
         <QuickPostForm />
+      </SectionWindow>
+
+      <SectionWindow 
+      title="dashboard"
+      show={showProfile}
+      toggle={toggleYourProfile}>
+        <Dashboard/>
       </SectionWindow>
     </div>
   );

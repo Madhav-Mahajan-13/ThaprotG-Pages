@@ -14,6 +14,9 @@ import Forgot from './pages/forgot';
 import OTP from './pages/OTP';
 import Reset from './pages/reset';
 import MyProvider from './context/provider';
+// import UserProfile from './pages/ProfilePage';
+// import Dashboard from './pages/ProfilePage';
+import UserProfile from './pages/UserPage';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +38,10 @@ const router = createBrowserRouter([
       {
         path:'campusgallery',
         element:<CampusGallery/>
+      },
+      {
+        path:'profile',
+        element:<UserProfile></UserProfile>
       }
     ]
   },

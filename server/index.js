@@ -4,6 +4,7 @@ import pg from "pg";
 import dotenv from "dotenv";
 import alumProjectRouter from "./Route/alumProjectRoute.js";
 import galleryRouter from "./Route/galleryRoute.js";
+import { userRouter } from "./Route/userRoute.js";
 
 
 dotenv.config();
@@ -20,7 +21,7 @@ app.use("/api/alumprojects",alumProjectRouter);
 
 app.use("/api/gallery",galleryRouter);
 
-app.use("/api/",);
+app.use("/api/user",userRouter);
 
 
 app.listen(port, () => {

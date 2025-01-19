@@ -1,0 +1,129 @@
+/* General Styling */
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 20px;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.profile-picture {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.profile-info h1 {
+  margin: 0;
+}
+
+.bio {
+  color: #555;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.connect-button,
+.message-button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.connect-button {
+  background-color: #0073b1;
+  color: white;
+}
+
+.message-button {
+  background-color: #eee;
+}
+
+/* Connections and Activity Sections */
+.connections-section,
+.activity-section {
+  margin-top: 20px;
+}
+
+.connections-section h2,
+.activity-section h2 {
+  margin-bottom: 10px;
+}
+
+.connection {
+  margin-bottom: 10px;
+}
+
+.post {
+  margin-bottom: 15px;
+}
+
+.post small {
+  color: #888;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-picture {
+    margin-right: 0; /* Remove right margin */
+    margin-bottom: 10px;
+    width: 120px; /* Reduce size for smaller screens */
+    height: 120px;
+  }
+
+  .action-buttons {
+    flex-direction: row; /* Buttons side-by-side on smaller screens */
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-info h1 {
+    font-size: 1.5rem; /* Smaller heading size */
+  }
+
+  .connect-button,
+  .message-button {
+    padding: 8px 15px; /* Reduce button padding */
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .connections-section ul,
+  .activity-section ul {
+    padding-left: 0; /* Remove list padding for smaller screens */
+  }
+
+  .connections-section li,
+  .activity-section li {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+}
