@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import "../styling/SideBar.css";
+import "../styling/SideBar3.css";
 
 const SectionWindow = ({ title, show, toggle, children }) => (
   <div className={`side-window ${show ? "open" : ""}`}>

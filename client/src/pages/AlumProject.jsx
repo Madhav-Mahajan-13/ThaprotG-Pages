@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../styling/AlumProject/AlumProject.css"
+// import "../styling/AlumProject/AlumProject.css"
+import "../styling/alum.css"
 import { fetchProjects } from "../services/fakeApi_Project.js"; // API request
 import SearchBar from "../components/SearchBar.jsx";
 import ProjectCard from "../components/ProjectCard.jsx";
