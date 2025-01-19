@@ -49,7 +49,8 @@ export const Dashboard = ({ userId }) => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/user/${userId}`, formData);
+        console.log(formData);
+      await axios.post(`http://localhost:5000/api/user/dashboard/${userId}`, formData);
       setIsEditing(false);
       alert("Data saved successfully!");
     } catch (error) {
@@ -122,7 +123,7 @@ export const Dashboard = ({ userId }) => {
               </label>
               <input
                 className="form-input"
-                type="date"
+                type="number"
                 id="graduationDate"
                 name="graduationDate"
                 value={formData.graduationDate}
