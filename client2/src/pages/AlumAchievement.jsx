@@ -1,5 +1,10 @@
+import "../styling/AlumAchievement.css"
+
 const AlumAchievement = () => {
-    return (<> alum achievements</>  );
+    return (<> <div className="right">
+        alum achievements
+    </div>
+    </>  );
 }
  
 export default AlumAchievement;
