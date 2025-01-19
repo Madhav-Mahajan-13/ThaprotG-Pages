@@ -4,10 +4,12 @@ import axios from "axios";
 export const Dashboard = ({ userId }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     graduationDate: "",
     bio: "",
+    profilePicture: "",
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -15,13 +17,20 @@ export const Dashboard = ({ userId }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`/api/users/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/user/dashboard/${userId}`
+        );
+
+        // Populate formData with API response
         setFormData({
-          name: response.data.name || "",
+          firstName: response.data.first_name || "",
+          lastName: response.data.last_name || "",
           email: response.data.email || "",
-          graduationDate: response.data.graduationDate || "",
+          graduationDate: response.data.date_of_graduation || "",
           bio: response.data.bio || "",
+          profilePicture: response.data.profile_picture || "https://picsum.photos/200/300",
         });
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -41,7 +50,7 @@ export const Dashboard = ({ userId }) => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`/api/users/${userId}`, formData);
+      await axios.put(`http://localhost:5000/api/user/${userId}`, formData);
       setIsEditing(false);
       alert("Data saved successfully!");
     } catch (error) {
@@ -64,12 +73,22 @@ export const Dashboard = ({ userId }) => {
         <div>
           <form>
             <div>
-              <label htmlFor="name">Name:</label>
+              <label htmlFor="firstName">First Name:</label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="lastName">Last Name:</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleInputChange}
               />
             </div>
@@ -86,7 +105,7 @@ export const Dashboard = ({ userId }) => {
             <div>
               <label htmlFor="graduationDate">Date of Graduation:</label>
               <input
-                type="date"
+                type="number"
                 id="graduationDate"
                 name="graduationDate"
                 value={formData.graduationDate}
@@ -115,10 +134,17 @@ export const Dashboard = ({ userId }) => {
       ) : (
         <div>
           <div>
-            <img src="https://picsum.photos/200/300" alt="Profile" />
+            <img
+              src={formData.profilePicture}
+              alt="Profile"
+              style={{ width: "200px", height: "300px" }}
+            />
           </div>
           <div>
-            <p>Name: {formData.name || "N/A"}</p>
+            <p>First Name: {formData.firstName || "N/A"}</p>
+          </div>
+          <div>
+            <p>Last Name: {formData.lastName || "N/A"}</p>
           </div>
           <div>
             <p>Email: {formData.email || "N/A"}</p>
