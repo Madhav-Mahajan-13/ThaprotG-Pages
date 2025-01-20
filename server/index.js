@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import alumProjectRouter from "./Route/alumProjectRoute.js";
 import galleryRouter from "./Route/galleryRoute.js";
 import { userRouter } from "./Route/userRoute.js";
+import loginSignupRoute from './Route/loginSignupRoute.js'
 
 
 dotenv.config();
