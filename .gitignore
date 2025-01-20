@@ -7,6 +7,7 @@
 /client/node_modules
 /client2/node_modules
 /server/node_modules
+/server/.env
 
 
 # testing
@@ -16,7 +17,6 @@
 /build
 
 # misc
-/server/.env
 .DS_Store
 .env
 .env.local
