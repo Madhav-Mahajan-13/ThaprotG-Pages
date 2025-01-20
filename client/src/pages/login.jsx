@@ -84,7 +84,7 @@ export default function SignIn(props) {
       return;
     }
 
-    const res = await fetch(backendHost+'/api/login',{
+    const res = await fetch(backendHost+'/api/auth/login',{
       method:"POST",
       headers:{
         "Content-Type":"application/json"

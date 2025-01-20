@@ -17,7 +17,6 @@ import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../context/context.jsx';
 import { toast,ToastContainer } from 'react-toastify';
 
-const registerRoute = 'http://localhost:80/api/register';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -64,7 +63,7 @@ export default function SignUp(props) {
 
   const date = new Date();
   const navigate = useNavigate();
-  const {toastOptions} = React.useContext(MyContext);
+  const {toastOptions,backendHost} = React.useContext(MyContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -113,7 +112,7 @@ export default function SignUp(props) {
         return;
       }
 
-      const data = await fetch(registerRoute,{
+      const data = await fetch(backendHost + '/api/auth/register',{
         method:"POST",
         body:JSON.stringify({
           name : name,

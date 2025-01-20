@@ -82,7 +82,7 @@ export default function Reset(props) {
                 return;
             }
 
-            const res = await fetch(backendHost + '/api/reset',{
+            const res = await fetch(backendHost + '/api/auth/reset',{
                 method:"POST",
                 body:JSON.stringify({
                     email : email,

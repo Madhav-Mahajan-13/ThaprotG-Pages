@@ -68,7 +68,7 @@ export default function OTP(props) {
     useEffect(() => {
         async function API_Call(){
           try {
-            const res = await fetch(backendHost+`/api/otp/${email}`,{
+            const res = await fetch(backendHost+`/api/auth/otp/${email}`,{
               headers:{
                 authToken:token
               },
@@ -105,7 +105,7 @@ export default function OTP(props) {
       }
 
       try {
-        const res = await fetch(backendHost + `/api/verify/${email}`,
+        const res = await fetch(backendHost + `/api/auth/verify/${email}`,
           {
             method:"POST",
             headers:{
