@@ -15,11 +15,15 @@ const MyProvider = ({children}) => {
         transition: Bounce,
     }
 
+    const [userId,setUserId] = useState(null);
+    const [isAlum,setIsAlum] = useState(null);
+    const [token,setToken] = useState(null);
+
     // const backendHost = 'https://1213-117-203-246-41.ngrok-free.app'
     const backendHost = 'http://localhost:80'
 
     return (
-        <MyContext.Provider value={{toastOptions,backendHost}}>
+        <MyContext.Provider value={{toastOptions,backendHost,userId,setUserId,isAlum,setIsAlum,token,setToken}}>
             {children}
         </MyContext.Provider>
     )

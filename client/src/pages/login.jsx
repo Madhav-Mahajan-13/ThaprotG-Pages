@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import {Link} from 'react-router-dom';
@@ -65,7 +64,7 @@ export default function SignIn(props) {
 
   const navigate = useNavigate();
   const [check,setCheck] = useState(false);
-  const {toastOptions} = React.useContext(MyContext);
+  const {toastOptions,backendHost} = React.useContext(MyContext);
 
   const handleSubmit = async (e) => {
 
@@ -85,7 +84,7 @@ export default function SignIn(props) {
       return;
     }
 
-    const res = await fetch('http://localhost:80/api/login',{
+    const res = await fetch(backendHost+'/api/login',{
       method:"POST",
       headers:{
         "Content-Type":"application/json"

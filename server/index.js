@@ -23,6 +23,8 @@ app.use("/api/gallery",galleryRouter);
 
 app.use("/api/user",userRouter);
 
+app.use("/api/auth",loginSignupRoute);
+
 
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
