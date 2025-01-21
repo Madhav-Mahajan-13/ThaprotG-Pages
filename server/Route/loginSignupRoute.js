@@ -74,7 +74,7 @@ router.post('/register',
             });
         } catch (err) {
             success = false;
-            return res.status(500).json({msg:errs.message,success:success});
+            return res.status(500).json({msg:err.message,success:success,bruh:'moment'});
         }
 })
 

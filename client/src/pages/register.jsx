@@ -67,6 +67,7 @@ export default function SignUp(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Clicked");
     try {
 
       const name = document.getElementById('name').value;
@@ -82,7 +83,6 @@ export default function SignUp(props) {
         toast.error("Give Valid Degree",toastOptions);
         return;
       }
-
 
       const year = Number(document.getElementById('graduation').value);
       if(year > date.getFullYear() + 10 || year < 1947){
@@ -143,7 +143,6 @@ export default function SignUp(props) {
   }
 
   return (
-    // <AppTheme {...props}>
     <AppTheme>
       <CssBaseline enableColorScheme />
       <ToastContainer/>
@@ -255,7 +254,7 @@ export default function SignUp(props) {
               type="submit"
               fullWidth
               variant="contained"
-            //   onClick={validateInputs}
+              onClick={handleSubmit}
             >
               Register
             </Button>
