@@ -5,7 +5,8 @@ import dotenv from "dotenv";
 import alumProjectRouter from "./Route/alumProjectRoute.js";
 import galleryRouter from "./Route/galleryRoute.js";
 import { userRouter } from "./Route/userRoute.js";
-import loginSignupRoute from './Route/loginSignupRoute.js'
+import router from "./Route/uservalidationRoute.js";
+// import loginSignupRoute from './Route/loginSignupRoute.js'
 
 
 dotenv.config();
@@ -24,7 +25,9 @@ app.use("/api/gallery",galleryRouter);
 
 app.use("/api/user",userRouter);
 
-app.use("/api/auth",loginSignupRoute);
+
+app.use("/api/auth",router);
+// app.use("/api/auth",loginSignupRoute);
 
 
 app.listen(port, () => {
