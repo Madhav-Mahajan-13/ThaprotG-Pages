@@ -241,7 +241,7 @@ const Sidebar = () => {
   toggle={toggleYourProfile}
 >
   {/* Pass userId as a prop to Dashboard */}
-  <Dashboard userId="c3826754-e7d8-42e1-8bd8-4c73e98e91b6" />
+  <Dashboard userId="0237552f-1a66-4a7d-968e-74f5e5aee00d" />
 </SectionWindow>
 
     </div>

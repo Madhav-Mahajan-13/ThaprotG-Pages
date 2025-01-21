@@ -189,7 +189,7 @@ export const Dashboard = ({ userId }) => {
             </div>
 
             <div className="profile-field">
-              <span className="field-label">Date of Graduation</span>
+              <span className="field-label">Year of Graduation</span>
               <p className="field-value">{formData.graduationDate || "N/A"}</p>
             </div>
 
