@@ -1,62 +1,47 @@
-// import fs from 'fs';
-// import db from "../dbConnection.js";
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 
-// Ensure directories exist
-// const ensureDirExists = (dir) => {
-//     if (!fs.existsSync(dir)) {
-//         fs.mkdirSync(dir, { recursive: true });
-//     }
-// };
-// ensureDirExists('uploads/pdfs');
-// ensureDirExists('uploads/images');
-
-
-// pdf storage
-const pdfStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/pdfs');
-    },
-    filename: (req, file, cb) => {
-        cb(null, `pdf_${Date.now()}${path.extname(file.originalname)}`);
+// Utility function to ensure the directory exists
+const ensureDirectoryExists = (dir) => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
     }
-});
+};
 
-const uploadPDF = multer({ 
-    storage: pdfStorage,
+// Create a single multer upload configuration
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            const uploadDir = file.fieldname === 'pdf' 
+                ? 'uploads/pdfs' 
+                : 'uploads/images';
+            
+            ensureDirectoryExists(uploadDir);
+            cb(null, uploadDir);
+        },
+        filename: (req, file, cb) => {
+            const prefix = file.fieldname === 'pdf' ? 'pdf' : 'img';
+            cb(null, `${prefix}_${Date.now()}${path.extname(file.originalname)}`);
+        }
+    }),
     fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname).toLowerCase();
-        if (ext !== '.pdf') {
+        
+        if (file.fieldname === 'pdf' && ext !== '.pdf') {
             return cb(new Error('Only PDFs are allowed'), false);
         }
-        cb(null, true);
-    }
-});
-
-const imageStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/images');
-    },
-    filename: (req, file, cb) => {
-        cb(null, `img_${Date.now()}${path.extname(file.originalname)}`);
-    }
-});
-
-// Image upload middleware
-const uploadImage = multer({ 
-    storage: imageStorage,
-    fileFilter: (req, file, cb) => {
-        const ext = path.extname(file.originalname).toLowerCase();
-        if (!ext.match(/\.(jpg|jpeg|png|gif)$/)) {
+        
+        if (file.fieldname === 'image' && !ext.match(/\.(jpg|jpeg|png|gif)$/)) {
             return cb(new Error('Only images are allowed'), false);
         }
+        
         cb(null, true);
     }
 });
 
-// Middleware exports for route configuration
-export const uploadProjectFiles = {
-    pdf: uploadPDF.single('pdf'),
-    image: uploadImage.single('image')
-};
+// Middleware for handling both PDF and image uploads
+export const uploadProjectFiles = upload.fields([
+    { name: 'pdf', maxCount: 1 },
+    { name: 'image', maxCount: 1 }
+]);
