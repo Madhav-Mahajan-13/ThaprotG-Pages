@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import "../styling/SideBar3.css";
 import { Dashboard } from "./Dashboard";
+import axios from "axios";
+import { userid } from "../context/userid";
+
 
 const SectionWindow = ({ title, show, toggle, children }) => (
   <div className={`side-window ${show ? "open" : ""}`}>
@@ -16,7 +19,8 @@ const SectionWindow = ({ title, show, toggle, children }) => (
 );
 
 const QuickPostForm = () => {
-  const [formData, setFormData] = useState({
+  const uid = userid; // Replace with actual user ID logic
+  const initialFormState = {
     title: "",
     description: "",
     openings: "",
@@ -24,7 +28,9 @@ const QuickPostForm = () => {
     openUntil: "",
     pdf: null,
     image: null,
-  });
+  };
+  const [formData, setFormData] = useState(initialFormState);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,87 +42,75 @@ const QuickPostForm = () => {
     setFormData({ ...formData, [name]: files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    // Add form submission logic here
+    setError(null);
+
+    if (!formData.title || !formData.description || !formData.openings || !formData.technology || !formData.openUntil) {
+      setError("Please fill out all required fields.");
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("id", uid);
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("openings", formData.openings);
+    formDataToSend.append("technology", formData.technology);
+    formDataToSend.append("openUntil", formData.openUntil);
+    if (formData.pdf) formDataToSend.append("pdf", formData.pdf);
+    if (formData.image) formDataToSend.append("image", formData.image);
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/projects/postProject", formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      console.log("Response:", response.data);
+      setFormData({
+        title: "",
+        description: "",
+        openings: "",
+        technology: "",
+        openUntil: "",
+        pdf: null,
+        image: null,
+      });
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to submit the form.");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="quick-post-form">
+      {error && <div className="error-message">{error}</div>}
       <div className="form-group">
         <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={formData.title}
-          onChange={handleInputChange}
-          required
-        />
+        <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required />
       </div>
       <div className="form-group">
         <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
-          required
-        ></textarea>
+        <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} required></textarea>
       </div>
       <div className="form-group">
         <label htmlFor="openings">Openings</label>
-        <input
-          type="number"
-          id="openings"
-          name="openings"
-          value={formData.openings}
-          onChange={handleInputChange}
-          required
-        />
+        <input type="number" id="openings" name="openings" value={formData.openings} onChange={handleInputChange} required />
       </div>
       <div className="form-group">
         <label htmlFor="technology">Technology</label>
-        <input
-          type="text"
-          id="technology"
-          name="technology"
-          value={formData.technology}
-          onChange={handleInputChange}
-          required
-        />
+        <input type="text" id="technology" name="technology" value={formData.technology} onChange={handleInputChange} required />
       </div>
       <div className="form-group">
         <label htmlFor="openUntil">Open Until</label>
-        <input
-          type="date"
-          id="openUntil"
-          name="openUntil"
-          value={formData.openUntil}
-          onChange={handleInputChange}
-          required
-        />
+        <input type="date" id="openUntil" name="openUntil" value={formData.openUntil} onChange={handleInputChange} required />
       </div>
       <div className="form-group">
         <label htmlFor="pdf">PDF</label>
-        <input
-          type="file"
-          id="pdf"
-          name="pdf"
-          accept="application/pdf"
-          onChange={handleFileChange}
-        />
+        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} />
       </div>
       <div className="form-group">
         <label htmlFor="image">Image</label>
-        <input
-          type="file"
-          id="image"
-          name="image"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
+        <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} />
       </div>
       <div className="form-actions">
         <button type="submit">Submit</button>
@@ -124,6 +118,7 @@ const QuickPostForm = () => {
     </form>
   );
 };
+
 
 const Sidebar = () => {
   const [showChat, setShowChat] = useState(false);
