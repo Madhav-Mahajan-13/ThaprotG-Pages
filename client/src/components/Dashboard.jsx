@@ -49,7 +49,6 @@ export const Dashboard = ({ userId }) => {
 
   const handleSave = async () => {
     try {
-        console.log(formData);
       await axios.post(`http://localhost:5000/api/user/dashboard/${userId}`, formData);
       setIsEditing(false);
       alert("Data saved successfully!");

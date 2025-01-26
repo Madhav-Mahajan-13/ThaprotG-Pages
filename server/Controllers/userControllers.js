@@ -11,9 +11,9 @@ export const getCurrentUser = async (req, res) => {
     try {
         const { userId } = req.params; // Retrieve user ID from the request
         const result = await db.query(
-            `SELECT id2 AS user_id, first_name, last_name, email, user_type, date_of_graduation, 
+            `SELECT id2 AS user_id, first_name, last_name, email, user_type, graduation_year, 
             profile_picture, bio, suspended 
-            FROM user_table WHERE id2 = $1`,
+            FROM users WHERE id2 = $1`,
             [userId]
         );
         

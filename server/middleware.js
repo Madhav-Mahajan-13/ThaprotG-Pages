@@ -1,24 +1,26 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-export async function getUser(req,res,next){
+export async function getUser(req, res, next) {
     try {
-        const verify = req.header('verify');
+        const verify = req.header('verify'); // Header to check if verification is needed
+        const token = req.header('authToken'); // Authorization token
 
-        const token = req.header('authToken')
-
-        if(!token){
-            return res.status(505).json({msg:"Invalid Token",success:false});
+        if (!token) {
+            return res.status(400).json({ msg: "Token is required", success: false });
         }
 
-        const data = await jwt.verify(token,process.env.sec_key);
+        // Verifying the token using the secret key
+        const data = jwt.verify(token, process.env.sec_key);
 
-        if(!data){
-            return res.status(504).json({msg:"Invalid Token",success:false});
+        if (!data) {
+            return res.status(401).json({ msg: "Invalid Token", success: false });
         }
 
-        if(verify){
-            return res.status(200).json({msg:"Token Good",success:true})
+        if (verify) {
+            return res.status(200).json({ msg: "Token is valid", success: true });
         }
+
+        console.log(data);
 
         req.uid = data.id
         req.email = data.email
@@ -26,6 +28,7 @@ export async function getUser(req,res,next){
         next();
 
     } catch (e) {
-        return res.status(507).json({msg:e.message,success:false});
+        // Handling errors during token verification
+        return res.status(500).json({ msg: e.message, success: false });
     }
 }
