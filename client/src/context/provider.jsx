@@ -17,13 +17,13 @@ const MyProvider = ({children}) => {
 
     const [userId,setUserId] = useState(null);
     const [isAlum,setIsAlum] = useState(null);
-    const [token,setToken] = useState(null);
+    const [authToken,setToken] = useState(null);
 
     // const backendHost = 'https://1213-117-203-246-41.ngrok-free.app'
     const backendHost = 'http://localhost:5000'
 
     return (
-        <MyContext.Provider value={{toastOptions,backendHost,userId,setUserId,isAlum,setIsAlum,token,setToken}}>
+        <MyContext.Provider value={{toastOptions,backendHost,userId,setUserId,isAlum,setIsAlum,authToken,setToken}}>
             {children}
         </MyContext.Provider>
     )
