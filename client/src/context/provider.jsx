@@ -20,7 +20,7 @@ const MyProvider = ({children}) => {
     const [token,setToken] = useState(null);
 
     // const backendHost = 'https://1213-117-203-246-41.ngrok-free.app'
-    const backendHost = 'http://localhost:80'
+    const backendHost = 'http://localhost:5000'
 
     return (
         <MyContext.Provider value={{toastOptions,backendHost,userId,setUserId,isAlum,setIsAlum,token,setToken}}>

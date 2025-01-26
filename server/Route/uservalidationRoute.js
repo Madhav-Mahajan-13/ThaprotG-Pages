@@ -155,7 +155,7 @@ router.post('/verify/:email', async (req, res) => {
         const otp = req.body.otp;
         const email = req.params['email'];
 
-        pool.query(`SELECT otp FROM otp WHERE email='${email}' AND CURRENT_TIMESTAMP < expires + INTERVAL '5 minute'`, async (err, result) => {
+        pool.query(`SELECT otp FROM otp WHERE email='${email}' AND CURRENT_TIMESTAMP < otp_expires + INTERVAL '5 minute'`, async (err, result) => {
             if (err) {
                 return res.status(404).json({ msg: err.message, success: false });
             }
@@ -186,6 +186,57 @@ router.post('/verify/:email', async (req, res) => {
         return res.status(404).json({ msg: e.message, success: false });
     }
 });
+
+router.post('/verifyToken',getUser)
+
+router.post('/forgot',async (req,res) => {
+    try {
+        const email = req.body.email;
+
+        pool.query(`select email from users where email='${email}'`,(err,result) => {
+            if(err){
+                return res.status(500).json({msg:err.message,success:false});
+            }
+
+            if(!result.rowCount){
+                return res.status(400).json({msg:"User does not exist","success":false});
+            }
+
+            const data = {
+                email : email,
+                forgot : true
+            }
+
+            const token = jwt.sign(data,process.env.sec_key,{expiresIn:'10m'});
+            return res.status(200).json({token:token,success:true});
+
+        })
+    } catch (error) {
+        res.status(500).json({msg:error.message,success:false})
+    }
+})
+
+router.post('/reset',async (req,res) =>{
+    try {
+        const {email,pass} = req.body;
+
+        const salt = await bcrypt.genSalt(10);
+        const securePass = await bcrypt.hash(pass,salt);
+
+        pool.query(`update users set password='${securePass}' where email='${email}'`,(err,result)=>{
+            if(err){
+                return res.status(500).json({msg:err.message,success:false});
+            }
+
+            return res.status(200).json({msg:"Updated Successfully",success:true})
+
+        })
+
+
+    } catch (error) {
+        return res.status(500).json({msg:error.message,success:false});
+    }
+})
 
 // Export router
 export default router;

@@ -6,12 +6,9 @@ import galleryRouter from "./Route/galleryRoute.js";
 import { userRouter } from "./Route/userRoute.js";
 import router from "./Route/uservalidationRoute.js";
 import postProjectRouter from "./Route/postProjectRoute.js";
-// import loginSignupRoute from './Route/loginSignupRoute.js'
-
+import loginSignupRoute from './Route/loginSignupRoute.js'
 
 dotenv.config();
-
-
 
 const port = 5000;
 
@@ -30,8 +27,8 @@ app.use("/api/user",userRouter);
 app.use("/api/projects",postProjectRouter);
 
 
-app.use("/api/auth",router);
-// app.use("/api/auth",loginSignupRoute);
+// app.use("/api/auth",router);
+app.use("/api/auth",loginSignupRoute);
 
 
 app.listen(port, () => {

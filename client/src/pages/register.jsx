@@ -134,6 +134,7 @@ export default function SignUp(props) {
       }
 
       setTimeout(() => {
+        toast.success("Redirecting!!!",toastOptions);
         navigate(`/otp/${res.authToken}/${email}`);
       },800);
 
