@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import pg from "pg";
 import dotenv from "dotenv";
 import alumProjectRouter from "./Route/alumProjectRoute.js";
 import galleryRouter from "./Route/galleryRoute.js";
@@ -10,7 +9,7 @@ import loginSignupRoute from './Route/loginSignupRoute.js'
 
 dotenv.config();
 
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 
 const app = express();

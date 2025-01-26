@@ -22,11 +22,11 @@ const transporter = mailer.createTransport({
 });
 
 const pool = new Pool({
-    user:process.env.dbUser,
-    password:process.env.dbPass,
-    host:process.env.dbHost,
-    port:process.env.dbPort,
-    database:process.env.database,
+    user:process.env.DB_USER,
+    password:process.env.DB_PASSWORD,
+    host:process.env.DB_HOST,
+    port:process.env.DB_PORT,
+    database:process.env.DB_NAME,
 });
 
 router.post('/register',
@@ -67,6 +67,7 @@ router.post('/register',
                         pool.query(`insert into users(id2,first_name,last_name,email,degree,graduation_year,password) values(gen_random_uuid(),'${first_name}','${last_name}','${req.body.email}','${req.body.degree}',${req.body.year},'${securePass}')`,(err,result) => {
                             if(err){
                                 success = false
+                                console.log("ERROR\n");
                                 return res.status(501).json({msg:err,success:success})
                             }
                             else{
@@ -84,7 +85,8 @@ router.post('/register',
             });
         } catch (err) {
             success = false;
-            return res.status(500).json({msg:errs.message,success:success});
+            console.log("ERROR\n");
+            return res.status(500).json({msg:err.message,success:success});
         }
 })
 

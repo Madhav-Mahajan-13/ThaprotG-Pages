@@ -91,7 +91,7 @@ export default function Forgot(props) {
 
           toast.success("Redirecting")
           setTimeout(() => {
-              localStorage.setItem('isForgot','yes');
+              sessionStorage.setItem('isForgot','yes');
               navigate(`/OTP/${data.token}/${email}`);
           },1000)
 

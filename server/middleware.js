@@ -20,8 +20,6 @@ export async function getUser(req,res,next){
             return res.status(200).json({msg:"Token Good",success:true})
         }
 
-        console.log(data);
-
         req.uid = data.id
         req.email = data.email
         req.body.email = data.email

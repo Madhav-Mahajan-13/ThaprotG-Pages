@@ -63,7 +63,7 @@ export default function OTP(props) {
     const {token,email} = useParams();
     const {backendHost,toastOptions} = React.useContext(MyContext);
     const [isLoading,setLoading] = useState(true);
-    const forgot = localStorage.getItem('isForgot')
+    const forgot = sessionStorage.getItem('isForgot')
 
     useEffect(() => {
         async function API_Call(){
@@ -124,6 +124,7 @@ export default function OTP(props) {
         toast.success("Redirecting...",toastOptions);
 
         setTimeout(() => {
+          sessionStorage.removeItem('isForgot')
           if(!forgot){
               navigate('/')
           }
