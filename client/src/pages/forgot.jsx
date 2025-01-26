@@ -65,13 +65,14 @@ export default function Forgot(props) {
         e.preventDefault();
         try {
           const email = document.getElementById('email').value;
+          console.log("HERE");
           const [left,right] = email.split('@');
           if(left < 3 || right != 'thapar.edu'){
               toast.info("Not a Valid thapar.edu account",toastOptions)
               return;
           }
 
-          const res = await fetch(backendHost + '/api/forgot',{
+          const res = await fetch(backendHost + '/api/auth/forgot',{
               method:"POST",
               body:JSON.stringify({
                   email : email

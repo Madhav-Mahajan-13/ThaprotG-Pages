@@ -64,7 +64,7 @@ export default function SignIn(props) {
 
   const navigate = useNavigate();
   const [check,setCheck] = useState(false);
-  const {toastOptions,backendHost} = React.useContext(MyContext);
+  const {toastOptions,backendHost,setUserId,setToken,setIsAlum} = React.useContext(MyContext);
 
   const handleSubmit = async (e) => {
 
@@ -118,6 +118,10 @@ export default function SignIn(props) {
       else{
         sessionStorage.setItem('authToken',data.authToken);
       }
+
+      await setUserId(data.id);
+      await setIsAlum(data.is_alum);
+      await setToken(data.authToken);
 
       setTimeout(() => {
         navigate("/");

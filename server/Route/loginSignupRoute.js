@@ -127,7 +127,7 @@ router.post('/login',[
     
                     const payload = await jwt.sign(data,process.env.sec_key);
     
-                    return res.status(200).json({authToken:payload,success:true,otp:false});
+                    return res.status(200).json({authToken:payload,success:true,otp:false,id:rows.id2,is_alum:(rows.user_type == 'alum')});
                 }
 
                 else{
