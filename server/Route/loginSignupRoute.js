@@ -1,16 +1,14 @@
-const db = require('../dbConnection')
-const express = require('express')
-const bcrypt = require('bcrypt')
-const mailer = require('nodemailer')
-const jwt = require('jsonwebtoken')
-const {body,validationResult} = require('express-validator')
-const { getUser } = require('../middleware')
-
-const router = express.Router()
+const { getUser } = require('../middleware');
+const Pool = require('pg').Pool;
+const express = require('express');
+const router = express.Router();
+const {body,validationResult} = require('express-validator');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mailer = require("nodemailer");
+const crypto = require("crypto");
 
 var d = new Date();
-
-const pool = db;
 
 const transporter = mailer.createTransport({
     service:"Gmail",
@@ -23,11 +21,21 @@ const transporter = mailer.createTransport({
     }
 });
 
+const pool = new Pool({
+    user:process.env.dbUser,
+    password:process.env.dbPass,
+    host:process.env.dbHost,
+    port:process.env.dbPort,
+    database:process.env.database,
+});
+
 router.post('/register',
     [
     body('name',"Enter Valid Name").isLength({min:3}),
     body('email',"Enter Valid Email").isEmail(),
     body('password',"Enter Valid Password").isLength({min:8}),
+    body('degree','Not a valid degree').toLowerCase().isIn(['be','btech','mtech','ba','bca','mca','diploma','me','mba','bba','bsc','phd','ma']),
+    body('year',"Enter valid year").isNumeric({min:1949,max:d.getFullYear()+10})
     ],
     async(req,res) => {
         let success = true
@@ -50,11 +58,13 @@ router.post('/register',
                         return res.status(400).json({msg:"User already Exists",success:success});
                     }
                     else{
+                        const first_name = req.body.name.split(" ")[0]
+                        const last_name = req.body.name.split(" ")[1]?req.body.name.split(" ")[1]:"" + req.body.name.split(" ")[2]?req.body.name.split(" ")[2]:"" 
                         
                         const salt = await bcrypt.genSalt(10);
                         const securePass = await bcrypt.hash(req.body.password,salt);
 
-                        pool.query(`insert into users(id,name,email,password) values(gen_random_uuid(),'${req.body.name}','${req.body.email}','${securePass}')`,(err,result) => {
+                        pool.query(`insert into users(id2,first_name,last_name,email,degree,graduation_year,password) values(gen_random_uuid(),'${first_name}','${last_name}','${req.body.email}','${req.body.degree}',${req.body.year},'${securePass}')`,(err,result) => {
                             if(err){
                                 success = false
                                 return res.status(501).json({msg:err,success:success})
@@ -74,7 +84,7 @@ router.post('/register',
             });
         } catch (err) {
             success = false;
-            return res.status(500).json({msg:err.message,success:success,bruh:'moment'});
+            return res.status(500).json({msg:errs.message,success:success});
         }
 })
 
@@ -84,10 +94,8 @@ router.post('/login',[
     ],async (req,res) => {
         const errs = validationResult(req);
         if(!errs.isEmpty()){
-            return res.status(503).json({"msg":errs.array()[0].msg,success:false});
+            return res.status(503).json({"msg":errs.array(),success:false});
         }
-
-        console.log(req.body)
 
         try {
             pool.query(`select * from users where email='${req.body.email}'`,async (err,result) => {
@@ -109,15 +117,15 @@ router.post('/login',[
                     return res.status(400).json({"msg":"Invalid Password",success:false});
                 }
 
-                if(rows.is_otp_verified){
+                if(rows.otp_verified){
                     const data = {
-                        id:rows.id,
+                        id:rows.id2,
                         type:rows.user_type
                     }
     
                     const payload = await jwt.sign(data,process.env.sec_key);
     
-                    return res.status(200).json({authToken:payload,success:true,otp:false,self:rows.id});
+                    return res.status(200).json({authToken:payload,success:true,otp:false});
                 }
 
                 else{
@@ -139,7 +147,7 @@ router.post('/login',[
         }
 })
 
-router.post('/OTP/:email',getUser,async (req,res) => {
+router.post('/otp/:email',getUser,async (req,res) => {
     try {
         if(req.params['email'] !== req.body.email){
             return res.status(500).json({msg:"Invalid Token-Email Combination",success:false})
@@ -172,40 +180,35 @@ router.post('/OTP/:email',getUser,async (req,res) => {
 router.post('/verify/:email',async (req,res) => {
     try {
         const otp = req.body.otp;
-        const email = req.params['email'];
 
-        pool.query(`select otp from otp where email='${email}' and CURRENT_TIMESTAMP < expires + INTERVAL '5 minute'`,async (err,result) => {
-            if(err){
-                return res.status(404).json({msg:err.message,success:false});
+        pool.query(`select otp from otp where otp_expires < current_timestamp + (5 * interval '1 minute') and email='${req.params['email']}'`,async (error,result) => {
+            if(error){
+                return res.status(501).json({msg:error.message,success:false});
             }
 
             if(!result.rowCount){
-                return res.status(400).json({msg:"OTP not found",success:false});
+                return res.status(502).json({msg:"No OTP found",success:false});
             }
 
-            const res_otp = result.rows[0].otp;
-
-            console.log(req.forgot)
-
-            if(otp == res_otp){
-                if(req.forgot){
-                    return res.status(200).json({msg:"Verified",success:true,forgot:true})
-                }
-                await pool.query(`update users set is_otp_verified=true where email='${email}'`,async (err,result) => {
-                    if(err){
-                        return res.status(404).json({msg:err.message,success:false});
+            if(otp == result.rows.otp){
+                pool.query(`delete from otp where email='${req.params['email']}'`,(error,result) =>{
+                    if(error){
+                        return res.status(502).json({msg:error.message,success:false});
                     }
 
-                    return res.status(200).json({msg:"OTP verified",success:true});
-                    
+                    pool.query(`update users set otp_verified = true where email = '${req.params['email']}'`,(error,result) => {
+                        if(error){
+                            return res.status(503).json({msg:error.message,success:false});
+                        }
+                        
+                        return res.status(200).json({msg:"Verification Successfull",success:true})
+
+                    });  
                 })
             }
-            else{
-                return res.status(400).json({msg:"Incorrect OTP",success:false})
-            }
         })
-    } catch (e) {
-            return res.status(404).json({msg:e.message,success:false});
+    }catch(error){
+        return res.status(400).json({msg:error.message,success:false});
     }
 })
 
@@ -238,7 +241,7 @@ router.post('/forgot',async (req,res) => {
     }
 })
 
-router.post('/reset',getUser,async (req,res) =>{
+router.post('/reset',async (req,res) =>{
     try {
         const {email,pass} = req.body;
 
@@ -257,21 +260,6 @@ router.post('/reset',getUser,async (req,res) =>{
 
     } catch (error) {
         return res.status(500).json({msg:error.message,success:false});
-    }
-})
-
-router.get("/getalluser",async (req,res) => {
-    try {
-        pool.query('select * from users',(err,results) => {
-            if(err){
-                return res.status(500).json({msg:err.message,success:false});
-            }
-
-            const rows = results.rows;
-            return res.status(200).json({users:rows,success:false});
-        })
-    } catch (e) {
-        return res.status(500).json({msg:e.message,success:false})
     }
 })
 
