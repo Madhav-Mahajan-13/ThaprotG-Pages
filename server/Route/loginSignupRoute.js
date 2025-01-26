@@ -183,7 +183,7 @@ router.post('/verify/:email',async (req,res) => {
     try {
         const otp = req.body.otp;
 
-        pool.query(`select otp from otp where otp_expires < current_timestamp + (5 * interval '1 minute') and email='${req.params['email']}'`,async (error,result) => {
+        pool.query(`select otp from otp where otp_expires  < current_timestamp + (5 * interval '1 minute') and email='${req.params['email']}'`,async (error,result) => {
             if(error){
                 return res.status(501).json({msg:error.message,success:false});
             }
