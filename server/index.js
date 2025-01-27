@@ -26,7 +26,6 @@ app.use("/api/gallery",galleryRouter);
 app.use("/api/user",userRouter);
 app.use("/api/projects",postProjectRouter);
 
-
 // app.use("/api/auth",router);
 app.use("/api/auth",loginSignupRoute);
 

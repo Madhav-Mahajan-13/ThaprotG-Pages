@@ -52,3 +52,22 @@ export const updateUser = async (req, res) => {
 };
 
 
+export const searchUser = async (req, res) => {
+    try {
+        const { query } = req.params;
+
+        const result = await db.query(
+            `SELECT * FROM users 
+             WHERE LOWER(first_name) LIKE LOWER($1) 
+             OR LOWER(email) LIKE LOWER($1) 
+             OR LOWER(last_name) LIKE LOWER($1)`, 
+            [`%${query}%`]
+        );
+        if (result.rows.length === 0) {
+            return res.status(200).json({ success: true, data: [], msg: "No users found" });
+        }
+        res.status(200).json({ success: true, data: result.rows });
+    } catch (e) {
+        res.status(500).json({ msg: e.message, success: false });
+    }
+};

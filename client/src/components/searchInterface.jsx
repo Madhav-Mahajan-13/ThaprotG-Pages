@@ -1,31 +1,16 @@
-import React, { useState } from "react"
-import { TextField, Button, Card, CardContent, Typography, Avatar, Grid, Container, Snackbar, Box } from "@mui/material"
-import { Search as SearchIcon, Clear as ClearIcon } from "@mui/icons-material"
-
-const mockUsers = [
-  {
-    id: "1",
-    name: "Alex Thompson",
-    imageUrl: "/placeholder.svg?height=100&width=100",
-  },
-  {
-    id: "2",
-    name: "Sam Wilson",
-    imageUrl: "/placeholder.svg?height=100&width=100",
-  },
-  {
-    id: "3",
-    name: "Jordan Lee",
-    imageUrl: "/placeholder.svg?height=100&width=100",
-  },
-]
+import React, { useState } from "react";
+import { TextField, Button, Card, CardContent, Typography, Avatar, Grid2, Container, Snackbar, Box } from "@mui/material";
+import { Search as SearchIcon, Clear as ClearIcon } from "@mui/icons-material";
+import axios from "axios";
+import { useContext } from "react";
+import { MyContext } from '../context/context.jsx';
 
 function UserCard({ user, onConnect }) {
   return (
     <Card variant="outlined" sx={{ "&:hover": { boxShadow: 3 }, transition: "box-shadow 0.3s" }}>
       <CardContent sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Avatar src={user.imageUrl} alt={`${user.name}'s profile`} sx={{ width: 56, height: 56 }} />
+          <Avatar src={user.imageUrl || "/placeholder.svg"} alt={`${user.name}'s profile`} sx={{ width: 56, height: 56 }} />
           <Box>
             <Typography variant="h6">{user.name}</Typography>
           </Box>
@@ -43,29 +28,43 @@ function UserCard({ user, onConnect }) {
         </Button>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export default function SearchInterface() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [searchResults, setSearchResults] = useState([])
-  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const {backendRoute} = useContext(MyContext);
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    const results = mockUsers.filter((user) => user.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    setSearchResults(results)
-  }
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    if (!searchQuery.trim()) return;
+
+    setLoading(true);
+    try {
+      // Replace with your actual API endpoint
+      const response = await axios.get(backendRoute+`/api/user/search/${searchQuery}`);
+      setSearchResults(response.data.data);
+    } catch (error) {
+      console.error("Error fetching users:", error.message);
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleConnect = (userId) => {
-    console.log(`Connecting with user ${userId}`)
-    setOpenSnackbar(true)
-  }
+    console.log(`Connecting with user ${userId}`);
+    setOpenSnackbar(true);
+  };
 
   const handleClear = () => {
-    setSearchQuery("")
-    setSearchResults([])
-  }
+    setSearchQuery("");
+    setSearchResults([]);
+  };
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
@@ -114,20 +113,30 @@ export default function SearchInterface() {
         </Box>
       )}
 
-      <Grid container spacing={2}>
-        {searchResults.map((user) => (
-          <Grid item xs={12} key={user.id}>
-            <UserCard user={user} onConnect={handleConnect} />
-          </Grid>
-        ))}
-        {searchResults.length === 0 && searchQuery && (
-          <Grid item xs={12}>
+      <Grid2 container spacing={2}>
+        {loading ? (
+          <Grid2 item xs={12}>
             <Typography align="center" color="textSecondary">
-              No users found
+              Loading...
             </Typography>
-          </Grid>
+          </Grid2>
+        ) : (
+          <>
+            {searchResults.map((user) => (
+              <Grid2 item xs={12} key={user.id}>
+                <UserCard user={user} onConnect={handleConnect} />
+              </Grid2>
+            ))}
+            {searchResults.length === 0 && searchQuery && !loading && (
+              <Grid2 item xs={12}>
+                <Typography align="center" color="textSecondary">
+                  No users found
+                </Typography>
+              </Grid2>
+            )}
+          </>
         )}
-      </Grid>
+      </Grid2>
 
       <Snackbar
         open={openSnackbar}
@@ -136,6 +145,5 @@ export default function SearchInterface() {
         message="Connection request sent successfully"
       />
     </Container>
-  )
+  );
 }
-
