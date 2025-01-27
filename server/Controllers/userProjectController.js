@@ -1,104 +1,148 @@
-// // import express from 'express';
-// import multer from 'multer';
-// import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-// import db from "../dbConnection.js";
-// import dotenv from "dotenv";
-// import path from 'path';
-// import exp from 'constants';
+import db from "../dbConnection.js";
+import dotenv from "dotenv";
+dotenv.config();
 
-// dotenv.config();
+export const postProject = async (req, res) => {
+    try {
+        const { id, title, description, openings, technology, openUntil } = req.body;
 
-// // const app = express();
-// const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
-// const MAX_PDF_SIZE = 10 * 1024 * 1024; // 10MB
+        // Handle file uploads
+        const pdfPath = req.files?.pdf ? req.files.pdf[0].filename : null;
+        const imagePath = req.files?.image ? req.files.image[0].filename : null;
 
-// const upload = multer({
-//     storage: multer.memoryStorage(),
-//     limits: { fileSize: Math.max(MAX_IMAGE_SIZE, MAX_PDF_SIZE) },
-//     fileFilter: (req, file, cb) => {
-//         if (file.fieldname === 'image' && !['image/jpeg', 'image/png', 'image/gif'].includes(file.mimetype)) {
-//             return cb(new Error('Invalid image format'));
-//         }
-//         if (file.fieldname === 'pdf' && file.mimetype !== 'application/pdf') {
-//             return cb(new Error('Invalid PDF format'));
-//         }
-//         cb(null, true);
-//     }
-// });
+        // Validate user type
+        const userTypeResult = await db.query(
+            'SELECT user_type FROM users WHERE id2 = $1',
+            [id]
+        );
 
-// const s3Client = new S3Client({
-//     region: process.env.AWS_REGION,
-//     credentials: { accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET_KEY }
-// });
+        if (userTypeResult.rows.length === 0 || !userTypeResult.rows[0].user_type) {
+            return res.status(403).json({ error: 'User type validation failed' });
+        }
 
+        // Format technology array for PostgreSQL
+        const techArray = Array.isArray(technology) 
+            ? technology 
+            : technology 
+                ? technology.split(',').map(tech => tech.trim())
+                : [];
 
+        // Properly format technology for PostgreSQL
+        const formattedTechnology = techArray.length 
+            ? `{${techArray.map(t => `"${t}"`).join(',')}}` 
+            : null;
 
-// const uploadToS3 = async (file, folder) => {
-//     const filename = `${Date.now()}-${path.basename(file.originalname)}`;
-//     const uploadParams = {
-//         Bucket: process.env.AWS_BUCKET_NAME,
-//         Key: `${folder}/${filename}`,
-//         Body: file.buffer,
-//         ContentType: file.mimetype,
-//         ACL: 'public-read'
-//     };
+            // console.log("image path ",imagePath)
+        // Check user type and prepare query
 
-//     await s3Client.send(new PutObjectCommand(uploadParams));
-//     return `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${folder}/${filename}`;
-// };
+        const userType = userTypeResult.rows[0].user_type;
+        let insertResult; // Change 'const' to 'let'
 
-// const saveToDatabase = async (name, description, imageUrl, pdfUrl) => {
-//     const query = 'INSERT INTO submissions (name, description, image_url, pdf_url) VALUES ($1, $2, $3, $4) RETURNING id';
-//     const result = await db.query(query, [name, description, imageUrl, pdfUrl]);
-//     return result.rows[0].id;
-// };
+        if (userType === 'student') {
+            insertResult = await db.query(`
+                INSERT INTO projects 
+                (user_id, title, description, open_until, openings, technology, pdf_path, image_path)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                RETURNING project_id;
+            `,[
+                id,
+                title,
+                description,
+                openUntil,
+                openings,
+                formattedTechnology,
+                pdfPath,
+                imagePath
+            ]);
+        } else if (userType === 'alumni') {
+            const status = "alumni";
+            insertResult = await db.query(`
+                INSERT INTO projects 
+                (user_id, title, description, open_until, openings, technology, pdf_path, image_path, status)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                RETURNING project_id;
+            `,[
+                id,
+                title,
+                description,
+                openUntil,
+                openings,
+                formattedTechnology,
+                pdfPath,
+                imagePath,
+                status
+            ]);
+        } else {
+            return res.status(403).json({ error: 'Only students and alumni can post projects' });
+        }
 
-// // app.post('/api/submit', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'pdf', maxCount: 1 }]), async (req, res) => {
+        // Execute the query
+      
 
-// export const postProject = async(req,res)=>{
-//     try {
-//         if (!req.files?.image?.[0] || !req.files?.pdf?.[0]) {
-//             return res.status(400).json({ error: 'Both image and PDF files are required' });
-//         }
+        res.status(201).json({
+            message: 'Project posted successfully',
+            projectId: insertResult.rows[0].project_id
+        });
+    } catch (error) {
+        console.error('Project posting error:', error);
+        res.status(500).json({
+            error: 'Failed to post project',
+            details: error.message
+        });
+    }
+};
 
+ export const getUserProjects = async (req, res) => {
+    const { userId } = req.body;
+    
+    // Check if userId exists
+    if (!userId) {
+        return res.status(400).json({
+            success: false,
+            message: 'User ID is required'
+        });
+    }
 
-//         //  user type se define bhi karna hai 
+    try {
+        const query = {
+            text: `
+                SELECT 
+                    project_id,
+                    title,
+                    description,
+                    open_until,
+                    status,
+                    technology,
+                    image_path,
+                    openings,
+                    pdf_path
+                FROM projects 
+                WHERE user_id = $1
+            `,
+            values: [userId]
+        };
 
-//         const { name, description } = req.body;
-//         const image = req.files.image[0];
-//         const pdf = req.files.pdf[0];
+        const result = await db.query(query);
 
-//         const imageUrl = await uploadToS3(image, 'images');
-//         const pdfUrl = await uploadToS3(pdf, 'pdfs');
+        if (!result.rows || result.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No projects found for this user'
+            });
+        }
 
-//         const submissionId = await saveToDatabase(name, description, imageUrl, pdfUrl);
+        return res.status(200).json({
+            success: true,
+            data: result.rows,
+            count: result.rows.length
+        });
 
-//         res.status(200).json({ message: 'Submission successful', submissionId, imageUrl, pdfUrl });
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-// // const PORT = process.env.PORT || 3000;
-// // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-// export const getYourProjects = async (req, res) => {
-//     const id = req.body._id; // Get user ID from the request body
-
-//     try {
-//         // Query the database for projects associated with the user ID
-//         const result = await db.query(
-//             `SELECT title, project_id, status, created_at, pdf_link 
-//              FROM projects 
-//              WHERE user_id = $1`, 
-//             [id]
-//         );
-
-//         // Send the result as a JSON response
-//         return res.status(200).json(result.rows);
-//     } catch (error) {
-//         console.error("Error fetching projects:", error);
-
-//         // Send an error response
-//         return res.status(500).json({ error: "Failed to fetch projects" });
-//     }
-// };
+    } catch (error) {
+        console.error('Error fetching user projects:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error while fetching projects',
+            
+        });
+    }
+};
