@@ -56,6 +56,10 @@ export const searchUser = async (req, res) => {
     try {
         const { query } = req.params;
 
+        if (!query || query.trim() === "") {
+            return res.status(400).json({ success: false, msg: "Query parameter is required" });
+        }
+
         const result = await db.query(
             `SELECT * FROM users 
              WHERE LOWER(first_name) LIKE LOWER($1) 
@@ -63,11 +67,14 @@ export const searchUser = async (req, res) => {
              OR LOWER(last_name) LIKE LOWER($1)`, 
             [`%${query}%`]
         );
+
         if (result.rows.length === 0) {
             return res.status(200).json({ success: true, data: [], msg: "No users found" });
         }
+
         res.status(200).json({ success: true, data: result.rows });
     } catch (e) {
+        console.error("Error querying users:", e.message);
         res.status(500).json({ msg: e.message, success: false });
     }
 };

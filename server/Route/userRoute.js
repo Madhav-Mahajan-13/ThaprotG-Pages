@@ -12,4 +12,4 @@ export const userRouter =express.Router();
 // getcurrentuser
 userRouter.get("/dashboard/:userId",getCurrentUser)
 userRouter.post("/dashboard/:userId",updateUser)
-userRouter.get("/search/:name",searchUser)
+userRouter.get("/search/:query",searchUser)

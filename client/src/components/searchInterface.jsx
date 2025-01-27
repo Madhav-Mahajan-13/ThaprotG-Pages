@@ -1,18 +1,40 @@
 import React, { useState } from "react";
-import { TextField, Button, Card, CardContent, Typography, Avatar, Grid2, Container, Snackbar, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Avatar,
+  Container,
+  Snackbar,
+  Box,
+} from "@mui/material";
 import { Search as SearchIcon, Clear as ClearIcon } from "@mui/icons-material";
-import axios from "axios";
 import { useContext } from "react";
-import { MyContext } from '../context/context.jsx';
+import { MyContext } from "../context/context.jsx";
 
 function UserCard({ user, onConnect }) {
   return (
-    <Card variant="outlined" sx={{ "&:hover": { boxShadow: 3 }, transition: "box-shadow 0.3s" }}>
-      <CardContent sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <Card
+      variant="outlined"
+      sx={{ "&:hover": { boxShadow: 3 }, transition: "box-shadow 0.3s" }}
+    >
+      <CardContent
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Avatar src={user.imageUrl || "/placeholder.svg"} alt={`${user.name}'s profile`} sx={{ width: 56, height: 56 }} />
+          <Avatar
+            src={user.imageUrl || "/placeholder.svg"}
+            alt={`${user.name}'s profile`}
+            sx={{ width: 56, height: 56 }}
+          />
           <Box>
-            <Typography variant="h6">{user.name}</Typography>
+            <Typography variant="h6">{user.first_name +" "+ user.last_name}</Typography>
           </Box>
         </Box>
         <Button
@@ -36,7 +58,7 @@ export default function SearchInterface() {
   const [searchResults, setSearchResults] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [loading, setLoading] = useState(false);
-  const {backendRoute} = useContext(MyContext);
+  const { backendHost } = useContext(MyContext);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -45,9 +67,14 @@ export default function SearchInterface() {
 
     setLoading(true);
     try {
-      // Replace with your actual API endpoint
-      const response = await axios.get(backendRoute+`/api/user/search/${searchQuery}`);
-      setSearchResults(response.data.data);
+      const response = await fetch(
+        `${backendHost}/api/user/search/${searchQuery}`
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      setSearchResults(data.data || []);
     } catch (error) {
       console.error("Error fetching users:", error.message);
       setSearchResults([]);
@@ -68,7 +95,10 @@ export default function SearchInterface() {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <form onSubmit={handleSearch} style={{ display: "flex", marginBottom: "24px" }}>
+      <form
+        onSubmit={handleSearch}
+        style={{ display: "flex", marginBottom: "24px" }}
+      >
         <TextField
           fullWidth
           variant="outlined"
@@ -113,30 +143,24 @@ export default function SearchInterface() {
         </Box>
       )}
 
-      <Grid2 container spacing={2}>
+      <Box sx={{ display: "grid", gap: 2 }}>
         {loading ? (
-          <Grid2 item xs={12}>
-            <Typography align="center" color="textSecondary">
-              Loading...
-            </Typography>
-          </Grid2>
+          <Typography align="center" color="textSecondary">
+            Loading...
+          </Typography>
         ) : (
           <>
             {searchResults.map((user) => (
-              <Grid2 item xs={12} key={user.id}>
-                <UserCard user={user} onConnect={handleConnect} />
-              </Grid2>
+              <UserCard user={user} onConnect={handleConnect} key={user.id} />
             ))}
             {searchResults.length === 0 && searchQuery && !loading && (
-              <Grid2 item xs={12}>
-                <Typography align="center" color="textSecondary">
-                  No users found
-                </Typography>
-              </Grid2>
+              <Typography align="center" color="textSecondary">
+                No users found
+              </Typography>
             )}
           </>
         )}
-      </Grid2>
+      </Box>
 
       <Snackbar
         open={openSnackbar}
