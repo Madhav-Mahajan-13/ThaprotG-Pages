@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import axios from "axios";
 import '../styling/Dashboard.css';
+import { MyContext } from "../context/context";
 
-export const Dashboard = ({ userId }) => {
+export const Dashboard = ({ userd }) => {
+  const {userId}=useContext(MyContext);
+  const result = useContext(MyContext);
+  console.log(result)
+  const __id=userId;
+  console.log("dash",__id)
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    graduationDate: "",
+    graduation_year: "",
     bio: "",
     profilePicture: "",
   });
@@ -17,15 +23,17 @@ export const Dashboard = ({ userId }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        
         const response = await axios.get(
-          `http://localhost:5000/api/user/dashboard/${userId}`
+          `http://localhost:5000/api/user/dashboard/${__id}`
         );
+        console.log(response)
 
         setFormData({
           firstName: response.data.first_name || "",
           lastName: response.data.last_name || "",
           email: response.data.email || "",
-          graduationDate: response.data.date_of_graduation || "",
+          graduation_year: response.data.graduation_year || "",
           bio: response.data.bio || "",
           profilePicture: response.data.profile_picture || "https://picsum.photos/200/300",
         });
@@ -49,6 +57,7 @@ export const Dashboard = ({ userId }) => {
 
   const handleSave = async () => {
     try {
+      console.log("formdata ==== ",formData)
       await axios.post(`http://localhost:5000/api/user/dashboard/${userId}`, formData);
       setIsEditing(false);
       alert("Data saved successfully!");
@@ -117,15 +126,15 @@ export const Dashboard = ({ userId }) => {
             </div>
 
             <div className="form-group">
-              <label className="form-label" htmlFor="graduationDate">
+              <label className="form-label" htmlFor="graduation_year">
                 Date of Graduation:
               </label>
               <input
                 className="form-input"
                 type="number"
-                id="graduationDate"
-                name="graduationDate"
-                value={formData.graduationDate}
+                id="graduation_year"
+                name="graduation_year"
+                value={formData.graduation_year}
                 onChange={handleInputChange}
               />
             </div>
@@ -189,7 +198,7 @@ export const Dashboard = ({ userId }) => {
 
             <div className="profile-field">
               <span className="field-label">Date of Graduation</span>
-              <p className="field-value">{formData.graduationDate || "N/A"}</p>
+              <p className="field-value">{formData.graduation_year || "N/A"}</p>
             </div>
 
             <div className="profile-field">

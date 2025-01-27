@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../styling/SideBar3.css";
 import { Dashboard } from "./Dashboard";
 import axios from "axios";
-import { userid } from "../context/userid";
+import { MyContext } from "../context/context";
+// import { userid } from "../context/userid";
+
+
+
 
 
 const SectionWindow = ({ title, show, toggle, children }) => (
@@ -19,7 +23,8 @@ const SectionWindow = ({ title, show, toggle, children }) => (
 );
 
 const QuickPostForm = () => {
-  const uid = userid; // Replace with actual user ID logic
+  const {userId}=useContext(MyContext);
+  const uid = userId; // Replace with actual user ID logic
   const initialFormState = {
     title: "",
     description: "",
@@ -65,7 +70,7 @@ const QuickPostForm = () => {
       const response = await axios.post("http://localhost:5000/api/projects/postProject", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+      alert("post successfull");
       console.log("Response:", response.data);
       setFormData({
         title: "",
