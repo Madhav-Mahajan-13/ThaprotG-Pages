@@ -5,8 +5,7 @@ import { MyContext } from "../context/context";
 
 export const Dashboard = ({ userd }) => {
   const {userId}=useContext(MyContext);
-  const result = useContext(MyContext);
-  console.log(result)
+
   const __id=userId;
   console.log("dash",__id)
   const [isEditing, setIsEditing] = useState(false);

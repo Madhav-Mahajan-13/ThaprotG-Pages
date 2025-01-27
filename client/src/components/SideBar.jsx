@@ -4,6 +4,7 @@ import "../styling/SideBar3.css";
 import { Dashboard } from "./Dashboard";
 import axios from "axios";
 import { MyContext } from "../context/context";
+import UserProjects from "./UserProjectsCard.jsx";
 // import { userid } from "../context/userid";
 
 
@@ -224,7 +225,8 @@ const Sidebar = () => {
         show={showProject}
         toggle={toggleYourProject}
       >
-        <p>Render the project element</p>
+        <UserProjects></UserProjects>
+        {/* <p>Render the project element</p> */}
         {/* Add your project content here */}
       </SectionWindow>
 
