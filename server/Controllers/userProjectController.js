@@ -118,6 +118,7 @@ export const postProject = async (req, res) => {
                     pdf_path
                 FROM projects 
                 WHERE user_id = $1
+                ORDER BY updated_at DESC
             `,
             values: [userId]
         };
