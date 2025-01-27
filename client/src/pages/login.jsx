@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { MyContext } from '../context/context.jsx';
 import { toast,ToastContainer } from 'react-toastify';
+import { useEffect } from 'react';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -64,7 +65,7 @@ export default function SignIn(props) {
 
   const navigate = useNavigate();
   const [check,setCheck] = useState(false);
-  const {toastOptions,backendHost,setUserId,setToken,setIsAlum} = React.useContext(MyContext);
+  const {toastOptions,backendHost,setUserId,setToken,setIsAlum,authToken} = React.useContext(MyContext);
 
   const handleSubmit = async (e) => {
 
@@ -127,8 +128,17 @@ export default function SignIn(props) {
         navigate("/");
       },500);
     }
-
   }
+  useEffect(()=>{
+    const token1 = localStorage.getItem('authToken');
+    const token2 = sessionStorage.getItem('authToken');
+
+    const token = token1?token1:token2;
+
+    if(token || authToken){
+        navigate("/");
+    }
+  },[])
 
   return (
     <AppTheme {...props}>

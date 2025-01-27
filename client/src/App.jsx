@@ -24,6 +24,10 @@ const router = createBrowserRouter([
     element:<Landing/>,
     children:[
       {
+        path:"/",
+        element:<h1>HELLO WORLD</h1>
+      },
+      {
         path:'studentProject',
         element:<StudentProject/>
       },

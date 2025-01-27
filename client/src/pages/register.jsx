@@ -12,7 +12,7 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../theme/AppTheme.jsx';
-
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../context/context.jsx';
 import { toast,ToastContainer } from 'react-toastify';
@@ -63,7 +63,7 @@ export default function SignUp(props) {
 
   const date = new Date();
   const navigate = useNavigate();
-  const {toastOptions,backendHost} = React.useContext(MyContext);
+  const {toastOptions,backendHost,authToken} = React.useContext(MyContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -142,6 +142,16 @@ export default function SignUp(props) {
       toast.error(error.message,toastOptions);
     }
   }
+  useEffect(()=>{
+      const token1 = localStorage.getItem('authToken');
+      const token2 = sessionStorage.getItem('authToken');
+  
+      const token = token1?token1:token2;
+  
+      if(token || authToken){
+          navigate("/");
+      }
+    },[])
 
   return (
     <AppTheme>
