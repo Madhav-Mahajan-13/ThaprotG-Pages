@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../styling/SideBar3.css";
 import { Dashboard } from "./Dashboard";
 import axios from "axios";
@@ -127,6 +127,8 @@ const QuickPostForm = () => {
 
 
 const Sidebar = () => {
+  const {userId}=useContext(MyContext);
+  const [userName,setUserName]=useState("")
   const [showChat, setShowChat] = useState(false);
   const [showProject, setShowProject] = useState(false);
   const [showQuickPost, setQuickPost] = useState(false);
@@ -135,6 +137,22 @@ const Sidebar = () => {
   const toggleYourProject = () => setShowProject(!showProject);
   const toggleQuickPost = () => setQuickPost(!showQuickPost);
   const toggleYourProfile =()=> setShowProfile(!showProfile)
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`);
+        // Concatenate first_name and last_name with a space
+        setUserName(`${response.data.first_name} ${response.data.last_name}`);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (userId) {
+      fetchUserData();
+    }
+  }, [userId]); // Only run when userId changes
+      
   return (
     <div className={`app-container ${showChat ? "chat-active" : ""}`}>
       {/* Sidebar */}
@@ -185,7 +203,7 @@ const Sidebar = () => {
           <div className="user-section">
             <div className="user-info">
               <span className="user-icon">👤</span>
-              <span className="username">Username</span>
+              <span className="username">{userName}</span>
             </div>
             <button className="chat-button" onClick={toggleChat}>
               Chat 💬
@@ -238,12 +256,12 @@ const Sidebar = () => {
         <QuickPostForm />
       </SectionWindow>
       <SectionWindow 
-  title="dashboard"
-  show={showProfile}
-  toggle={toggleYourProfile}
->
+      title="dashboard"
+      show={showProfile}
+      toggle={toggleYourProfile}
+    >
   {/* Pass userId as a prop to Dashboard */}
-  <Dashboard userId="0237552f-1a66-4a7d-968e-74f5e5aee00d" />
+  <Dashboard  />
 </SectionWindow>
 
     </div>

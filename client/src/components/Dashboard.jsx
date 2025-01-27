@@ -3,7 +3,7 @@ import axios from "axios";
 import '../styling/Dashboard.css';
 import { MyContext } from "../context/context";
 
-export const Dashboard = ({ userd }) => {
+export const Dashboard = () => {
   const {userId}=useContext(MyContext);
 
   const __id=userId;
