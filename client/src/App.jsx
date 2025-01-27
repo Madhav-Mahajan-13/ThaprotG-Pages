@@ -17,6 +17,7 @@ import MyProvider from './context/provider';
 // import UserProfile from './pages/ProfilePage';
 // import Dashboard from './pages/ProfilePage';
 import UserProfile from './pages/UserPage';
+import Home from './pages/home';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
     children:[
       {
         path:"/",
-        element:<h1>HELLO WORLD</h1>
+        element:<Home/>
       },
       {
         path:'studentProject',

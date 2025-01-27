@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react"
 import { useNavigate } from "react-router-dom";
+import SearchInterface from "../components/searchInterface";
 
 export default function Home(){
     
@@ -17,8 +18,8 @@ export default function Home(){
     },[])
 
     return(
-        <>
-        <h1>Hello World</h1>
-        </>
+        <div className="flex flex-col">
+            <SearchInterface/>
+        </div>
     )
 }

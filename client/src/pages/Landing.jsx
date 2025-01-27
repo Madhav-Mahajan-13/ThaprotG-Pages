@@ -20,10 +20,10 @@ const Landing = () => {
     },[])
 
     return ( 
-    <> 
-        <Sidebar/>
-        <Outlet/>
-    </> 
+        <div className="">
+            <Sidebar/>
+            <Outlet/>
+        </div>
     );
 }
  
