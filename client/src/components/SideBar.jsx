@@ -5,9 +5,8 @@ import { Dashboard } from "./Dashboard";
 import axios from "axios";
 import { MyContext } from "../context/context";
 import UserProjects from "./UserProjectsCard.jsx";
-// import { userid } from "../context/userid";
 
-
+import MobileNav from "./MobileNav.jsx";
 
 
 
@@ -126,49 +125,196 @@ const QuickPostForm = () => {
 };
 
 
+// const Sidebar = () => {
+//   const {userId}=useContext(MyContext);
+//   const [userName,setUserName]=useState("")
+//   const [showChat, setShowChat] = useState(false);
+//   const [showProject, setShowProject] = useState(false);
+//   const [showQuickPost, setQuickPost] = useState(false);
+//   const [showProfile, setShowProfile] = useState(false);
+//   const toggleChat = () => setShowChat(!showChat);
+//   const toggleYourProject = () => setShowProject(!showProject);
+//   const toggleQuickPost = () => setQuickPost(!showQuickPost);
+//   const toggleYourProfile =()=> setShowProfile(!showProfile)
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`);
+//         // Concatenate first_name and last_name with a space
+//         setUserName(`${response.data.first_name} ${response.data.last_name}`);
+//       } catch (error) {
+//         console.error("Error fetching user data:", error);
+//       }
+//     };
+
+//     if (userId) {
+//       fetchUserData();
+//     }
+//   }, [userId]); // Only run when userId changes
+      
+//   return (
+//     <div className={`app-container ${showChat ? "chat-active" : ""}`}>
+//       {/* Sidebar */}
+//       <aside className="sidebar">
+//         <div className="sidebar-container">
+//           {/* Logo */}
+//           <Link to="/" className="sidebar-logo">
+//             <img
+//               src="/assets/images/logo-text.svg"
+//               alt="logo"
+//               className="logo-image"
+//             />
+//             <div className="project-name">ThaProt-G</div>
+//           </Link>
+
+//           {/* Navigation */}
+//           <nav className="sidebar-nav">
+//             <ul className="sidebar-links">
+//               <li>
+//                 <Link to="/" className="sidebar-button">
+//                   Home
+//                 </Link>
+//               </li>
+//               <li>
+//                 <Link to="/alumproject" className="sidebar-button">
+//                   Projects
+//                 </Link>
+//               </li>
+//               <li>
+//                 <Link to="/studentproject" className="sidebar-button">
+//                   Projects by Students
+//                 </Link>
+//               </li>
+//               <li>
+//                 <Link to="/campusgallery" className="sidebar-button">
+//                   Gallery
+//                 </Link>
+//               </li>
+//               <li>
+//                 <Link to="/campusgallery" className="sidebar-button">
+//                   Events Showcase
+//                 </Link>
+//               </li>
+//             </ul>
+//           </nav>
+
+//           {/* User Section */}
+//           <div className="user-section">
+//             <div className="user-info">
+//               <span className="user-icon">👤</span>
+//               <span className="username">{userName}</span>
+//             </div>
+//             <button className="chat-button" onClick={toggleChat}>
+//               Chat 💬
+//             </button>
+//             <button className="chat-button" onClick={toggleQuickPost}>
+//               Quick Post
+//             </button>
+//             <button className="chat-button" onClick={toggleYourProject}>
+//               Your Projects
+//             </button>
+//             {/* <button className="chat-button"><a href="/profile">Your Profile</a></button> */}
+//             <button className="chat-button" onClick={toggleYourProfile}>
+//               Your Profile
+//             </button>
+//           </div>
+
+//           {/* Logout Button */}
+//           <div className="logout-section">
+//             <button
+//               className="logout-button"
+//               onClick={() => alert("Logged Out")}
+//             >
+//               Logout
+//             </button>
+//           </div>
+//         </div>
+//       </aside>
+
+//       {/* Side Windows */}
+//       <SectionWindow title="Chat" show={showChat} toggle={toggleChat}>
+//         <p>Welcome to the chat!</p>
+//         {/* Add your chat content here */}
+//       </SectionWindow>
+
+//       <SectionWindow
+//         title="Your Projects"
+//         show={showProject}
+//         toggle={toggleYourProject}
+//       >
+//         <UserProjects></UserProjects>
+//         {/* <p>Render the project element</p> */}
+//         {/* Add your project content here */}
+//       </SectionWindow>
+
+//       <SectionWindow
+//         title="Quick Post"
+//         show={showQuickPost}
+//         toggle={toggleQuickPost}
+//       >
+//         <QuickPostForm />
+//       </SectionWindow>
+//       <SectionWindow 
+//       title="dashboard"
+//       show={showProfile}
+//       toggle={toggleYourProfile}
+//     >
+//   {/* Pass userId as a prop to Dashboard */}
+//   <Dashboard  />
+// </SectionWindow>
+
+//     </div>
+//   );
+// };
 const Sidebar = () => {
-  const {userId}=useContext(MyContext);
-  const [userName,setUserName]=useState("")
-  const [showChat, setShowChat] = useState(false);
-  const [showProject, setShowProject] = useState(false);
-  const [showQuickPost, setQuickPost] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-  const toggleChat = () => setShowChat(!showChat);
-  const toggleYourProject = () => setShowProject(!showProject);
-  const toggleQuickPost = () => setQuickPost(!showQuickPost);
-  const toggleYourProfile =()=> setShowProfile(!showProfile)
+  const { userId } = useContext(MyContext)
+  const [userName, setUserName] = useState("")
+  const [showChat, setShowChat] = useState(false)
+  const [showProject, setShowProject] = useState(false)
+  const [showQuickPost, setQuickPost] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
+  const toggleChat = () => setShowChat(!showChat)
+  const toggleYourProject = () => setShowProject(!showProject)
+  const toggleQuickPost = () => setQuickPost(!showQuickPost)
+  const toggleYourProfile = () => setShowProfile(!showProfile)
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`);
-        // Concatenate first_name and last_name with a space
-        setUserName(`${response.data.first_name} ${response.data.last_name}`);
+        const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`)
+        setUserName(`${response.data.first_name} ${response.data.last_name}`)
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching user data:", error)
       }
-    };
+    }
 
     if (userId) {
-      fetchUserData();
+      fetchUserData()
     }
-  }, [userId]); // Only run when userId changes
-      
+  }, [userId])
+
+  const handleLogout = () => {
+    alert("Logged Out")
+    // Add your logout logic here
+  }
+
   return (
     <div className={`app-container ${showChat ? "chat-active" : ""}`}>
-      {/* Sidebar */}
+      <MobileNav
+        userName={userName}
+        onLogout={handleLogout}
+        toggleChat={toggleChat}
+        toggleQuickPost={toggleQuickPost}
+        toggleYourProject={toggleYourProject}
+        toggleYourProfile={toggleYourProfile}
+      />
       <aside className="sidebar">
         <div className="sidebar-container">
-          {/* Logo */}
           <Link to="/" className="sidebar-logo">
-            <img
-              src="/assets/images/logo-text.svg"
-              alt="logo"
-              className="logo-image"
-            />
+            <img src="/assets/images/logo-text.svg" alt="logo" className="logo-image" />
             <div className="project-name">ThaProt-G</div>
           </Link>
 
-          {/* Navigation */}
           <nav className="sidebar-nav">
             <ul className="sidebar-links">
               <li>
@@ -199,7 +345,6 @@ const Sidebar = () => {
             </ul>
           </nav>
 
-          {/* User Section */}
           <div className="user-section">
             <div className="user-info">
               <span className="user-icon">👤</span>
@@ -214,58 +359,36 @@ const Sidebar = () => {
             <button className="chat-button" onClick={toggleYourProject}>
               Your Projects
             </button>
-            {/* <button className="chat-button"><a href="/profile">Your Profile</a></button> */}
             <button className="chat-button" onClick={toggleYourProfile}>
               Your Profile
             </button>
           </div>
 
-          {/* Logout Button */}
           <div className="logout-section">
-            <button
-              className="logout-button"
-              onClick={() => alert("Logged Out")}
-            >
+            <button className="logout-button" onClick={handleLogout}>
               Logout
             </button>
           </div>
         </div>
       </aside>
 
-      {/* Side Windows */}
       <SectionWindow title="Chat" show={showChat} toggle={toggleChat}>
         <p>Welcome to the chat!</p>
-        {/* Add your chat content here */}
       </SectionWindow>
 
-      <SectionWindow
-        title="Your Projects"
-        show={showProject}
-        toggle={toggleYourProject}
-      >
-        <UserProjects></UserProjects>
-        {/* <p>Render the project element</p> */}
-        {/* Add your project content here */}
+      <SectionWindow title="Your Projects" show={showProject} toggle={toggleYourProject}>
+        <UserProjects />
       </SectionWindow>
 
-      <SectionWindow
-        title="Quick Post"
-        show={showQuickPost}
-        toggle={toggleQuickPost}
-      >
+      <SectionWindow title="Quick Post" show={showQuickPost} toggle={toggleQuickPost}>
         <QuickPostForm />
       </SectionWindow>
-      <SectionWindow 
-      title="dashboard"
-      show={showProfile}
-      toggle={toggleYourProfile}
-    >
-  {/* Pass userId as a prop to Dashboard */}
-  <Dashboard  />
-</SectionWindow>
 
+      <SectionWindow title="Dashboard" show={showProfile} toggle={toggleYourProfile}>
+        <Dashboard />
+      </SectionWindow>
     </div>
-  );
-};
+  )
+}
 
 export default Sidebar;

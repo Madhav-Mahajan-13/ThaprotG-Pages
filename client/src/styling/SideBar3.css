@@ -322,8 +322,54 @@
 }
 
 @media screen and (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .side-window {
+    width: 100%;
+    right: -100%;
+  }
+
+  #left {
+    width: 100%;
+  }
+
   .main-content {
     margin-left: 0;
     padding: 1rem;
   }
 }
+
+/* Add these new styles for the mobile menu button */
+.mobile-menu-button {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .mobile-menu-button {
+    display: block;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+  }
+}
+
+/* Add these new CSS variables for consistent theming */
+:root {
+  --primary-bg-color: #000000;
+  --secondary-bg-color: #1e1e1e;
+  --primary-color: #d51aff;
+  --text-color: #ffffff;
+  --link-color: #03dac6;
+  --link-hover-color: #018786;
+}
+
