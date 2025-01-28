@@ -1,0 +1,185 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+.carousel-slide.prev {
+  z-index: 1;
+}
+
+.slide-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-slide img {
+  max-width: 100%;
+  max-height: 70%;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.carousel-slide:hover img {
+  transform: scale(1.05);
+}
+
+.slide-text {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--text-color);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.carousel-slide.active .slide-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.torn-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-bg-color);
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    98% 98%,
+    96% 100%,
+    94% 99%,
+    92% 98%,
+    90% 99%,
+    88% 98%,
+    86% 100%,
+    84% 99%,
+    82% 98%,
+    80% 99%,
+    78% 98%,
+    76% 100%,
+    74% 99%,
+    72% 98%,
+    70% 99%,
+    68% 98%,
+    66% 100%,
+    64% 99%,
+    62% 98%,
+    60% 99%,
+    58% 98%,
+    56% 100%,
+    54% 99%,
+    52% 98%,
+    50% 99%,
+    48% 98%,
+    46% 100%,
+    44% 99%,
+    42% 98%,
+    40% 99%,
+    38% 98%,
+    36% 100%,
+    34% 99%,
+    32% 98%,
+    30% 99%,
+    28% 98%,
+    26% 100%,
+    24% 99%,
+    22% 98%,
+    20% 99%,
+    18% 98%,
+    16% 100%,
+    14% 99%,
+    12% 98%,
+    10% 99%,
+    8% 98%,
+    6% 100%,
+    4% 99%,
+    2% 98%,
+    0% 100%
+  );
+  transform: translateY(100%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide.active .torn-effect {
+  transform: translateY(100%);
+}
+
+.carousel-slide.prev .torn-effect {
+  transform: translateY(0%);
+  transition-delay: 0.2s;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 3;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--text-color);
+  opacity: 0.5;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.indicator.active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    height: 300px;
+  }
+
+  .slide-text {
+    font-size: 1rem;
+  }
+}
+

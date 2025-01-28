@@ -1,0 +1,42 @@
+.internship-placement {
+  background-color: var(--secondary-bg-color);
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.internship-placement h2 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.internship-placement p {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+.internship-placement ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.internship-placement li {
+  margin-bottom: 0.5rem;
+}
+
+.internship-placement a {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.internship-placement a:hover {
+  color: var(--link-hover-color);
+}
+
+@media (max-width: 768px) {
+  .internship-placement {
+    padding: 1rem;
+  }
+}
+
