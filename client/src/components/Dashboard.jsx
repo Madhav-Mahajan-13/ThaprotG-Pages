@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import axios from "axios";
-import '../styling/Dashboard.css';
-import { MyContext } from "../context/context";
+import React, { useState, useEffect, useContext } from "react"
+import axios from "axios"
+import "../styling/Dashboard.css"
+import { MyContext } from "../context/context"
+import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes } from "react-icons/fa"
 
 export const Dashboard = () => {
-  const {userId}=useContext(MyContext);
-
-  const __id=userId;
-  console.log("dash",__id)
-  const [isEditing, setIsEditing] = useState(false);
+  const { userId } = useContext(MyContext)
+  const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -16,17 +14,13 @@ export const Dashboard = () => {
     graduation_year: "",
     bio: "",
     profilePicture: "",
-  });
-  const [isLoading, setIsLoading] = useState(true);
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        
-        const response = await axios.get(
-          `http://localhost:5000/api/user/dashboard/${__id}`
-        );
-        console.log(response)
+        const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`)
 
         setFormData({
           firstName: response.data.first_name || "",
@@ -35,53 +29,55 @@ export const Dashboard = () => {
           graduation_year: response.data.graduation_year || "",
           bio: response.data.bio || "",
           profilePicture: response.data.profile_picture || "https://picsum.photos/200/300",
-        });
+        })
 
-        setIsLoading(false);
+        setIsLoading(false)
       } catch (error) {
-        console.error("Error fetching user data:", error);
-        setIsLoading(false);
+        console.error("Error fetching user data:", error)
+        setIsLoading(false)
       }
-    };
+    }
 
     if (userId) {
-      fetchUserData();
+      fetchUserData()
     }
-  }, [userId]);
+  }, [userId])
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   const handleSave = async () => {
     try {
-      console.log("formdata ==== ",formData)
-      await axios.post(`http://localhost:5000/api/user/dashboard/${userId}`, formData);
-      setIsEditing(false);
-      alert("Data saved successfully!");
+      await axios.post(`http://localhost:5000/api/user/dashboard/${userId}`, formData)
+      setIsEditing(false)
+      alert("Profile updated successfully!")
     } catch (error) {
-      console.error("Error saving data:", error);
-      alert("Failed to save data. Please try again.");
+      console.error("Error saving data:", error)
+      alert("Failed to update profile. Please try again.")
     }
-  };
-
-  const handleBack = () => {
-    setIsEditing(false);
-  };
+  }
 
   if (isLoading) {
-    return <div className="loading">Loading...</div>;
+    return (
+      <div className="dashboard-container">
+        <div className="loading">Loading your profile...</div>
+      </div>
+    )
   }
 
   return (
     <div className="dashboard-container">
       {isEditing ? (
         <div className="edit-form">
-          <form>
+          <h2>
+            <FaEdit /> Edit Profile
+          </h2>
+          <form onSubmit={(e) => e.preventDefault()}>
             <div className="form-group">
               <label className="form-label" htmlFor="firstName">
-                First Name:
+                <FaUser /> First Name
               </label>
               <input
                 className="form-input"
@@ -96,7 +92,7 @@ export const Dashboard = () => {
 
             <div className="form-group">
               <label className="form-label" htmlFor="lastName">
-                Last Name:
+                <FaUser /> Last Name
               </label>
               <input
                 className="form-input"
@@ -111,7 +107,7 @@ export const Dashboard = () => {
 
             <div className="form-group">
               <label className="form-label" htmlFor="email">
-                Email:
+                <FaEnvelope /> Email
               </label>
               <input
                 className="form-input"
@@ -126,7 +122,7 @@ export const Dashboard = () => {
 
             <div className="form-group">
               <label className="form-label" htmlFor="graduation_year">
-                Date of Graduation:
+                <FaGraduationCap /> Graduation Year
               </label>
               <input
                 className="form-input"
@@ -135,12 +131,14 @@ export const Dashboard = () => {
                 name="graduation_year"
                 value={formData.graduation_year}
                 onChange={handleInputChange}
+                min="1900"
+                max="2099"
               />
             </div>
 
             <div className="form-group">
               <label className="form-label" htmlFor="bio">
-                Bio:
+                <FaBook /> Bio
               </label>
               <textarea
                 className="form-textarea"
@@ -153,19 +151,11 @@ export const Dashboard = () => {
             </div>
 
             <div className="button-group">
-              <button
-                type="button"
-                className="button primary-button"
-                onClick={handleSave}
-              >
-                Save Changes
+              <button type="button" className="button primary-button" onClick={handleSave}>
+                <FaSave /> Save Changes
               </button>
-              <button
-                type="button"
-                className="button secondary-button"
-                onClick={handleBack}
-              >
-                Cancel
+              <button type="button" className="button secondary-button" onClick={() => setIsEditing(false)}>
+                <FaTimes /> Cancel
               </button>
             </div>
           </form>
@@ -173,51 +163,48 @@ export const Dashboard = () => {
       ) : (
         <div className="profile-view">
           <div className="profile-image-container">
-            <img
-              className="profile-image"
-              src={formData.profilePicture}
-              alt="Profile"
-            />
+            <img className="profile-image" src={formData.profilePicture || "/placeholder.svg"} alt="Profile" />
           </div>
           <div className="profile-details">
             <div className="profile-field">
-              <span className="field-label">First Name</span>
-              <p className="field-value">{formData.firstName || "N/A"}</p>
+              <span className="field-label">
+                <FaUser /> Name
+              </span>
+              <p className="field-value">{`${formData.firstName} ${formData.lastName}` || "Not provided"}</p>
             </div>
 
             <div className="profile-field">
-              <span className="field-label">Last Name</span>
-              <p className="field-value">{formData.lastName || "N/A"}</p>
+              <span className="field-label">
+                <FaEnvelope /> Email
+              </span>
+              <p className="field-value">{formData.email || "Not provided"}</p>
             </div>
 
             <div className="profile-field">
-              <span className="field-label">Email</span>
-              <p className="field-value">{formData.email || "N/A"}</p>
+              <span className="field-label">
+                <FaGraduationCap /> Graduation Year
+              </span>
+              <p className="field-value">{formData.graduation_year || "Not provided"}</p>
             </div>
 
             <div className="profile-field">
-              <span className="field-label">Date of Graduation</span>
-              <p className="field-value">{formData.graduation_year || "N/A"}</p>
-            </div>
-
-            <div className="profile-field">
-              <span className="field-label">Bio</span>
-              <p className="field-value">{formData.bio || "N/A"}</p>
+              <span className="field-label">
+                <FaBook /> Bio
+              </span>
+              <p className="field-value">{formData.bio || "No bio provided"}</p>
             </div>
 
             <div className="button-group">
-              <button
-                className="button primary-button"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit Profile
+              <button className="button primary-button" onClick={() => setIsEditing(true)}>
+                <FaEdit /> Edit Profile
               </button>
             </div>
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
+
