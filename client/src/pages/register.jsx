@@ -106,8 +106,9 @@ export default function SignUp(props) {
       }
 
       const password = document.getElementById('password').value;
-      if(password.length < 3){
+      if(password.length < 8){
         // Implement Error showing
+
         toast.error("Invalid Password Length",toastOptions);
         return;
       }

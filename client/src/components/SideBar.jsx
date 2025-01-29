@@ -1,173 +1,191 @@
-import { Link } from "react-router-dom";
-import React, { useContext, useEffect, useState } from "react";
-import "../styling/SideBar3.css";
-import { Dashboard } from "./Dashboard";
-import axios from "axios";
-import { MyContext } from "../context/context";
-import UserProjects from "./UserProjectsCard.jsx";
+// import { Link } from "react-router-dom"
+// import React, { useContext, useEffect, useState } from "react"
+// import "../styling/SideBar3.css"
+// import { Dashboard } from "./Dashboard"
+// import axios from "axios"
+// import { MyContext } from "../context/context"
+// import UserProjects from "./UserProjectsCard.jsx"
+// import MobileNav from "./MobileNav.jsx"
 
-import MobileNav from "./MobileNav.jsx";
+// const SectionWindow = ({ title, show, toggle, children }) => (
+//   <div className={`side-window ${show ? "open" : ""}`}>
+//     <div className="side-header">
+//       <span>{title}</span>
+//       <button onClick={toggle} className="side-close-button">
+//         ✖
+//       </button>
+//     </div>
+//     <div className="side-body">{children}</div>
+//   </div>
+// )
 
+// const QuickPostForm = () => {
+//   const { userId } = useContext(MyContext)
+//   const uid = userId // Replace with actual user ID logic
+//   const initialFormState = {
+//     title: "",
+//     description: "",
+//     openings: "",
+//     technology: "",
+//     openUntil: "",
+//     pdf: null,
+//     image: null,
+//   }
+//   const [formData, setFormData] = useState(initialFormState)
+//   const [error, setError] = useState(null)
 
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target
+//     setFormData({ ...formData, [name]: value })
+//   }
 
-const SectionWindow = ({ title, show, toggle, children }) => (
-  <div className={`side-window ${show ? "open" : ""}`}>
-    <div className="side-header">
-      <span>{title}</span>
-      <button onClick={toggle} className="side-close-button">
-        ✖
-      </button>
-    </div>
-    <div className="side-body">{children}</div>
-  </div>
-);
+//   const handleFileChange = (e) => {
+//     const { name, files } = e.target
+//     setFormData({ ...formData, [name]: files[0] })
+//   }
 
-const QuickPostForm = () => {
-  const {userId}=useContext(MyContext);
-  const uid = userId; // Replace with actual user ID logic
-  const initialFormState = {
-    title: "",
-    description: "",
-    openings: "",
-    technology: "",
-    openUntil: "",
-    pdf: null,
-    image: null,
-  };
-  const [formData, setFormData] = useState(initialFormState);
-  const [error, setError] = useState(null);
+//   const handleSubmit = async (e) => {
+//     e.preventDefault()
+//     setError(null)
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+//     if (!formData.title || !formData.description || !formData.openings || !formData.technology || !formData.openUntil) {
+//       setError("Please fill out all required fields.")
+//       return
+//     }
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
-  };
+//     const formDataToSend = new FormData()
+//     formDataToSend.append("id", uid)
+//     formDataToSend.append("title", formData.title)
+//     formDataToSend.append("description", formData.description)
+//     formDataToSend.append("openings", formData.openings)
+//     formDataToSend.append("technology", formData.technology)
+//     formDataToSend.append("openUntil", formData.openUntil)
+//     if (formData.pdf) formDataToSend.append("pdf", formData.pdf)
+//     if (formData.image) formDataToSend.append("image", formData.image)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
+//     try {
+//       const response = await axios.post("http://localhost:5000/api/projects/postProject", formDataToSend, {
+//         headers: { "Content-Type": "multipart/form-data" },
+//       })
+//       alert("post successful")
+//       console.log("Response:", response.data)
+//       setFormData(initialFormState)
+//     } catch (err) {
+//       setError(err.response?.data?.error || "Failed to submit the form.")
+//     }
+//   }
 
-    if (!formData.title || !formData.description || !formData.openings || !formData.technology || !formData.openUntil) {
-      setError("Please fill out all required fields.");
-      return;
-    }
-
-    const formDataToSend = new FormData();
-    formDataToSend.append("id", uid);
-    formDataToSend.append("title", formData.title);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("openings", formData.openings);
-    formDataToSend.append("technology", formData.technology);
-    formDataToSend.append("openUntil", formData.openUntil);
-    if (formData.pdf) formDataToSend.append("pdf", formData.pdf);
-    if (formData.image) formDataToSend.append("image", formData.image);
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/projects/postProject", formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      alert("post successfull");
-      console.log("Response:", response.data);
-      setFormData({
-        title: "",
-        description: "",
-        openings: "",
-        technology: "",
-        openUntil: "",
-        pdf: null,
-        image: null,
-      });
-    } catch (err) {
-      setError(err.response?.data?.error || "Failed to submit the form.");
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="quick-post-form">
-      {error && <div className="error-message">{error}</div>}
-      <div className="form-group">
-        <label htmlFor="title">Title</label>
-        <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="description">Description</label>
-        <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} required></textarea>
-      </div>
-      <div className="form-group">
-        <label htmlFor="openings">Openings</label>
-        <input type="number" id="openings" name="openings" value={formData.openings} onChange={handleInputChange} required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="technology">Technology</label>
-        <input type="text" id="technology" name="technology" value={formData.technology} onChange={handleInputChange} required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="openUntil">Open Until</label>
-        <input type="date" id="openUntil" name="openUntil" value={formData.openUntil} onChange={handleInputChange} required />
-      </div>
-      <div className="form-group">
-        <label htmlFor="pdf">PDF</label>
-        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} />
-      </div>
-      <div className="form-group">
-        <label htmlFor="image">Image</label>
-        <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} />
-      </div>
-      <div className="form-actions">
-        <button type="submit">Submit</button>
-      </div>
-    </form>
-  );
-};
-
+//   return (
+//     <form onSubmit={handleSubmit} className="quick-post-form">
+//       {error && <div className="error-message">{error}</div>}
+//       <div className="form-group">
+//         <label htmlFor="title">Title</label>
+//         <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="description">Description</label>
+//         <textarea
+//           id="description"
+//           name="description"
+//           value={formData.description}
+//           onChange={handleInputChange}
+//           required
+//         ></textarea>
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="openings">Openings</label>
+//         <input
+//           type="number"
+//           id="openings"
+//           name="openings"
+//           value={formData.openings}
+//           onChange={handleInputChange}
+//           required
+//         />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="technology">Technology</label>
+//         <input
+//           type="text"
+//           id="technology"
+//           name="technology"
+//           value={formData.technology}
+//           onChange={handleInputChange}
+//           required
+//         />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="openUntil">Open Until</label>
+//         <input
+//           type="date"
+//           id="openUntil"
+//           name="openUntil"
+//           value={formData.openUntil}
+//           onChange={handleInputChange}
+//           required
+//         />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="pdf">PDF</label>
+//         <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="image">Image</label>
+//         <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} />
+//       </div>
+//       <div className="form-actions">
+//         <button type="submit">Submit</button>
+//       </div>
+//     </form>
+//   )
+// }
 
 // const Sidebar = () => {
-//   const {userId}=useContext(MyContext);
-//   const [userName,setUserName]=useState("")
-//   const [showChat, setShowChat] = useState(false);
-//   const [showProject, setShowProject] = useState(false);
-//   const [showQuickPost, setQuickPost] = useState(false);
-//   const [showProfile, setShowProfile] = useState(false);
-//   const toggleChat = () => setShowChat(!showChat);
-//   const toggleYourProject = () => setShowProject(!showProject);
-//   const toggleQuickPost = () => setQuickPost(!showQuickPost);
-//   const toggleYourProfile =()=> setShowProfile(!showProfile)
+//   const { userId } = useContext(MyContext)
+//   const [userName, setUserName] = useState("")
+//   const [openWindow, setOpenWindow] = useState(null) // Track which window is open
+
+//   const toggleWindow = (windowName) => {
+//     setOpenWindow(openWindow === windowName ? null : windowName)
+//   }
+
 //   useEffect(() => {
 //     const fetchUserData = async () => {
 //       try {
-//         const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`);
-//         // Concatenate first_name and last_name with a space
-//         setUserName(`${response.data.first_name} ${response.data.last_name}`);
+//         const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`)
+//         setUserName(`${response.data.first_name} ${response.data.last_name}`)
 //       } catch (error) {
-//         console.error("Error fetching user data:", error);
+//         console.error("Error fetching user data:", error)
 //       }
-//     };
+//     }
 
 //     if (userId) {
-//       fetchUserData();
+//       fetchUserData()
 //     }
-//   }, [userId]); // Only run when userId changes
-      
+//   }, [userId])
+
+//   const handleLogout = () => {
+//     alert("Logged Out")
+//     // Add your logout logic here
+//   }
+
 //   return (
-//     <div className={`app-container ${showChat ? "chat-active" : ""}`}>
-//       {/* Sidebar */}
+//     <div className={`app-container ${openWindow === "chat" ? "chat-active" : ""}`}>
+//       <MobileNav
+//         userName={userName}
+//         onLogout={handleLogout}
+//         toggleChat={() => toggleWindow("chat")}
+//         toggleQuickPost={() => toggleWindow("quickPost")}
+//         toggleYourProject={() => toggleWindow("yourProject")}
+//         toggleYourProfile={() => toggleWindow("yourProfile")}
+//       />
 //       <aside className="sidebar">
 //         <div className="sidebar-container">
-//           {/* Logo */}
 //           <Link to="/" className="sidebar-logo">
-//             <img
-//               src="/assets/images/logo-text.svg"
-//               alt="logo"
-//               className="logo-image"
-//             />
+//             <img src="https://picsum.photos/id/237/200/300" alt="logo" className="logo-image" />
 //             <div className="project-name">ThaProt-G</div>
 //           </Link>
 
-//           {/* Navigation */}
 //           <nav className="sidebar-nav">
 //             <ul className="sidebar-links">
 //               <li>
@@ -198,85 +216,221 @@ const QuickPostForm = () => {
 //             </ul>
 //           </nav>
 
-//           {/* User Section */}
 //           <div className="user-section">
 //             <div className="user-info">
 //               <span className="user-icon">👤</span>
 //               <span className="username">{userName}</span>
 //             </div>
-//             <button className="chat-button" onClick={toggleChat}>
+//             <button className="chat-button" onClick={() => toggleWindow("chat")}>
 //               Chat 💬
 //             </button>
-//             <button className="chat-button" onClick={toggleQuickPost}>
+//             <button className="chat-button" onClick={() => toggleWindow("quickPost")}>
 //               Quick Post
 //             </button>
-//             <button className="chat-button" onClick={toggleYourProject}>
+//             <button className="chat-button" onClick={() => toggleWindow("yourProject")}>
 //               Your Projects
 //             </button>
-//             {/* <button className="chat-button"><a href="/profile">Your Profile</a></button> */}
-//             <button className="chat-button" onClick={toggleYourProfile}>
+//             <button className="chat-button" onClick={() => toggleWindow("yourProfile")}>
 //               Your Profile
 //             </button>
 //           </div>
 
-//           {/* Logout Button */}
 //           <div className="logout-section">
-//             <button
-//               className="logout-button"
-//               onClick={() => alert("Logged Out")}
-//             >
+//             <button className="logout-button" onClick={handleLogout}>
 //               Logout
 //             </button>
 //           </div>
 //         </div>
 //       </aside>
 
-//       {/* Side Windows */}
-//       <SectionWindow title="Chat" show={showChat} toggle={toggleChat}>
+//       <SectionWindow title="Chat" show={openWindow === "chat"} toggle={() => toggleWindow("chat")}>
 //         <p>Welcome to the chat!</p>
-//         {/* Add your chat content here */}
 //       </SectionWindow>
 
 //       <SectionWindow
 //         title="Your Projects"
-//         show={showProject}
-//         toggle={toggleYourProject}
+//         show={openWindow === "yourProject"}
+//         toggle={() => toggleWindow("yourProject")}
 //       >
-//         <UserProjects></UserProjects>
-//         {/* <p>Render the project element</p> */}
-//         {/* Add your project content here */}
+//         <UserProjects />
 //       </SectionWindow>
 
-//       <SectionWindow
-//         title="Quick Post"
-//         show={showQuickPost}
-//         toggle={toggleQuickPost}
-//       >
+//       <SectionWindow title="Quick Post" show={openWindow === "quickPost"} toggle={() => toggleWindow("quickPost")}>
 //         <QuickPostForm />
 //       </SectionWindow>
-//       <SectionWindow 
-//       title="dashboard"
-//       show={showProfile}
-//       toggle={toggleYourProfile}
-//     >
-//   {/* Pass userId as a prop to Dashboard */}
-//   <Dashboard  />
-// </SectionWindow>
 
+//       <SectionWindow title="Dashboard" show={openWindow === "yourProfile"} toggle={() => toggleWindow("yourProfile")}>
+//         <Dashboard />
+//       </SectionWindow>
 //     </div>
-//   );
-// };
+//   )
+// }
+
+// export default Sidebar
+
+
+import { Link } from "react-router-dom"
+import React, { useContext, useEffect, useState } from "react"
+import "../styling/SideBar.css"
+import { Dashboard } from "./Dashboard"
+import axios from "axios"
+import { MyContext } from "../context/context"
+import UserProjects from "./UserProjectsCard.jsx"
+import MobileNav from "./MobileNav.jsx"
+import {
+  FaHome,
+  FaProjectDiagram,
+  FaUserGraduate,
+  FaImages,
+  FaCalendarAlt,
+  FaComments,
+  FaPlusCircle,
+  FaFolderOpen,
+  FaUserCircle,
+  FaSignOutAlt,
+} from "react-icons/fa"
+
+const SectionWindow = ({ title, show, toggle, children }) => (
+  <div className={`side-window ${show ? "open" : ""}`}>
+    <div className="side-header">
+      <span>{title}</span>
+      <button onClick={toggle} className="side-close-button">
+        ✖
+      </button>
+    </div>
+    <div className="side-body">{children}</div>
+  </div>
+)
+
+const QuickPostForm = () => {
+  const { userId } = useContext(MyContext)
+  const uid = userId
+  const initialFormState = {
+    title: "",
+    description: "",
+    openings: "",
+    technology: "",
+    openUntil: "",
+    pdf: null,
+    image: null,
+  }
+  const [formData, setFormData] = useState(initialFormState)
+  const [error, setError] = useState(null)
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
+
+  const handleFileChange = (e) => {
+    const { name, files } = e.target
+    setFormData({ ...formData, [name]: files[0] })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError(null)
+
+    if (!formData.title || !formData.description || !formData.openings || !formData.technology || !formData.openUntil) {
+      setError("Please fill out all required fields.")
+      return
+    }
+
+    const formDataToSend = new FormData()
+    formDataToSend.append("id", uid)
+    formDataToSend.append("title", formData.title)
+    formDataToSend.append("description", formData.description)
+    formDataToSend.append("openings", formData.openings)
+    formDataToSend.append("technology", formData.technology)
+    formDataToSend.append("openUntil", formData.openUntil)
+    if (formData.pdf) formDataToSend.append("pdf", formData.pdf)
+    if (formData.image) formDataToSend.append("image", formData.image)
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/projects/postProject", formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      alert("Post successful")
+      console.log("Response:", response.data)
+      setFormData(initialFormState)
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to submit the form.")
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="quick-post-form">
+      {error && <div className="error-message">{error}</div>}
+      <div className="form-group">
+        <label htmlFor="title">Title</label>
+        <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required />
+      </div>
+      <div className="form-group">
+        <label htmlFor="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+          required
+        ></textarea>
+      </div>
+      <div className="form-group">
+        <label htmlFor="openings">Openings</label>
+        <input
+          type="number"
+          id="openings"
+          name="openings"
+          value={formData.openings}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="technology">Technology</label>
+        <input
+          type="text"
+          id="technology"
+          name="technology"
+          value={formData.technology}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="openUntil">Open Until</label>
+        <input
+          type="date"
+          id="openUntil"
+          name="openUntil"
+          value={formData.openUntil}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="pdf">PDF</label>
+        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} />
+      </div>
+      <div className="form-group">
+        <label htmlFor="image">Image</label>
+        <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} />
+      </div>
+      <div className="form-actions">
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  )
+}
+
 const Sidebar = () => {
   const { userId } = useContext(MyContext)
   const [userName, setUserName] = useState("")
-  const [showChat, setShowChat] = useState(false)
-  const [showProject, setShowProject] = useState(false)
-  const [showQuickPost, setQuickPost] = useState(false)
-  const [showProfile, setShowProfile] = useState(false)
-  const toggleChat = () => setShowChat(!showChat)
-  const toggleYourProject = () => setShowProject(!showProject)
-  const toggleQuickPost = () => setQuickPost(!showQuickPost)
-  const toggleYourProfile = () => setShowProfile(!showProfile)
+  const [openWindow, setOpenWindow] = useState(null)
+
+  const toggleWindow = (windowName) => {
+    setOpenWindow(openWindow === windowName ? null : windowName)
+  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -299,19 +453,19 @@ const Sidebar = () => {
   }
 
   return (
-    <div className={`app-container ${showChat ? "chat-active" : ""}`}>
+    <div className={`app-container ${openWindow === "chat" ? "chat-active" : ""}`}>
       <MobileNav
         userName={userName}
         onLogout={handleLogout}
-        toggleChat={toggleChat}
-        toggleQuickPost={toggleQuickPost}
-        toggleYourProject={toggleYourProject}
-        toggleYourProfile={toggleYourProfile}
+        toggleChat={() => toggleWindow("chat")}
+        toggleQuickPost={() => toggleWindow("quickPost")}
+        toggleYourProject={() => toggleWindow("yourProject")}
+        toggleYourProfile={() => toggleWindow("yourProfile")}
       />
       <aside className="sidebar">
         <div className="sidebar-container">
           <Link to="/" className="sidebar-logo">
-            <img src="/assets/images/logo-text.svg" alt="logo" className="logo-image" />
+            <img src="https://picsum.photos/id/237/200/300" alt="logo" className="logo-image" />
             <div className="project-name">ThaProt-G</div>
           </Link>
 
@@ -319,27 +473,32 @@ const Sidebar = () => {
             <ul className="sidebar-links">
               <li>
                 <Link to="/" className="sidebar-button">
-                  Home
+                  <FaHome className="sidebar-icon" />
+                  <span>Home</span>
                 </Link>
               </li>
               <li>
                 <Link to="/alumproject" className="sidebar-button">
-                  Projects
+                  <FaProjectDiagram className="sidebar-icon" />
+                  <span>Projects</span>
                 </Link>
               </li>
               <li>
                 <Link to="/studentproject" className="sidebar-button">
-                  Projects by Students
+                  <FaUserGraduate className="sidebar-icon" />
+                  <span>Student Projects</span>
                 </Link>
               </li>
               <li>
                 <Link to="/campusgallery" className="sidebar-button">
-                  Gallery
+                  <FaImages className="sidebar-icon" />
+                  <span>Gallery</span>
                 </Link>
               </li>
               <li>
                 <Link to="/campusgallery" className="sidebar-button">
-                  Events Showcase
+                  <FaCalendarAlt className="sidebar-icon" />
+                  <span>Events Showcase</span>
                 </Link>
               </li>
             </ul>
@@ -347,48 +506,58 @@ const Sidebar = () => {
 
           <div className="user-section">
             <div className="user-info">
-              <span className="user-icon">👤</span>
+              <FaUserCircle className="user-icon" />
               <span className="username">{userName}</span>
             </div>
-            <button className="chat-button" onClick={toggleChat}>
-              Chat 💬
+            <button className="action-button" onClick={() => toggleWindow("chat")}>
+              <FaComments className="button-icon" />
+              <span>Chat</span>
             </button>
-            <button className="chat-button" onClick={toggleQuickPost}>
-              Quick Post
+            <button className="action-button" onClick={() => toggleWindow("quickPost")}>
+              <FaPlusCircle className="button-icon" />
+              <span>Quick Post</span>
             </button>
-            <button className="chat-button" onClick={toggleYourProject}>
-              Your Projects
+            <button className="action-button" onClick={() => toggleWindow("yourProject")}>
+              <FaFolderOpen className="button-icon" />
+              <span>Your Projects</span>
             </button>
-            <button className="chat-button" onClick={toggleYourProfile}>
-              Your Profile
+            <button className="action-button" onClick={() => toggleWindow("yourProfile")}>
+              <FaUserCircle className="button-icon" />
+              <span>Your Profile</span>
             </button>
           </div>
 
           <div className="logout-section">
             <button className="logout-button" onClick={handleLogout}>
-              Logout
+              <FaSignOutAlt className="button-icon" />
+              <span>Logout</span>
             </button>
           </div>
         </div>
       </aside>
 
-      <SectionWindow title="Chat" show={showChat} toggle={toggleChat}>
+      <SectionWindow title="Chat" show={openWindow === "chat"} toggle={() => toggleWindow("chat")}>
         <p>Welcome to the chat!</p>
       </SectionWindow>
 
-      <SectionWindow title="Your Projects" show={showProject} toggle={toggleYourProject}>
+      <SectionWindow
+        title="Your Projects"
+        show={openWindow === "yourProject"}
+        toggle={() => toggleWindow("yourProject")}
+      >
         <UserProjects />
       </SectionWindow>
 
-      <SectionWindow title="Quick Post" show={showQuickPost} toggle={toggleQuickPost}>
+      <SectionWindow title="Quick Post" show={openWindow === "quickPost"} toggle={() => toggleWindow("quickPost")}>
         <QuickPostForm />
       </SectionWindow>
 
-      <SectionWindow title="Dashboard" show={showProfile} toggle={toggleYourProfile}>
+      <SectionWindow title="Dashboard" show={openWindow === "yourProfile"} toggle={() => toggleWindow("yourProfile")}>
         <Dashboard />
       </SectionWindow>
     </div>
   )
 }
 
-export default Sidebar;
+export default Sidebar
+

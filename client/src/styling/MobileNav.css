@@ -1,60 +1,75 @@
+:root {
+  --primary-bg: #1a1a2e;
+  --secondary-bg: #16213e;
+  --accent-color: #0f3460;
+  --text-color: #e94560;
+  --text-light: #ffffff;
+  --hover-color: #533483;
+}
+
 .mobile-nav {
   display: none;
-}
-
-.mobile-nav-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1001;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.5rem;
-  cursor: pointer;
-  font-size: 1.5rem;
-}
-
-.mobile-nav-content {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--primary-bg-color);
+  right: 0;
+  background: var(--primary-bg);
   z-index: 1000;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  overflow-y: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.mobile-nav-content.open {
-  transform: translateX(0);
+.mobile-nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
 }
 
-.mobile-nav-header {
-  padding: 1rem;
-  text-align: center;
-  background: var(--secondary-bg-color);
+.mobile-nav-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-light);
 }
 
 .mobile-logo {
-  width: 100px;
+  width: 40px;
   height: auto;
+  margin-right: 0.5rem;
 }
 
 .mobile-project-name {
   font-size: 1.2rem;
   font-weight: bold;
-  margin-top: 0.5rem;
-  color: var(--text-color);
+}
+
+.mobile-nav-toggle {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-nav-menu {
+  display: none;
+  background: var(--secondary-bg);
+  padding: 1rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 60px);
+}
+
+.mobile-nav-menu.open {
+  display: block;
 }
 
 .mobile-nav-links {
   list-style: none;
   padding: 0;
-  margin: 1rem 0;
+  margin: 0 0 1rem 0;
 }
 
 .mobile-nav-links li {
@@ -62,21 +77,27 @@
 }
 
 .mobile-nav-links a {
-  display: block;
+  display: flex;
+  align-items: center;
   padding: 0.75rem 1rem;
-  color: var(--text-color);
+  color: var(--text-light);
   text-decoration: none;
   font-weight: 600;
   transition: background-color 0.3s ease;
+  border-radius: 8px;
 }
 
 .mobile-nav-links a:hover {
-  background-color: var(--secondary-bg-color);
+  background-color: var(--hover-color);
+}
+
+.mobile-nav-links a svg {
+  margin-right: 0.5rem;
 }
 
 .mobile-user-section {
-  padding: 1rem;
-  border-top: 1px solid var(--secondary-bg-color);
+  border-top: 1px solid var(--accent-color);
+  padding-top: 1rem;
 }
 
 .mobile-user-info {
@@ -84,21 +105,31 @@
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: var(--primary-bg);
+  border-radius: 8px;
+}
+
+.mobile-user-icon {
+  font-size: 1.5rem;
+  color: var(--text-light);
 }
 
 .mobile-username {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--text-light);
 }
 
-.mobile-action-button {
-  display: block;
+.mobile-action-button,
+.mobile-logout-button {
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
-  background: var(--primary-color);
-  color: white;
+  background: var(--accent-color);
+  color: var(--text-light);
   border: none;
   border-radius: 8px;
   font-weight: bold;
@@ -106,30 +137,36 @@
   transition: background-color 0.3s ease;
 }
 
-.mobile-action-button:hover {
-  background: var(--link-hover-color);
+.mobile-action-button:hover,
+.mobile-logout-button:hover {
+  background: var(--hover-color);
+}
+
+.mobile-action-button svg,
+.mobile-logout-button svg {
+  margin-right: 0.5rem;
 }
 
 .mobile-logout-button {
-  display: block;
-  width: 100%;
-  padding: 0.75rem;
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  background: var(--text-color);
 }
 
 .mobile-logout-button:hover {
-  background: #e60000;
+  background: #c13850;
 }
 
 @media screen and (max-width: 768px) {
   .mobile-nav {
     display: block;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px;
   }
 }
 

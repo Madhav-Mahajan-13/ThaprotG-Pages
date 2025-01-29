@@ -1,122 +1,82 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
-import "../styling/MobileNav.css"
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { FaBars, FaTimes, FaHome, FaProjectDiagram, FaUserGraduate, FaImages, FaCalendarAlt, FaComments, FaPlusCircle, FaFolderOpen, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+import "../styling/MobileNav.css";
 
 const MobileNav = ({ userName, onLogout, toggleChat, toggleQuickPost, toggleYourProject, toggleYourProfile }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen)
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const handleNavClick = (action) => {
+    action();
+    setIsOpen(false);
+  };
 
   return (
     <nav className="mobile-nav">
-      <button className="mobile-nav-toggle" onClick={toggleMenu}>
-        <span className="sr-only">Menu</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {isOpen ? (
-            <>
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </>
-          ) : (
-            <>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </>
-          )}
-        </svg>
-      </button>
-      <div className={`mobile-nav-content ${isOpen ? "open" : ""}`}>
-        <div className="mobile-nav-header">
+      <div className="mobile-nav-container">
+        <Link to="/" className="mobile-nav-logo">
           <img src="/assets/images/logo-text.svg" alt="logo" className="mobile-logo" />
-          <div className="mobile-project-name">ThaProt-G</div>
-        </div>
+          <span className="mobile-project-name">ThaProt-G</span>
+        </Link>
+        <button className="mobile-nav-toggle" onClick={toggleMenu}>
+          <span className="sr-only">Menu</span>
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
+      <div className={`mobile-nav-menu ${isOpen ? "open" : ""}`}>
         <ul className="mobile-nav-links">
           <li>
             <Link to="/" onClick={toggleMenu}>
-              Home
+              <FaHome /> Home
             </Link>
           </li>
           <li>
             <Link to="/alumproject" onClick={toggleMenu}>
-              Projects
+              <FaProjectDiagram /> Projects
             </Link>
           </li>
           <li>
             <Link to="/studentproject" onClick={toggleMenu}>
-              Projects by Students
+              <FaUserGraduate /> Student Projects
             </Link>
           </li>
           <li>
             <Link to="/campusgallery" onClick={toggleMenu}>
-              Gallery
+              <FaImages /> Gallery
             </Link>
           </li>
           <li>
             <Link to="/campusgallery" onClick={toggleMenu}>
-              Events Showcase
+              <FaCalendarAlt /> Events Showcase
             </Link>
           </li>
         </ul>
         <div className="mobile-user-section">
           <div className="mobile-user-info">
-            <span className="mobile-user-icon">👤</span>
+            <FaUserCircle className="mobile-user-icon" />
             <span className="mobile-username">{userName}</span>
           </div>
-          <button
-            className="mobile-action-button"
-            onClick={() => {
-              toggleChat()
-              toggleMenu()
-            }}
-          >
-            Chat 💬
+          <button className="mobile-action-button" onClick={() => handleNavClick(toggleChat)}>
+            <FaComments /> Chat
           </button>
-          <button
-            className="mobile-action-button"
-            onClick={() => {
-              toggleQuickPost()
-              toggleMenu()
-            }}
-          >
-            Quick Post
+          <button className="mobile-action-button" onClick={() => handleNavClick(toggleQuickPost)}>
+            <FaPlusCircle /> Quick Post
           </button>
-          <button
-            className="mobile-action-button"
-            onClick={() => {
-              toggleYourProject()
-              toggleMenu()
-            }}
-          >
-            Your Projects
+          <button className="mobile-action-button" onClick={() => handleNavClick(toggleYourProject)}>
+            <FaFolderOpen /> Your Projects
           </button>
-          <button
-            className="mobile-action-button"
-            onClick={() => {
-              toggleYourProfile()
-              toggleMenu()
-            }}
-          >
-            Your Profile
+          <button className="mobile-action-button" onClick={() => handleNavClick(toggleYourProfile)}>
+            <FaUserCircle /> Your Profile
           </button>
           <button className="mobile-logout-button" onClick={onLogout}>
-            Logout
+            <FaSignOutAlt /> Logout
           </button>
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default MobileNav
-
+export default MobileNav;

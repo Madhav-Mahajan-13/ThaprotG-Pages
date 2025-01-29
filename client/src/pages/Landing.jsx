@@ -20,7 +20,7 @@ const Landing = () => {
     },[])
 
     return ( 
-        <div className="">
+        <div className="flex flex-row">
             <Sidebar/>
             <Outlet/>
         </div>
