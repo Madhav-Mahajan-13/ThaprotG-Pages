@@ -1,0 +1,134 @@
+/* User Project Card Inside Side Window */
+.side-window .projects-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    height: 100%;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+/* Individual User Project Card */
+.side-window .project-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer; /* Makes the card clickable */
+    transition: transform 0.2s, box-shadow 0.2s;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%; /* Fits inside the side window */
+    margin: 10px 0;
+    max-width: 350px; /* Keeps card size reasonable */
+    box-sizing: border-box;
+}
+
+.side-window .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.side-window .project-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+/* Status Bar inside Project Card */
+.side-window .status-bar {
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* Title and Description inside Project Card */
+.side-window .project-card h2 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.side-window .project-card p {
+    font-size: 1rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.side-window .project-card p strong {
+    color: #333;
+}
+
+/* Technology and Openings Info */
+.side-window .project-card .technology,
+.side-window .project-card .openings {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* View PDF Button */
+.side-window .project-card button {
+    background-color: #6a11cb;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.side-window .project-card button:hover {
+    background-color: #5a0db0;
+    transform: scale(1.05);
+}
+
+/* Modal for PDF (same as in previous code) */
+.side-window .pdf-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.side-window .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 1000px;
+    position: relative;
+}
+
+.side-window .modal-content button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff5c5c;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+}

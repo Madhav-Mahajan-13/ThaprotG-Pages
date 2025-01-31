@@ -30,19 +30,21 @@ export const getCurrentUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const { userId } = req.params; // Get user ID from route parameter
-    const { firstName, lastName, email, dateOfGraduation, bio } = req.body; // Extract data from request body
+    const { firstName, lastName, email, graduation_year, bio } = req.body; // Extract data from request body
 
     try {
         const result = await db.query(
-            `UPDATE user_table 
-             SET first_name = $1, last_name = $2, email = $3, date_of_graduation = $4, bio = $5, updated_at = CURRENT_TIMESTAMP
+            `UPDATE users
+             SET first_name = $1, last_name = $2, email = $3, graduation_year = $4, bio = $5, updated_at = CURRENT_TIMESTAMP
              WHERE id2 = $6 RETURNING *`,
-            [firstName, lastName, email, dateOfGraduation, bio, userId]
+            [firstName, lastName, email, graduation_year, bio, userId]
         );
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
+
+
 
         return res.status(200).json({ message: "User updated successfully", user: result.rows[0] });
     } catch (error) {

@@ -5,7 +5,7 @@ import alumProjectRouter from "./Route/alumProjectRoute.js";
 import galleryRouter from "./Route/galleryRoute.js";
 import { userRouter } from "./Route/userRoute.js";
 import router from "./Route/uservalidationRoute.js";
-import postProjectRouter from "./Route/postProjectRoute.js";
+import userProjectRouter from "./Route/userProjectRoute.js";
 import loginSignupRoute from './Route/loginSignupRoute.js'
 
 dotenv.config();
@@ -24,7 +24,7 @@ app.use("/api/alumprojects",alumProjectRouter);
 app.use("/api/gallery",galleryRouter);
 
 app.use("/api/user",userRouter);
-app.use("/api/projects",postProjectRouter);
+app.use("/api/projects",userProjectRouter);
 
 // app.use("/api/auth",router);
 app.use("/api/auth",loginSignupRoute);

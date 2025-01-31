@@ -1,3 +1,53 @@
-.home{
-    background-color: black;
+:root {
+  --primary-bg-color: #121212;
+  --secondary-bg-color: #1e1e1e;
+  --primary-color: #bb86fc;
+  --text-color: #e0e0e0;
+  --link-color: #03dac6;
+  --link-hover-color: #018786;
+  --footer-bg-color: #1e1e1e;
+  --footer-text-color: #b0b0b0;
+  --footer-link-color: #03dac6;
+  --footer-link-hover-color: #018786;
+  --footer-border-color: #333333;
 }
+
+body {
+  background-color: var(--primary-bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 20%; /* Adjust this value to match your sidebar width */
+  padding: 2rem;
+}
+
+.sections-container {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .sections-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+}
+

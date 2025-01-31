@@ -1,17 +1,15 @@
 /* Gallery Container */
 .gallery-container {
   max-width: 70%;
-  /* margin:2rem auto; */
-  /* margin-right: 25%; */
-  /* margin: 25; */
-  padding:1rem;
-  background-color: #181818;
-  /* background-color: black; */
+  margin-left: 20%   ;
+  padding: 1rem;
   border-radius: 8px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  justify-content: center;
+  /* background-color: #181818; */
+  /* background-color: black; */
 }
 
+/* Gallery Title */
 .gallery-title {
   text-align: center;
   font-size: 2rem;
@@ -23,6 +21,10 @@
 .image-grid {
   column-count: 4; /* Number of columns (adjust as needed) */
   column-gap: 1.5rem; /* Space between columns */
+  -webkit-column-count: 4; /* For Safari */
+  -webkit-column-gap: 1.5rem; /* For Safari */
+  -moz-column-count: 4; /* For Firefox */
+  -moz-column-gap: 1.5rem; /* For Firefox */
 }
 
 .image-card {
@@ -54,6 +56,8 @@
   font-size: 0.9rem;
   color: #555;
 }
+
+/* Responsive Design */
 @media (max-width: 1024px) {
   .image-grid {
     column-count: 3; /* 3 columns for medium screens */
