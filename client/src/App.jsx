@@ -82,21 +82,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [connections, setConnections] = useState([]);
 
-  const {backendHost} = useContext(MyContext);
-  const socket = io(backendHost);
-
-  useEffect(() => {
-    if (user) {
-      socket.emit('login', user.id);
-      socket.on('newConnection', (connection) => {
-        setConnections(prev => [...prev, connection]);
-      });
-    }
-    return () => {
-      socket.off('newConnection');
-    };
-  }, [user]);
-
   return (
     <MyProvider>
       <RouterProvider router={router}/>
