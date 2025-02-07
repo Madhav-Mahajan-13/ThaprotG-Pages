@@ -1,11 +1,14 @@
 .project-card {
     display: flex;
     flex-direction: column;
-    background-color: white;
+    /* background-color: white; */
     border-radius: 8px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 1.5rem;
     padding: 1rem;
+    color:blue;
+    border-color: aquamarine;
+    border-width: 5px;
   }
   
   .image-section {
