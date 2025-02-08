@@ -81,7 +81,7 @@ export default function Projects() {
             <tr key={person.id} className="hover:bg-gray-100">
               <td className="border p-2">{person.project_id}</td>
               <td className="border p-2">{person.user_id}</td>
-              <td className="border p-2">{person.first_name + person.last_name}</td>
+              <td className="border p-2">{person.first_name + " " + person.last_name}</td>
               <td className="border p-2">{person.title}</td>
               <td className="border p-2">{person.description}</td>
               <td className="border p-2">{person.open_until}</td>
