@@ -32,21 +32,21 @@ export default function Sidebar() {
   },[location.pathname])
 
   return (
-    <div className="flex flex-col min-h-screen bg-[rgb(206, 211, 219)] px-5 gap-y-5 py-2 items-center shadow-2xl ">
+    <div className="flex flex-col min-h-screen bg-[rgb(206, 211, 219)] px-5 gap-y-5 py-2 items-center shadow-2xl">
       <div className="w-20">
         <img src={logo}></img>
       </div>
 
       <div className="flex flex-col gap-y-4 justify-start">
 
-        <Link to=''>
+        <Link to='carousel'>
         <Sidebutton $selected={isSelected === 0} onClick={() => setSelected(0)}>
           <TbCarouselHorizontal />
           <h1>Carousel Images</h1>
         </Sidebutton>
         </Link>
 
-        <Link to=''>
+        <Link to='/events'>
         <Sidebutton $selected={isSelected === 1} onClick={() => setSelected(1)}>
           <MdEventSeat />
           <h1>Events</h1>
