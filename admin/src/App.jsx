@@ -3,15 +3,22 @@ import {createBrowserRouter,Route,RouterProvider} from 'react-router-dom';
 import './App.css'
 import LoginSignup from './pages/loginSignup';
 import Landing from './pages/landing';
+import Addevent from './pages/addEvent';
 
 const router = createBrowserRouter([
   {
     path:"/login",
-    element:<LoginSignup/>
+    element:<LoginSignup/>,
   },
   {
     path:"/",
-    element:<Landing/>
+    element:<Landing/>,
+    children:[
+      {
+        path:'/addevent',
+        element:<Addevent/>
+      }
+    ]
   }
 ])
 
