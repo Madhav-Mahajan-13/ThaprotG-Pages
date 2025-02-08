@@ -13,7 +13,7 @@ import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../theme/AppTheme.jsx';
-
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { MyContext } from '../context/context.jsx';
@@ -64,81 +64,74 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 export default function SignIn(props) {
 
   const navigate = useNavigate();
-  const [check,setCheck] = useState(false);
-  const {toastOptions,backendHost,setUserId,setToken,setIsAlum,authToken} = React.useContext(MyContext);
+  const [check, setCheck] = useState(false);
+  const { toastOptions, backendHost, setUserId, setToken, setIsAlum, authToken } = useContext(MyContext);
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     const email = document.getElementById('email').value;
-    if(email.length < 8){
-      // Implement Error showing;
-      toast.error("Incorrect Email",toastOptions);
+    if (email.length < 8) {
+      toast.error("Incorrect Email", toastOptions);
       return;
     }
 
     const password = document.getElementById('password').value;
-    if(password.length < 8){
-      //Implement Error showing;
-      toast.error("Invalid Password",toastOptions);
+    if (password.length < 8) {
+      toast.error("Invalid Password", toastOptions);
       return;
     }
 
-    const res = await fetch(backendHost+'/api/auth/login',{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        email:email,
-        password:password
-      })
-    })
+    const res = await fetch(`${backendHost}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+      credentials: "include",  // 🚀 Allow cookies to be sent with requests
+    });
 
     const data = await res.json();
 
-    if(!data.success){
-      toast.error(data.msg,toastOptions);
+    if (!data.success) {
+      toast.error(data.msg, toastOptions);
       return;
     }
 
-    if(data.otp){
+    if (data.otp) {
       setTimeout(() => {
-        navigate(`/otp/${data.authToken}/${email}`);
-      },800);
-
+        navigate(`/otp/${email}`);
+      }, 800);
       return;
     }
 
-    else{
+    // ✅ Remove manual token storage
+    await setUserId(data.id);
+    await setIsAlum(data.is_alum);
 
-      if(check){
-        localStorage.setItem('authToken',data.authToken);
+    setTimeout(() => {
+      navigate("/");
+    }, 500);
+  };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch(`${backendHost}/api/auth/verifyToken`, {
+          method: "POST",
+          credentials: "include",  // 🚀 Allow cookies
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
       }
-      else{
-        sessionStorage.setItem('authToken',data.authToken);
-      }
+    };
 
-      await setUserId(data.id);
-      await setIsAlum(data.is_alum);
-      await setToken(data.authToken);
+    checkAuth();
+  }, []);
 
-      setTimeout(() => {
-        navigate("/");
-      },500);
-    }
-  }
-  useEffect(()=>{
-    const token1 = localStorage.getItem('authToken');
-    const token2 = sessionStorage.getItem('authToken');
-
-    const token = token1?token1:token2;
-
-    if(token || authToken){
-        navigate("/");
-    }
-  },[])
 
   return (
     <AppTheme {...props}>

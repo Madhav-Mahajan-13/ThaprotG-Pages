@@ -63,7 +63,7 @@ export default function SignUp(props) {
 
   const date = new Date();
   const navigate = useNavigate();
-  const {toastOptions,backendHost,authToken} = React.useContext(MyContext);
+  const {toastOptions,backendHost} = React.useContext(MyContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -143,16 +143,29 @@ export default function SignUp(props) {
       toast.error(error.message,toastOptions);
     }
   }
-  useEffect(()=>{
-      const token1 = localStorage.getItem('authToken');
-      const token2 = sessionStorage.getItem('authToken');
   
-      const token = token1?token1:token2;
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch(`${backendHost}/api/auth/verifyToken`, {
+          method: "POST",
+          credentials: "include", // 🔥 Important! Ensures cookies are sent
+        });
   
-      if(token || authToken){
-          navigate("/");
+        const data = await response.json();
+  
+        if (data.success) {
+          navigate("/"); // ✅ User is authenticated, go to home
+        } else {
+          console.warn("Authentication failed:", data.msg);
+        }
+      } catch (error) {
+        console.error("Error verifying token:", error);
       }
-    },[])
+    };
+  
+    checkAuth();
+  }, [navigate, backendHost]);
 
   return (
     <AppTheme>

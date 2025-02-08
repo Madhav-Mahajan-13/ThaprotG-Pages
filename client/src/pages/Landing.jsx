@@ -6,18 +6,29 @@ import { MyContext } from "../context/context";
 const Landing = () => {
 
     const navigate = useNavigate();
-    const {userId,isAlum,authToken} = useContext(MyContext);
+    const {backendHost} = useContext(MyContext);
 
     useEffect(() => {
-        const token1 = localStorage.getItem('authToken');
-        const token2 = sessionStorage.getItem('authToken');
+        const checkAuth = async () => {
+            try {
+                const response = await fetch(`${backendHost}/api/auth/verifyToken`, {
+                    method: "POST",
+                    credentials: "include", // 🔥 Ensures cookies are sent
+                });
 
-        const token = token1?token1:token2;
+                const data = await response.json();
 
-        if(!token && !(authToken)){
-            navigate("/login");
-        }   
-    },[])
+                if (!data.success) {
+                    navigate("/login"); // ❌ Not authenticated, redirect to login
+                }
+            } catch (error) {
+                console.error("Authentication check failed:", error);
+                navigate("/login"); // Redirect on error
+            }
+        };
+
+        checkAuth();
+    }, [navigate]);
 
     return ( 
         <div className="flex flex-row">

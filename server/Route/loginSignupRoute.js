@@ -14,7 +14,7 @@ const transporter = mailer.createTransport({
     service: "Gmail",
     host: "smtp.gmail.com",
     port: 465,
-    secure: true,
+    secure: process.env.production == true,
     auth: {
         user: process.env.sender_email,
         pass: process.env.sender_pass,
@@ -79,7 +79,7 @@ router.post('/register',
 
                                 res.cookie('authToken', token, {
                                     httpOnly: true,    // Prevents JavaScript access
-                                    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+                                    secure: process.env.production == true, // Use secure cookies in production
                                     sameSite: 'Strict', // Prevents CSRF
                                     maxAge: 10 * 60 * 1000, // 10 minutes
                                 });
@@ -97,73 +97,69 @@ router.post('/register',
         }
     });
 
-router.post('/login', [
-    body('email', "Enter Valid Email").isEmail(),
-    body("password", "Enter Valid Password Format").isLength({ min: 8 })
-], async (req, res) => {
-    const errs = validationResult(req);
-    if (!errs.isEmpty()) {
-        return res.status(503).json({ "msg": errs.array(), success: false });
-    }
-
-    try {
-        db.query(`select * from users where email='${req.body.email}'`, async (err, result) => {
-            if (err) {
-                return res.status(502).json({ "msg": err.message, "success": false });
+    router.post('/login', [
+        body('email', "Enter a valid email").isEmail(),
+        body("password", "Password must be at least 8 characters").isLength({ min: 8 })
+    ], async (req, res) => {
+        const errs = validationResult(req);
+        if (!errs.isEmpty()) {
+            return res.status(400).json({ msg: errs.array(), success: false });
+        }
+    
+        try {
+            const { email, password } = req.body;
+    
+            // Use parameterized query to prevent SQL Injection
+            const result = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
+    
+            if (result.rows.length === 0) {
+                return res.status(400).json({ msg: "User does not exist", success: false });
             }
-
-            if (!result.rowCount) {
-                return res.status(400).json({ "msg": "User does not exist", "success": false });
-            }
-
-            const rows = result.rows[0];
-            const pass = req.body.password;
-
-            const passComp = await bcrypt.compare(pass, rows.password);
-
+    
+            const user = result.rows[0];
+    
+            // Compare passwords
+            const passComp = await bcrypt.compare(password, user.password);
             if (!passComp) {
-                return res.status(400).json({ "msg": "Invalid Password", success: false });
+                return res.status(400).json({ msg: "Invalid Password", success: false });
             }
-
-            if (rows.otp_verified) {
+    
+            if (user.otp_verified) {
+                // User is verified, generate authentication token
                 const data = {
-                    id: rows.id2,
-                    type: rows.user_type
+                    id: user.id2,
+                    type: user.user_type
                 };
-
-                const payload = await jwt.sign(data, process.env.sec_key);
-
+    
+                const token = jwt.sign(data, process.env.sec_key);
+    
                 res.cookie('authToken', token, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === "production",
+                    secure: process.env.production == true,
                     sameSite: 'Strict',
-                    maxAge: 60 * 60 * 1000, // 1 hour
+                    maxAge: 60 * 60 * 1000 // 1 hour
                 });
-
-                return res.status(200).json({ authToken: payload, success: true, otp: false, id: rows.id2, is_alum: (rows.user_type == 'alum') });
-            }
-
-            else {
-                const data = {
-                    email: rows.email
-                };
-
-                const payload = await jwt.sign(data, process.env.sec_key, { expiresIn: "10m" });
-
-                res.cookie('authToken', token, {
+    
+                return res.status(200).json({ success: true, otp: false, id: user.id2, is_alum: user.user_type === 'alum' });
+            } else {
+                // User is not verified, generate OTP token
+                const otpToken = jwt.sign({ email: user.email }, process.env.sec_key, { expiresIn: "10m" });
+    
+                res.cookie('authToken', otpToken, {
                     httpOnly: true,
-                    secure: process.env.NODE_ENV === "production",
+                    secure: process.env.production == true,
                     sameSite: 'Strict',
-                    maxAge: 10 * 30 * 1000, // 5 minutesc
+                    maxAge: 5 * 60 * 1000 // 5 minutes
                 });
-
-                return res.status(200).json({ authToken: payload, success: true, otp: true });
+    
+                return res.status(200).json({ success: true, otp: true });
             }
-        });
-    } catch (e) {
-        return res.status(501).json({ "msg": e.message, success: false });
-    }
-});
+        } catch (error) {
+            console.error("Login Error:", error);
+            return res.status(500).json({ msg: "Internal Server Error", success: false });
+        }
+    });
+    
 
 router.post('/otp/:email', getUser, async (req, res) => {
     try {
@@ -237,7 +233,9 @@ router.post('/verify/:email', async (req, res) => {
     }
 });
 
-router.post('/verifyToken', getUser);
+router.post('/verifyToken', getUser, (req, res) => {
+    return res.status(200).json({ success: true, user: req.user });
+});
 
 router.post('/forgot', async (req, res) => {
     try {
@@ -287,7 +285,7 @@ router.post('/reset', async (req, res) => {
 router.post('/logout', (req, res) => {
     res.clearCookie('authToken', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.production == true,
         sameSite: 'Strict',
     });
     return res.status(200).json({ success: true, msg: "Logged out successfully" });
