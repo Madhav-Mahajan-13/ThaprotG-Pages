@@ -34,7 +34,7 @@ export const createCarousel = async (req, res) => {
         const image_path = req.files?.image ? req.files.image[0].filename : null;
 
         // Input validation
-        if (!title || !img_discription) {
+        if (!title || !img_discription||!status) {
             // If there's an uploaded image, delete it since we're not going to use it
             if (image_path) {
                 try {
@@ -46,7 +46,7 @@ export const createCarousel = async (req, res) => {
 
             return res.status(400).json({
                 success: false,
-                message: "Title and image description are required"
+                message: "Title , status and image description are required"
             });
         }
 
@@ -61,7 +61,7 @@ export const createCarousel = async (req, res) => {
             `INSERT INTO carousel (title, image_path, img_discription, link, status) 
              VALUES ($1, $2, $3, $4, $5) 
              RETURNING id, title, image_path, img_discription, link, status, created_at`,
-            [title, "uploads/images"+image_path, img_discription, link, status || 'active']
+            [title, "uploads/images"+image_path, img_discription, link, status ]
         );
 
         return res.status(201).json({
