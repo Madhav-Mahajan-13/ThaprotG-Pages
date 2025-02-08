@@ -77,6 +77,13 @@ router.post('/register',
 
                                 const token = jwt.sign(payload, process.env.sec_key, { expiresIn: '10m' });
 
+                                res.cookie('authToken', token, {
+                                    httpOnly: true,    // Prevents JavaScript access
+                                    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+                                    sameSite: 'Strict', // Prevents CSRF
+                                    maxAge: 10 * 60 * 1000, // 10 minutes
+                                });
+
                                 return res.status(200).json({ msg: "User Created Successfully", authToken: token, success: success });
                             }
                         });
@@ -126,6 +133,13 @@ router.post('/login', [
 
                 const payload = await jwt.sign(data, process.env.sec_key);
 
+                res.cookie('authToken', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: 'Strict',
+                    maxAge: 60 * 60 * 1000, // 1 hour
+                });
+
                 return res.status(200).json({ authToken: payload, success: true, otp: false, id: rows.id2, is_alum: (rows.user_type == 'alum') });
             }
 
@@ -135,6 +149,13 @@ router.post('/login', [
                 };
 
                 const payload = await jwt.sign(data, process.env.sec_key, { expiresIn: "10m" });
+
+                res.cookie('authToken', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: 'Strict',
+                    maxAge: 10 * 30 * 1000, // 5 minutesc
+                });
 
                 return res.status(200).json({ authToken: payload, success: true, otp: true });
             }
@@ -146,65 +167,73 @@ router.post('/login', [
 
 router.post('/otp/:email', getUser, async (req, res) => {
     try {
-        if (req.params['email'] !== req.body.email) {
-            return res.status(500).json({ msg: "Invalid Token-Email Combination", success: false });
+        // Ensure the user is requesting OTP for their own email
+        if (req.email !== req.params.email) {
+            return res.status(403).json({ msg: "Unauthorized request", success: false });
         }
 
         const otp = crypto.randomInt(100000, 999999);
 
-        await db.query(`delete from otp where email='${req.body.email}'`);
+        // Delete any existing OTPs for this user
+        await db.query(`DELETE FROM otp WHERE email = $1`, [req.email]);
 
-        db.query(`insert into otp(email,otp) values('${req.body.email}','${otp}')`, async (err, result) => {
-            if (err) {
-                return res.status(404).json({ msg: err, success: false });
-            }
+        // Insert new OTP
+        await db.query(`INSERT INTO otp (email, otp) VALUES ($1, $2)`, [req.email, otp]);
 
-            const info = await transporter.sendMail({
-                from: process.env.sender_email,
-                to: req.body.email,
-                subject: "OTP for ThaProt-G",
-                text: `Your OTP for ThaProt-G is ${otp} , valid for 5 minutes`
-            });
-
-            return res.status(200).json({ msg: info, success: true });
+        // Send OTP via email
+        const info = await transporter.sendMail({
+            from: process.env.sender_email,
+            to: req.email,
+            subject: "OTP for ThaProt-G",
+            text: `Your OTP for ThaProt-G is ${otp}, valid for 5 minutes.`,
         });
 
+        return res.status(200).json({ msg: "OTP sent successfully", success: true });
+
     } catch (e) {
-        return res.status(404).json({ msg: e.message, success: false });
+        console.error("OTP Error:", e.message);
+        return res.status(500).json({ msg: "Internal server error", success: false });
     }
 });
 
+
 router.post('/verify/:email', async (req, res) => {
     try {
-        const otp = req.body.otp;
+        const { otp } = req.body;
+        const email = req.params.email;
 
-        db.query(`select otp from otp where otp_expires  < current_timestamp + (5 * interval '1 minute') and email='${req.params['email']}'`, async (error, result) => {
-            if (error) {
-                return res.status(501).json({ msg: error.message, success: false });
-            }
+        if (!otp) {
+            return res.status(400).json({ msg: "OTP is required", success: false });
+        }
 
-            if (!result.rowCount) {
-                return res.status(502).json({ msg: "No OTP found", success: false });
-            }
+        // Check if the OTP exists and is still valid
+        const { rows } = await db.query(
+            `SELECT otp FROM otp WHERE email = $1 AND otp_expires > NOW()`,
+            [email]
+        );
 
-            if (otp == result.rows.otp) {
-                db.query(`delete from otp where email='${req.params['email']}'`, (error, result) => {
-                    if (error) {
-                        return res.status(502).json({ msg: error.message, success: false });
-                    }
+        if (rows.length === 0) {
+            return res.status(400).json({ msg: "Invalid or expired OTP", success: false });
+        }
 
-                    db.query(`update users set otp_verified = true where email = '${req.params['email']}'`, (error, result) => {
-                        if (error) {
-                            return res.status(503).json({ msg: error.message, success: false });
-                        }
+        if (otp !== rows[0].otp) {
+            return res.status(401).json({ msg: "Incorrect OTP", success: false });
+        }
 
-                        return res.status(200).json({ msg: "Verification Successfull", success: true });
-                    });
-                });
-            }
-        });
+        // Delete OTP and update user verification in a single transaction
+        await db.query("BEGIN");
+
+        await db.query(`DELETE FROM otp WHERE email = $1`, [email]);
+        await db.query(`UPDATE users SET otp_verified = true WHERE email = $1`, [email]);
+
+        await db.query("COMMIT");
+
+        return res.status(200).json({ msg: "Verification successful", success: true });
+
     } catch (error) {
-        return res.status(400).json({ msg: error.message, success: false });
+        await db.query("ROLLBACK");
+        console.error("OTP Verification Error:", error.message);
+        return res.status(500).json({ msg: "Internal Server Error", success: false });
     }
 });
 
@@ -253,6 +282,15 @@ router.post('/reset', async (req, res) => {
     } catch (error) {
         return res.status(500).json({ msg: error.message, success: false });
     }
+});
+
+router.post('/logout', (req, res) => {
+    res.clearCookie('authToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: 'Strict',
+    });
+    return res.status(200).json({ success: true, msg: "Logged out successfully" });
 });
 
 export default router;

@@ -2,33 +2,32 @@ import jwt from 'jsonwebtoken';
 
 export async function getUser(req, res, next) {
     try {
-        const verify = req.header('verify'); // Header to check if verification is needed
-        const token = req.header('authToken'); // Authorization token
+        const verify = req.header('verify'); // Check if token verification is required
+        const token = req.cookies.authToken; // Read token from cookies
 
         if (!token) {
-            return res.status(400).json({ msg: "Token is required", success: false });
+            return res.status(401).json({ msg: "Authentication required", success: false });
         }
 
-        // Verifying the token using the secret key
+        // Verify the token using the secret key
         const data = jwt.verify(token, process.env.sec_key);
 
         if (!data) {
-            return res.status(401).json({ msg: "Invalid Token", success: false });
+            return res.status(403).json({ msg: "Invalid Token", success: false });
         }
 
         if (verify) {
             return res.status(200).json({ msg: "Token is valid", success: true });
         }
 
-        console.log(data);
-
-        req.uid = data.id
-        req.email = data.email
-        req.body.email = data.email
-        next();
+        // Attach user data to request
+        req.uid = data.id;
+        req.email = data.email;
+        req.body.email = data.email;
+        
+        next(); // Proceed to the next middleware
 
     } catch (e) {
-        // Handling errors during token verification
         return res.status(500).json({ msg: e.message, success: false });
     }
 }
