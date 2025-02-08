@@ -61,7 +61,7 @@ export default function Projects() {
               <td className="border p-2">{project.open_until}</td>
               <td className="border p-2">{project.status}</td>
               <td className="border p-2">{project.created_at}</td>
-              <td className="border p-2">{project.technologies}</td>
+              <td className="border p-2">{project.technology.join(',')}</td>
               <td className="border p-2">
               {project.pdf_path != 'null' && <a href={backendHost + '/' + project.image_path}>Click to Open</a>}
               {project.pdf_path == 'null' && "Image not available"}
