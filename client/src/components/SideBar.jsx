@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import React, { useContext,useRef,  useEffect, useState } from "react"
 import "../styling/SideBar3.css"
 import { Dashboard } from "./Dashboard"
@@ -268,9 +268,10 @@ const QuickPostForm = () => {
 }
 
 const Sidebar = () => {
-  const { userId } = useContext(MyContext)
+  const { userId,backendHost } = useContext(MyContext)
   const [userName, setUserName] = useState("")
   const [openWindow, setOpenWindow] = useState(null)
+  const navigate = useNavigate();
 
   const toggleWindow = (windowName) => {
     setOpenWindow(openWindow === windowName ? null : windowName)
@@ -291,9 +292,12 @@ const Sidebar = () => {
     }
   }, [userId])
 
-  const handleLogout = () => {
-    alert("Logged Out")
-    // Add your logout logic here
+  const handleLogout = async () => {
+    const res = await fetch(backendHost + '/api/auth/logout',{
+      method:'POST',
+      credentials:'include'
+    })
+    navigate("/login");
   }
 
   return (

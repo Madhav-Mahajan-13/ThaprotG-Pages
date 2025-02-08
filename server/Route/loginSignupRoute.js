@@ -168,6 +168,8 @@ router.post('/otp/:email', getUser, async (req, res) => {
             return res.status(403).json({ msg: "Unauthorized request", success: false });
         }
 
+        console.log("HERE");
+
         const otp = crypto.randomInt(100000, 999999);
 
         // Delete any existing OTPs for this user
@@ -195,7 +197,7 @@ router.post('/otp/:email', getUser, async (req, res) => {
 
 router.post('/verify/:email', async (req, res) => {
     try {
-        const { otp } = req.body;
+        const otp = req.body.otp;
         const email = req.params.email;
 
         if (!otp) {
@@ -256,6 +258,14 @@ router.post('/forgot', async (req, res) => {
             };
 
             const token = jwt.sign(data, process.env.sec_key, { expiresIn: '10m' });
+
+            res.cookie('authToken', token, {
+                httpOnly: true,    // Prevents JavaScript access
+                secure: process.env.production == true, // Use secure cookies in production
+                sameSite: 'Strict', // Prevents CSRF
+                maxAge: 10 * 60 * 1000, // 10 minutes
+            });
+
             return res.status(200).json({ token: token, success: true });
         });
     } catch (error) {

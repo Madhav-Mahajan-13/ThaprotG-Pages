@@ -19,6 +19,7 @@ const Landing = () => {
                 const data = await response.json();
 
                 if (!data.success) {
+                    console.log("NO ENTRY WITHOUT AUTHTOKEN");
                     navigate("/login"); // ❌ Not authenticated, redirect to login
                 }
             } catch (error) {
@@ -28,7 +29,7 @@ const Landing = () => {
         };
 
         checkAuth();
-    }, [navigate]);
+    },[navigate]);
 
     return ( 
         <div className="flex flex-row">

@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { MyContext } from '../context/context.jsx';
 import { toast,ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
+import { userid } from '../context/userid.jsx';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -65,7 +66,7 @@ export default function SignIn(props) {
 
   const navigate = useNavigate();
   const [check, setCheck] = useState(false);
-  const { toastOptions, backendHost, setUserId, setToken, setIsAlum, authToken } = useContext(MyContext);
+  const { toastOptions, backendHost, setUserId, setIsAlum,userId} = useContext(MyContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

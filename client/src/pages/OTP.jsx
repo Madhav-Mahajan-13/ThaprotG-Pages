@@ -63,6 +63,7 @@ export default function OTP(props) {
     const {token,email} = useParams();
     const {backendHost,toastOptions} = React.useContext(MyContext);
     const [isLoading,setLoading] = useState(true);
+    const [otp,setOTP] = useState(null);
     const forgot = sessionStorage.getItem('isForgot')
 
     useEffect(() => {
@@ -70,9 +71,10 @@ export default function OTP(props) {
           try {
             const res = await fetch(backendHost+`/api/auth/otp/${email}`,{
               headers:{
-                authToken:token
+                authToken:token,
               },
-              method:"POST"
+              method:"POST",
+              credentials:"include"
             });
 
             const data = await res.json();
@@ -97,8 +99,8 @@ export default function OTP(props) {
     const handleSubmit = async (e) => {
       e.preventDefault();
 
-      const otp = document.getElementById('OTP');
-
+      console.log(otp);
+  
       if(otp.length < 6){
         console.log("Invalid OTP length");
         return;
@@ -108,8 +110,11 @@ export default function OTP(props) {
         const res = await fetch(backendHost + `/api/auth/verify/${email}`,
           {
             method:"POST",
+            body:JSON.stringify({
+              otp : otp
+            }),
             headers:{
-              otp:otp
+              'Content-Type' : 'application/json'
             }
           }
         )
@@ -123,8 +128,12 @@ export default function OTP(props) {
 
         toast.success("Redirecting...",toastOptions);
 
-        setTimeout(() => {
+        setTimeout(async () => {
           sessionStorage.removeItem('isForgot')
+          await fetch(backendHost + '/api/auth/logout',{
+            method:"POST",
+            credentials:'include'
+          })
           if(!forgot){
               navigate('/')
           }
@@ -177,6 +186,7 @@ export default function OTP(props) {
                 fullWidth
                 variant="outlined"
                 color={'primary'}
+                onChange={(e) => {setOTP(e.target.value)}}
               />
             </FormControl>
             <Button
