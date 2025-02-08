@@ -24,7 +24,7 @@ export const getApprovedProjects = async (req, res) => {
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE p.status = 'approved' or p.status='completed'
+            WHERE (p.status = 'approved' or p.status='completed)' and  u.user_type='student'
             ORDER BY p.created_at DESC
         `;
 
@@ -74,7 +74,7 @@ export const getPendingProjects = async (req, res) => {
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE p.status = 'pending'
+            WHERE p.status = 'pending' and  u.user_type='student'
             ORDER BY p.created_at ASC
         `;
 
@@ -125,7 +125,7 @@ export const getDeniedProjects = async (req, res) => {
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE p.status = 'denied'
+            WHERE p.status = 'denied' and u.user_type='student'
             ORDER BY p.created_at DESC
         `;
 
@@ -185,12 +185,12 @@ export const searchProjects = async (req, res) => {
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE 1=1
+            WHERE 1=1 
         `;
 
         const values = [];
         let valueIndex = 1;
-
+        query += `and u.user_type = 'student'`
         if (title) {
             query += ` AND LOWER(p.title) LIKE LOWER($${valueIndex})`;
             values.push(`%${title}%`);
