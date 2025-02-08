@@ -24,7 +24,7 @@ export const getApprovedProjects = async (req, res) => {
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE (p.status = 'approved' or p.status='completed)' and  u.user_type='student'
+            WHERE (p.status = 'approved' or p.status='completed') and  u.user_type='student'
             ORDER BY p.created_at DESC
         `;
 
