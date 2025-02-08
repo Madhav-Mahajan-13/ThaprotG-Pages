@@ -5,7 +5,6 @@ export async function getUser(req, res, next) {
 
         const verify = req.header('verify'); // Check if token verification is required
         const token = req.cookies.authToken; // Read token from cookies
-        console.log("HERE");
         if (!token) {
             return res.status(401).json({ msg: "Authentication required", success: false });
         }
