@@ -20,7 +20,6 @@ border-b-1
 border-b-black
 ${(p) => (p.$selected ? "font-bold" : "")} 
 py-1
-shadow-inner
 px-2
 `;
 

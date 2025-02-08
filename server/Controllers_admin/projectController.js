@@ -24,15 +24,15 @@ export const getApprovedProjects = async (req, res) => {
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE (p.status = 'approved' or p.status='completed') and  u.user_type='student'
+            WHERE (p.status = 'approved') and  u.user_type='student'
             ORDER BY p.created_at DESC
         `;
 
         const result = await db.query(query);
 
         if (!result.rows || result.rows.length === 0) {
-            return res.status(404).json({
-                success: false,
+            return res.status(20).json({
+                success: true,
                 message: 'No approved projects found'
             });
         }

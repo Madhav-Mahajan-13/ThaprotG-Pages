@@ -20,7 +20,6 @@ import UserProfile from './pages/UserPage';
 import Home from './pages/home';
 import { useEffect,useState } from 'react';
 // import io from 'socket.io-client';
-import { MyContext } from './context/context';
 
 
 

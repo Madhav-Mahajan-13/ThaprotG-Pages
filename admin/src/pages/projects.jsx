@@ -1,46 +1,38 @@
-const data = [
-    {
-        "project_id": "2bea5bdf-ce1d-4a63-9534-9670fe2a6ec3",
-        "user_id": "2544bbab-16d4-473f-8b1a-26dca6a659b7",
-        "title": "dfgerfgdfg",
-        "description": "ertertgerdfg",
-        "open_until": "2025-02-24T18:30:00.000Z",
-        "status": "pending",
-        "pushed_to_website": false,
-        "created_at": "2025-02-08T13:24:10.499Z",
-        "technology": [
-          "redgdfg"
-        ],
-        "image_path": "uploads/images/img_1739021050494.png",
-        "openings": 2,
-        "pdf_path": "uploads/pdfs/pdf_1739021050493.pdf",
-        "first_name": "Indra",
-        "last_name": "Mohan"
-      },
-      {
-        "project_id": "4f03aff4-a745-45ec-9f3e-e25521217107",
-        "user_id": "2544bbab-16d4-473f-8b1a-26dca6a659b7",
-        "title": "gergdfg",
-        "description": "tyrthgfh",
-        "open_until": "2025-02-12T18:30:00.000Z",
-        "status": "pending",
-        "pushed_to_website": false,
-        "created_at": "2025-02-08T13:24:34.862Z",
-        "technology": [
-          "gdfg"
-        ],
-        "image_path": "uploads/images/img_1739021074849.png",
-        "openings": 2,
-        "pdf_path": "uploads/pdfs/pdf_1739021074848.pdf",
-        "first_name": "Indra",
-        "last_name": "Mohan"
-      }
-];
+/* eslint-disable no-unused-vars */
+import React from "react";
+import { useContext } from "react";
+import { MyContext } from "../context/myContext";
+import { useEffect } from "react";
+import {toast,ToastContainer} from 'react-toastify';
 
 export default function Projects() {
-    const backendHost = 'http://localhost:5000';
+    const {backendHost,approved_projects,setProjects,toastOptions} = useContext(MyContext);
+
+    useEffect(() => {
+      const API_CALL = async () => {
+          const res = await fetch(backendHost + '/api/admin/projects_approved',{}) // ADD AUTH HEADERS LATER
+
+          const data = await res.json();
+          if(data.success){
+            if(data.data){
+              setProjects(data.data);
+            }
+            else{
+              toast("NO APPROVED PROJECTS",toastOptions)
+            }
+          }
+          else{
+            toast.error(data.message,toastOptions);
+            return;
+          }
+      }
+
+      API_CALL();
+    },[])
+
   return (
     <div className="overflow-x-auto w-full">
+      <ToastContainer/>
       <table className="table-auto border-collapse border border-gray-400 w-1/2 text-left mx-auto my-24 md:my-5">
         <thead className="bg-gray-200">
           <tr>
@@ -59,25 +51,25 @@ export default function Projects() {
           </tr>
         </thead>
         <tbody>
-          {data.map((person) => (
-            <tr key={person.id} className="hover:bg-gray-100">
-              <td className="border p-2">{person.project_id}</td>
-              <td className="border p-2">{person.user_id}</td>
-              <td className="border p-2">{person.first_name + " " + person.last_name}</td>
-              <td className="border p-2">{person.title}</td>
-              <td className="border p-2">{person.description}</td>
-              <td className="border p-2">{person.open_until}</td>
-              <td className="border p-2">{person.status}</td>
-              <td className="border p-2">{person.created_at}</td>
-              <td className="border p-2">{person.technologies}</td>
+          {approved_projects && approved_projects.map((project) => (
+            <tr key={project.project_id} className="hover:bg-gray-100">
+              <td className="border p-2">{project.project_id}</td>
+              <td className="border p-2">{project.user_id}</td>
+              <td className="border p-2">{project.first_name + " " + project.last_name}</td>
+              <td className="border p-2">{project.title}</td>
+              <td className="border p-2">{project.description}</td>
+              <td className="border p-2">{project.open_until}</td>
+              <td className="border p-2">{project.status}</td>
+              <td className="border p-2">{project.created_at}</td>
+              <td className="border p-2">{project.technologies}</td>
               <td className="border p-2">
-              {person.pdf_path != 'null' && <a href={backendHost + '/' + person.image_path}>Click to Open</a>}
-              {person.pdf_path == 'null' && "Image not available"}
+              {project.pdf_path != 'null' && <a href={backendHost + '/' + project.image_path}>Click to Open</a>}
+              {project.pdf_path == 'null' && "Image not available"}
               </td>
-              <td className="border p-2">{person.openings}</td>
+              <td className="border p-2">{project.openings}</td>
               <td className="border p-2">
-                    {person.pdf_path != 'null' && <a href={backendHost + '/' + person.pdf_path}>Click to Open</a>}
-                    {person.pdf_path == 'null' && "PDF not available"}
+                    {project.pdf_path != 'null' && <a href={backendHost + '/' + project.pdf_path}>Click to Open</a>}
+                    {project.pdf_path == 'null' && "PDF not available"}
               </td>
             </tr>
           ))}

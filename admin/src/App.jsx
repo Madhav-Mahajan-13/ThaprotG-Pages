@@ -4,6 +4,7 @@ import LoginSignup from './pages/loginSignup';
 import Landing from './pages/landing';
 import Addevent from './pages/addEvent';
 import Projects from './pages/projects';
+import MyProvider from './context/provider';
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,9 @@ const router = createBrowserRouter([
 function App() {
 
   return (
-    <RouterProvider router={router}/>
+    <MyProvider>
+      <RouterProvider router={router}/>
+    </MyProvider>
   )
 }
 

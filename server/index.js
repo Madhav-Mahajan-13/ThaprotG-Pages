@@ -18,7 +18,7 @@ const port = 5000;
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: process.env.FRONTEND_URL, // Allow your frontend domain
+    origin: "*", // Allow your frontend domain
     credentials: true, // Required for cookies
 }));
 app.use(cookieParser());
