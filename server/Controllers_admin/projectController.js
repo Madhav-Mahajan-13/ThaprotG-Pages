@@ -24,7 +24,7 @@ export const getApprovedProjects = async (req, res) => {
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE p.status = 'approved' or p.status="completed'
+            WHERE p.status = 'approved' or p.status='completed'
             ORDER BY p.created_at DESC
         `;
 
@@ -256,8 +256,9 @@ export const searchProjects = async (req, res) => {
 
         return res.status(200).json({
             success: true,
+            count: result.rows.length,
             data: result.rows,
-            count: result.rows.length
+            
         });
 
     } catch (error) {
@@ -265,6 +266,67 @@ export const searchProjects = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Internal server error',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+};
+export const changeStatus = async (req, res) => {
+    try {
+        // Input validation
+        const { project_id, status } = req.body;
+        
+        if (!project_id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Project ID is required'
+            });
+        }
+
+        if (!status) {
+            return res.status(400).json({
+                success: false,
+                message: 'Status is required'
+            });
+        }
+
+        // Validate status values (add your valid statuses)
+        const validStatuses = ['pending', 'approved', 'denied'];
+        if (!validStatuses.includes(status.toLowerCase())) {
+            return res.status(400).json({
+                success: false,
+                message: `Invalid status. Must be one of: ${validStatuses.join(', ')}`
+            });
+        }
+
+        // Update project status
+        const result = await db.query(
+            'UPDATE projects SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE project_id = $2 RETURNING *',
+            [status.toLowerCase(), project_id]
+        );
+
+        // Check if project exists
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Project not found'
+            });
+        }
+
+        // Return success response
+        return res.status(200).json({
+            success: true,
+            message: 'Project status updated successfully',
+            data: result.rows[0]
+        });
+
+    } catch (error) {
+        // Log the error for debugging (use your preferred logging solution)
+        console.error('Error updating project status:', error);
+
+        // Return error response
+        return res.status(500).json({
+            success: false,
+            message: 'An error occurred while updating project status',
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
