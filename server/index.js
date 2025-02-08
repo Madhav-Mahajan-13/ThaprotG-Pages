@@ -7,6 +7,7 @@ import { userRouter } from "./Route/userRoute.js";
 // import router from "./Route/uservalidationRoute.js";
 import userProjectRouter from "./Route/userProjectRoute.js";
 import loginSignupRoute from './Route/loginSignupRoute.js'
+import adminRouter from "./Route/adminRoute.js";
 
 dotenv.config();
 
@@ -29,7 +30,7 @@ app.use("/api/projects",userProjectRouter);
 // app.use("/api/auth",router);
 app.use("/api/auth",loginSignupRoute);
 
-
+app.use("/api/admin",adminRouter)
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
 });
