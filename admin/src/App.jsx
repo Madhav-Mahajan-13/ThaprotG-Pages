@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import {createBrowserRouter,Route,RouterProvider} from 'react-router-dom';
+import {createBrowserRouter,RouterProvider} from 'react-router-dom';
 import './App.css'
 import LoginSignup from './pages/loginSignup';
 import Landing from './pages/landing';
 import Addevent from './pages/addEvent';
+import Projects from './pages/projects';
 
 const router = createBrowserRouter([
   {
@@ -17,13 +17,16 @@ const router = createBrowserRouter([
       {
         path:'/addevent',
         element:<Addevent/>
+      },
+      {
+        path:'/projects',
+        element:<Projects/>
       }
     ]
   }
 ])
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <RouterProvider router={router}/>
