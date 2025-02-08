@@ -218,3 +218,57 @@ export const getSubAdminDetails = async (req, res) => {
         });
     }
 };
+
+
+export const deleteSubAdmin = async (req, res) => {
+    try {
+        const { user_id } = req.body;
+
+        if (!user_id) {
+            return res.status(400).json({
+                success: false,
+                message: "User ID is required"
+            });
+        }
+
+        // First check if the sub-admin exists and is actually a sub-admin
+        const existingAdmin = await db.query(
+            'SELECT email, type FROM admin WHERE user_id = $1',
+            [user_id]
+        );
+
+        if (existingAdmin.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Sub-admin not found"
+            });
+        }
+
+        // Verify this is actually a sub-admin
+        if (existingAdmin.rows[0].type !== 'sub') {
+            return res.status(403).json({
+                success: false,
+                message: "Cannot delete: specified user is not a sub-admin"
+            });
+        }
+
+        // Delete the sub-admin
+        const result = await db.query(
+            `DELETE FROM admin WHERE user_id = $1 AND type = 'sub' RETURNING id, user_id, email, department`,
+            [user_id]
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Sub-admin deleted successfully",
+            data: result.rows[0]
+        });
+    } catch (error) {
+        console.error("Error in deleteSubAdmin:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to delete sub-admin",
+            error: error.message
+        });
+    }
+};
