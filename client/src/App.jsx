@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useContext } from 'react';
 import { createBrowserRouter,Route,RouterProvider } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css'
@@ -18,6 +18,11 @@ import MyProvider from './context/provider';
 // import Dashboard from './pages/ProfilePage';
 import UserProfile from './pages/UserPage';
 import Home from './pages/home';
+import { useEffect,useState } from 'react';
+import io from 'socket.io-client';
+import { MyContext } from './context/context';
+
+
 
 const router = createBrowserRouter([
   {
@@ -73,6 +78,10 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+
+  const [user, setUser] = useState(null);
+  const [connections, setConnections] = useState([]);
+
   return (
     <MyProvider>
       <RouterProvider router={router}/>

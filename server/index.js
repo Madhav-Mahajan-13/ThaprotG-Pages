@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import alumProjectRouter from "./Route/alumProjectRoute.js";
 import galleryRouter from "./Route/galleryRoute.js";
 import { userRouter } from "./Route/userRoute.js";
-import router from "./Route/uservalidationRoute.js";
+// import router from "./Route/uservalidationRoute.js";
 import userProjectRouter from "./Route/userProjectRoute.js";
 import loginSignupRoute from './Route/loginSignupRoute.js'
 

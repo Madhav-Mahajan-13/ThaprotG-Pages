@@ -8,6 +8,7 @@
 /client2/node_modules
 /server/node_modules
 /server/.env
+/admin/node_modules
 
 
 #vscode

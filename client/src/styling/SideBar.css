@@ -11,7 +11,6 @@
 
 .app-container {
   display: flex;
-  /* min-height: 100vh;npm run start */
 }
 
 .sidebar {
