@@ -4,10 +4,12 @@ import { TbCarouselHorizontal } from "react-icons/tb";
 import { MdEventSeat } from "react-icons/md";
 import { FaCalendarPlus } from "react-icons/fa";
 import tw from "tailwind-styled-components";
-import {Link} from 'react-router-dom';
+import {Link,useLocation} from 'react-router-dom';
+import { useEffect } from "react";
 
 export default function Sidebar() {
   const [isSelected, setSelected] = useState(0);
+  const location = useLocation();
 
   const Sidebutton = tw.div`
     cursor-pointer
@@ -23,8 +25,14 @@ export default function Sidebar() {
     px-2
 `;
 
+  useEffect(() => {
+    if(location.pathname == '/') setSelected(0);
+    if(location.pathname == '/events') setSelected(1);
+    if(location.pathname == '/addevent') setSelected(2);
+  },[location.pathname])
+
   return (
-    <div className="flex flex-col min-h-screen bg-[rgb(206, 211, 219)] px-5 gap-y-5 py-2 items-center shadow-2xl">
+    <div className="flex flex-col min-h-screen bg-[rgb(206, 211, 219)] px-5 gap-y-5 py-2 items-center shadow-2xl ">
       <div className="w-20">
         <img src={logo}></img>
       </div>
