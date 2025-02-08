@@ -30,7 +30,10 @@ app.use("/api/projects",userProjectRouter);
 // app.use("/api/auth",router);
 app.use("/api/auth",loginSignupRoute);
 
-app.use("/api/admin",adminRouter)
+app.use("/api/admin",adminRouter);
+
+app.use("/uploads", express.static("uploads"));
+
 app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
 });
