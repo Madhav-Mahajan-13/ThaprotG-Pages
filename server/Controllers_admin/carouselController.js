@@ -171,6 +171,8 @@ export const suspendCarousel = async (req, res) => {
     }
 };
 
+
+
 // Additional helper function to update carousel item
 export const updateCarousel = async (req, res) => {
     try {
@@ -287,6 +289,63 @@ export const updateCarousel = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Failed to update carousel item",
+            error: error.message
+        });
+    }
+};
+
+
+export const deleteCarousel = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: "Carousel ID is required"
+            });
+        }
+
+        // First, get the image path before deleting the record
+        const imageResult = await db.query(
+            'SELECT image_path FROM carousel WHERE id = $1',
+            [id]
+        );
+
+        if (imageResult.rows.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Carousel item not found"
+            });
+        }
+
+        // Delete the record from the database
+        const result = await db.query(
+            `DELETE FROM carousel WHERE id = $1 RETURNING *`,
+            [id]
+        );
+
+        // Delete the associated image file
+        const imagePath = imageResult.rows[0].image_path;
+        if (imagePath) {
+            try {
+                await fs.unlink(path.join('uploads', imagePath));
+            } catch (unlinkError) {
+                console.error("Error deleting image file:", unlinkError);
+                // Continue with the response even if image deletion fails
+            }
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Carousel item deleted successfully",
+            data: result.rows[0]
+        });
+    } catch (error) {
+        console.error("Error in deleteCarousel:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to delete carousel item",
             error: error.message
         });
     }
