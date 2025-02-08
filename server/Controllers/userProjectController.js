@@ -51,8 +51,8 @@ export const postProject = async (req, res) => {
                 openUntil,
                 openings,
                 formattedTechnology,
-                "uploads/pdf/"+pdfPath,
-                "uploads/img/"+imagePath,
+                "uploads/pdfs/"+pdfPath,
+                "uploads/images/"+imagePath,
             ]);
         } else if (userType === 'alumni') {
             const status = "alumni";
@@ -68,8 +68,8 @@ export const postProject = async (req, res) => {
                 openUntil,
                 openings,
                 formattedTechnology,
-                pdfPath,
-                imagePath,
+                "uploads/pdfs/"+pdfPath,
+                "uploads/images/"+imagePath,
                 status
             ]);
         } else {
