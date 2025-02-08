@@ -55,7 +55,7 @@ export const postProject = async (req, res) => {
                 "uploads/images/"+imagePath,
             ]);
         } else if (userType === 'alumni') {
-            const status = "alumni";
+            const status = "approved";
             insertResult = await db.query(`
                 INSERT INTO projects 
                 (user_id, title, description, open_until, openings, technology, pdf_path, image_path, status)
