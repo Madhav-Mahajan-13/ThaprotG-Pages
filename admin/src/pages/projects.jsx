@@ -1,37 +1,37 @@
 const data = [
     {
-        "project_id": "f078ced0-498d-4380-828e-55cf420adfa3",
+        "project_id": "2bea5bdf-ce1d-4a63-9534-9670fe2a6ec3",
         "user_id": "2544bbab-16d4-473f-8b1a-26dca6a659b7",
-        "title": "skdjfhsd",
-        "description": "wlwifjwlksdf",
-        "open_until": "2025-02-20T18:30:00.000Z",
+        "title": "dfgerfgdfg",
+        "description": "ertertgerdfg",
+        "open_until": "2025-02-24T18:30:00.000Z",
         "status": "pending",
         "pushed_to_website": false,
-        "created_at": "2025-02-08T13:07:56.743Z",
+        "created_at": "2025-02-08T13:24:10.499Z",
         "technology": [
-          "MERN"
+          "redgdfg"
         ],
-        "image_path": "uploads/img/img_1739020076737.png",
+        "image_path": "uploads/images/img_1739021050494.png",
         "openings": 2,
-        "pdf_path": "uploads/pdf/pdf_1739020076736.pdf",
+        "pdf_path": "uploads/pdfs/pdf_1739021050493.pdf",
         "first_name": "Indra",
         "last_name": "Mohan"
       },
       {
-        "project_id": "a874ec6f-e3bb-4155-82b6-23d652df8d8b",
+        "project_id": "4f03aff4-a745-45ec-9f3e-e25521217107",
         "user_id": "2544bbab-16d4-473f-8b1a-26dca6a659b7",
-        "title": "dgdfgsd",
-        "description": "weolifhsdkjfb",
-        "open_until": "2025-02-25T18:30:00.000Z",
+        "title": "gergdfg",
+        "description": "tyrthgfh",
+        "open_until": "2025-02-12T18:30:00.000Z",
         "status": "pending",
         "pushed_to_website": false,
-        "created_at": "2025-02-08T13:08:16.133Z",
+        "created_at": "2025-02-08T13:24:34.862Z",
         "technology": [
-          "lfjsdkf"
+          "gdfg"
         ],
-        "image_path": "uploads/img/null",
-        "openings": 5,
-        "pdf_path": "uploads/pdf/null",
+        "image_path": "uploads/images/img_1739021074849.png",
+        "openings": 2,
+        "pdf_path": "uploads/pdfs/pdf_1739021074848.pdf",
         "first_name": "Indra",
         "last_name": "Mohan"
       }

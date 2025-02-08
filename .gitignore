@@ -9,6 +9,8 @@
 /server/node_modules
 /server/.env
 /admin/node_modules
+/server/uploads/pdfs
+/server/uploads/images
 
 
 #vscode
