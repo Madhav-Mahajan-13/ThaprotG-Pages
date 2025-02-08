@@ -1,260 +1,246 @@
+:root {
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8f9fa;
+  --accent-color: #dc3545;
+  --text-color: #212529;
+  --light-gray: #e9ecef;
+  --medium-gray: #ced4da;
+  --dark-gray: #6c757d;
+}
+
 /* Base styles for projects page */
 .projects-page {
-    margin: 2rem auto;
-    border-radius: 15px;
-    max-width: 1200px;
-    background-color: rgb(226, 226, 226);
-    padding: 20px;
-    margin-left: 300px; /* Space for sidebar */
-    width: calc(100% - 340px); /* Account for sidebar and padding */
+  margin: 2rem auto;
+  max-width: 1200px;
+  background-color: var(--primary-bg);
+  padding: 2rem;
+  margin-left: 300px; /* Space for sidebar */
+  width: calc(100% - 340px); /* Account for sidebar and padding */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Search Bar Styles */
+.search-bar {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+.search-input {
+  padding: 1rem;
+  width: 100%;
+  max-width: 700px;
+  font-size: 1rem;
+  border-radius: 50px;
+  border: 2px solid var(--medium-gray);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Project Card Styles */
+.projects-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-bg);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.image-section {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image {
+  transform: scale(1.05);
+}
+
+.details-section {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.project-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.posted-by,
+.date-posted {
+  color: var(--dark-gray);
+  font-size: 0.9rem;
+}
+
+.description {
+  color: var(--text-color);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Pagination Styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0 1rem;
+}
+
+.pagination button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--accent-color);
+  color: var(--primary-bg);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.pagination button:not(:disabled):hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+.pagination button:disabled {
+  background-color: var(--medium-gray);
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1200px) {
+  .projects-page {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    margin-left: calc(20% + 1rem);
   }
-  
-  /* Search Bar Styles */
+
+  .projects-list {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media screen and (max-width: 968px) {
+  .projects-page {
+    margin: 1rem;
+    margin-left: calc(25% + 1rem);
+  }
+
+  .search-bar {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .projects-page {
+    margin: 0.5rem;
+    padding: 1rem;
+    width: calc(100% - 1rem);
+    margin-left: 0.5rem;
+  }
+
+  .projects-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
   .search-bar {
     width: 100%;
-    max-width: 800px;
-    margin: 1.5rem auto;
-    display: flex;
-    justify-content: center;
-    padding: 0 1rem;
   }
-  
-  .search-input {
-    padding: 0.8rem;
-    width: 100%;
-    max-width: 700px;
-    font-size: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    outline: none;
-    transition: border-color 0.3s ease;
-  }
-  
-  .search-input:focus {
-    border-color: #5c6bc0;
-    box-shadow: 0 0 5px rgba(92, 107, 192, 0.2);
-  }
-  
-  /* Project Card Styles */
-  .projects-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 1rem;
-  }
-  
-  .project-card {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    overflow: hidden;
-  }
-  
-  .project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .image-section {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-  }
-  
-  .project-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .project-card:hover .project-image {
-    transform: scale(1.05);
-  }
-  
-  .details-section {
-    padding: 1rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .project-name {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: #333;
-  }
-  
-  .posted-by,
-  .date-posted {
-    color: #555;
-    font-size: 0.9rem;
-    margin: 0.25rem 0;
-  }
-  
-  .description {
-    color: #333;
-    margin-top: 0.5rem;
-    line-height: 1.5;
-    /* Limit to 3 lines with ellipsis */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  
-  /* Pagination Styles */
+
   .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .pagination button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .projects-page {
+    margin: 0;
     padding: 1rem;
   }
-  
-  .pagination button {
-    padding: 0.8rem 1.5rem;
-    background-color: #5c6bc0;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+
+  .search-input {
+    padding: 0.75rem;
   }
-  
-  .pagination button:not(:disabled):hover {
-    background-color: #3f51b5;
-    transform: translateY(-2px);
-  }
-  
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    transform: none;
-  }
-  
-  .pagination span {
-    font-size: 0.9rem;
-    color: #666;
-  }
-  
-  /* Responsive Design */
-  @media screen and (max-width: 1200px) {
-    .projects-page {
-      margin: 1rem;
-      width: calc(100% - 2rem);
-      margin-left: calc(20% + 1rem); /* Adjust for sidebar */
-    }
-    
-    .projects-list {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-  }
-  
-  @media screen and (max-width: 968px) {
-    .projects-page {
-      margin: 1rem;
-      margin-left: calc(25% + 1rem);
-    }
-    
-    .search-bar {
-      width: 90%;
-    }
-  }
-  
-  @media screen and (max-width: 768px) {
-    .projects-page {
-      margin: 0.5rem;
-      padding: 10px;
-      width: calc(100% - 1rem);
-      margin-left: 0.5rem; /* Adjust when sidebar becomes mobile */
-    }
-  
-    .projects-list {
-      grid-template-columns: 1fr;
-      gap: 15px;
-      padding: 0.5rem;
-    }
-  
-    .search-bar {
-      width: 100%;
-      padding: 0 0.5rem;
-    }
-  
-    .project-card {
-      margin-bottom: 1rem;
-    }
-  
-    .image-section {
-      height: 180px;
-    }
-  
-    .pagination {
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-  
-    .pagination button {
-      padding: 0.6rem 1rem;
-      font-size: 0.9rem;
-    }
-  }
-  
-  @media screen and (max-width: 480px) {
-    .projects-page {
-      margin: 0;
-      border-radius: 0;
-      padding: 8px;
-    }
-  
-    .search-input {
-      padding: 0.6rem;
-      font-size: 0.9rem;
-    }
-  
-    .project-name {
-      font-size: 1.1rem;
-    }
-  
-    .posted-by,
-    .date-posted,
-    .description {
-      font-size: 0.85rem;
-    }
-  
-    .pagination button {
-      padding: 0.5rem 0.8rem;
-      font-size: 0.8rem;
-    }
-  }
-  
-  /* Loading State */
-  .projects-list:empty {
-    min-height: 200px;
-    position: relative;
-  }
-  
-  .projects-list:empty::after {
-    content: "Loading projects...";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #666;
-  }
-  
-  /* No Results State */
-  .projects-list p {
-    text-align: center;
-    color: #666;
-    padding: 2rem;
+
+  .project-name {
     font-size: 1.1rem;
   }
+
+  .posted-by,
+  .date-posted,
+  .description {
+    font-size: 0.9rem;
+  }
+}
+
+/* Loading State */
+.projects-list:empty {
+  min-height: 200px;
+  position: relative;
+}
+
+.projects-list:empty::after {
+  content: "Loading projects...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--dark-gray);
+}
+
+/* No Results State */
+.projects-list p {
+  text-align: center;
+  color: var(--dark-gray);
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+

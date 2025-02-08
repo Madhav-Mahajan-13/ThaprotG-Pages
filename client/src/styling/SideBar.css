@@ -1,167 +1,159 @@
 :root {
-  --primary-bg: #1a1a2e;
-  --secondary-bg: #16213e;
-  --accent-color: #0f3460;
-  --text-color: #e94560;
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8f9fa;
+  --accent-color: #ff0000;
+  --text-color: #333333;
   --text-light: #ffffff;
-  --hover-color: #533483;
+  --hover-color: #ffeded;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 .app-container {
   display: flex;
-  min-height: 100vh;
+  /* min-height: 100vh;npm run start */
 }
 
 .sidebar {
-  padding: 2px;
   width: 280px;
-  background-color: var(--primary-bg);
+  background-color: var(--accent-color);
   color: var(--text-light);
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
   overflow-y: auto;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
+  box-shadow: 2px 0 8px var(--shadow-color);
 }
 
-/* .sidebar-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 20px;
-}
-
-.sidebar-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 30px;
-  text-decoration: none;
-  color: var(--text-light);
-} */
-/* Update these specific rules in your existing CSS */
 .sidebar-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 0; /* Remove default padding */
+  padding: 1rem;
 }
 
 .sidebar-logo {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
   text-decoration: none;
   color: var(--text-light);
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
 }
 
-
 .logo-image {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 1rem;
+  object-fit: cover;
 }
 
 .project-name {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .sidebar-nav {
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
 }
 
 .sidebar-links {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar-button {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
+  padding: 0.875rem 1.25rem;
   color: var(--text-light);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
 .sidebar-button:hover {
   background-color: var(--hover-color);
+  color: var(--accent-color);
+  transform: translateX(4px);
 }
 
 .sidebar-icon {
-  margin-right: 15px;
-  font-size: 1.2rem;
+  margin-right: 1rem;
+  font-size: 1.25rem;
 }
 
 .user-section {
   margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid var(--accent-color);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
 }
 
 .user-icon {
   font-size: 2rem;
-  margin-right: 10px;
+  margin-right: 1rem;
 }
 
 .username {
-  font-weight: bold;
+  font-weight: 600;
 }
 
-.action-button {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 12px 20px;
-  margin-bottom: 10px;
-  background-color: var(--secondary-bg);
-  color: var(--text-light);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.action-button:hover {
-  background-color: var(--hover-color);
-}
-
-.button-icon {
-  margin-right: 15px;
-  font-size: 1.2rem;
-}
-
-.logout-section {
-  margin-top: 20px;
-}
-
+.action-button,
 .logout-button {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 12px 20px;
-  background-color: var(--accent-color);
-  color: var(--text-light);
+  padding: 0.875rem 1.25rem;
+  margin-bottom: 0.75rem;
   border: none;
   border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+}
+
+.action-button {
+  background-color: var(--text-light);
+  color: var(--accent-color);
+}
+
+.action-button:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-2px);
+}
+
+.button-icon {
+  margin-right: 1rem;
+  font-size: 1.25rem;
+}
+
+.logout-section {
+  margin-top: 1.25rem;
+}
+
+.logout-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
 }
 
 .logout-button:hover {
-  background-color: var(--text-color);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .side-window {
@@ -174,6 +166,7 @@
   transition: right 0.3s ease;
   z-index: 1000;
   overflow-y: auto;
+  box-shadow: -2px 0 8px var(--shadow-color);
 }
 
 .side-window.open {
@@ -184,7 +177,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
   background-color: var(--accent-color);
   color: var(--text-light);
 }
@@ -195,42 +188,57 @@
   color: var(--text-light);
   font-size: 1.5rem;
   cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.side-close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .side-body {
-  padding: 20px;
+  padding: 1.5rem;
 }
 
 .quick-post-form {
   background-color: var(--primary-bg);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  color: var(--text-light);
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-weight: 500;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid var(--accent-color);
-  border-radius: 4px;
-  background-color: var(--secondary-bg);
-  color: var(--text-light);
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--primary-bg);
+  color: var(--text-color);
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
 }
 
 .form-actions {
@@ -238,17 +246,19 @@
 }
 
 .form-actions button {
-  padding: 10px 20px;
+  padding: 0.75rem 1.5rem;
   background-color: var(--accent-color);
   color: var(--text-light);
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .form-actions button:hover {
-  background-color: var(--hover-color);
+  background-color: #cc0000;
+  transform: translateY(-2px);
 }
 
 @media screen and (max-width: 768px) {
@@ -271,68 +281,13 @@
   }
 }
 
-
 .sidebar::-webkit-scrollbar,
 .side-window::-webkit-scrollbar {
   display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
 .sidebar,
 .side-window {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-/* Update these specific rules in your existing CSS */
-.sidebar-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 0; /* Remove default padding */
-}
-
-.sidebar-logo {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  text-decoration: none;
-  color: var(--text-light);
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.sidebar {
-  width: 280px;
-  background-color: var(--primary-bg);
-  color: var(--text-light);
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  overflow-y: auto;
-  transition: all 0.3s ease;
-  z-index: 1001; /* Ensure sidebar is above other content */
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.sidebar::-webkit-scrollbar,
-.side-window::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.sidebar,
-.side-window {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-@media screen and (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .sidebar.open {
-    transform: translateX(0);
-  }
-}
-

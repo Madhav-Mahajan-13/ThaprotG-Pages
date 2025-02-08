@@ -1,5 +1,5 @@
 import React from "react";
-import "../styling/AlumProject/Pagination.css"
+// import "../styling/AlumProject/Pagination.css"
 const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) {

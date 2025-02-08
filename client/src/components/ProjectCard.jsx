@@ -1,5 +1,5 @@
 import React from "react";
-import "../styling/AlumProject/ProjectCard.css"
+// import "../styling/AlumProject/ProjectCard.css"
 const ProjectCard = ({ project }) => {
 
   const handleclick =()=>{
