@@ -1,57 +1,39 @@
 const data = [
     {
-        "project_id": "49998a73-f62e-44a3-8e64-c97c12a2b399",
-        "user_id": "0237552f-1a66-4a7d-968e-74f5e5aee00d",
-        "title": "Freight Logistics Database",
-        "description": "create some that  glj;slj",
-        "open_until": "2025-01-28T18:30:00.000Z",
+        "project_id": "f078ced0-498d-4380-828e-55cf420adfa3",
+        "user_id": "2544bbab-16d4-473f-8b1a-26dca6a659b7",
+        "title": "skdjfhsd",
+        "description": "wlwifjwlksdf",
+        "open_until": "2025-02-20T18:30:00.000Z",
         "status": "pending",
         "pushed_to_website": false,
-        "created_at": "2025-01-25T22:14:11.945Z",
+        "created_at": "2025-02-08T13:07:56.743Z",
         "technology": [
-          "webdev"
+          "MERN"
         ],
-        "image_path": "img_1737843251940.jpg",
+        "image_path": "uploads/img/img_1739020076737.png",
         "openings": 2,
-        "pdf_path": "pdf_1737843251938.pdf",
-        "first_name": "David",
-        "last_name": "Smith"
+        "pdf_path": "uploads/pdf/pdf_1739020076736.pdf",
+        "first_name": "Indra",
+        "last_name": "Mohan"
       },
       {
-        "project_id": "e77a7643-5834-4af8-b2ac-a3e5b432267c",
-        "user_id": "0237552f-1a66-4a7d-968e-74f5e5aee00d",
-        "title": "Freight Logistics Database",
-        "description": "create some that  glj;slj",
-        "open_until": "2025-01-28T18:30:00.000Z",
+        "project_id": "a874ec6f-e3bb-4155-82b6-23d652df8d8b",
+        "user_id": "2544bbab-16d4-473f-8b1a-26dca6a659b7",
+        "title": "dgdfgsd",
+        "description": "weolifhsdkjfb",
+        "open_until": "2025-02-25T18:30:00.000Z",
         "status": "pending",
         "pushed_to_website": false,
-        "created_at": "2025-01-25T22:16:55.401Z",
+        "created_at": "2025-02-08T13:08:16.133Z",
         "technology": [
-          "webdev"
+          "lfjsdkf"
         ],
-        "image_path": "img_1737843415395.jpg",
-        "openings": 2,
-        "pdf_path": "pdf_1737843415393.pdf",
-        "first_name": "David",
-        "last_name": "Smith"
-      },
-      {
-        "project_id": "aefbc4d2-6eef-416a-b507-24447c80d9fb",
-        "user_id": "0237552f-1a66-4a7d-968e-74f5e5aee00d",
-        "title": "Freight Logistics Database",
-        "description": "create some that  glj;slj",
-        "open_until": "2025-01-28T18:30:00.000Z",
-        "status": "pending",
-        "pushed_to_website": false,
-        "created_at": "2025-01-25T22:19:42.713Z",
-        "technology": [
-          "webdev"
-        ],
-        "image_path": "img_1737843582707.jpg",
-        "openings": 2,
-        "pdf_path": "pdf_1737843582705.pdf",
-        "first_name": "David",
-        "last_name": "Smith"
+        "image_path": "uploads/img/null",
+        "openings": 5,
+        "pdf_path": "uploads/pdf/null",
+        "first_name": "Indra",
+        "last_name": "Mohan"
       }
 ];
 
@@ -89,15 +71,13 @@ export default function Projects() {
               <td className="border p-2">{person.created_at}</td>
               <td className="border p-2">{person.technologies}</td>
               <td className="border p-2">
-                <a href={backendHost + '/' + person.image_path}>
-                    Click to Open
-                </a>
+              {person.pdf_path != 'null' && <a href={backendHost + '/' + person.image_path}>Click to Open</a>}
+              {person.pdf_path == 'null' && "Image not available"}
               </td>
               <td className="border p-2">{person.openings}</td>
               <td className="border p-2">
-                <a href={backendHost + '/' + person.pdf_path}>
-                    Click to Open
-                </a>
+                    {person.pdf_path != 'null' && <a href={backendHost + '/' + person.pdf_path}>Click to Open</a>}
+                    {person.pdf_path == 'null' && "PDF not available"}
               </td>
             </tr>
           ))}
