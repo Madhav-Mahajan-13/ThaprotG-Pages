@@ -9,6 +9,7 @@ import { userRouter } from "./Route/userRoute.js";
 import userProjectRouter from "./Route/userProjectRoute.js";
 import loginSignupRoute from './Route/loginSignupRoute.js'
 import adminRouter from "./Route/adminRoute.js";
+import studentProjectRouter from "./Route/studentProjectRoute.js";
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/alumprojects",alumProjectRouter);
-
+app.use("/api/studentprojects",studentProjectRouter);
 app.use("/api/gallery",galleryRouter);
 
 app.use("/api/user",userRouter);
