@@ -11,6 +11,8 @@ import { TbCarouselHorizontal } from "react-icons/tb";
 import { MdEventSeat } from "react-icons/md";
 import { FaCalendarPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 
 const Sidebutton = tw.div`
 cursor-pointer
@@ -38,6 +40,8 @@ export default function TopBar() {
     if (location.pathname == "/projects") setSelected(3);
     if (location.pathname == "/pendingprojects") setSelected(4);
     if (location.pathname == "/rejectedprojects") setSelected(5);
+    if (location.pathname == "/subadmins") setSelected(6);
+    if (location.pathname == "/addsubadmin") setSelected(7);
   }, [location.pathname]);
 
   const sidebarRef = useRef(null);
@@ -123,6 +127,21 @@ export default function TopBar() {
               <h1>Rejected Projects</h1>
             </Sidebutton>
           </Link>
+
+          <Link to='/subadmins'>
+            <Sidebutton $selected={isSelected === 6} >
+            <FaUser />
+            <h1>Sub Admins</h1>
+          </Sidebutton>
+        </Link>
+
+        <Link to='/addsubadmin'>
+            <Sidebutton $selected={isSelected === 7} >
+              <FaUserPlus />
+              <h1>Add Sub Admins</h1>
+            </Sidebutton>
+        </Link>
+
         </div>
       </aside>
     </>

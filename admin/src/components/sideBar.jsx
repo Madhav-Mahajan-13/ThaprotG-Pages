@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import { IoDocumentText } from "react-icons/io5";
 import { MdApproval } from "react-icons/md";
 import { ImCross } from "react-icons/im";
+import { FaUser } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 
 const Sidebutton = tw.div`
 cursor-pointer
@@ -35,6 +37,8 @@ export default function Sidebar() {
     if(location.pathname == '/projects') setSelected(3);
     if(location.pathname == '/pendingprojects') setSelected(4);
     if(location.pathname == '/rejectedprojects') setSelected(5);
+    if(location.pathname == '/subadmins') setSelected(6);
+    if (location.pathname == "/addsubadmin") setSelected(7);
   },[location.pathname])
 
   return (
@@ -88,6 +92,20 @@ export default function Sidebar() {
           <ImCross />
           <h1>Rejected Projects</h1>
         </Sidebutton>
+        </Link>
+
+        <Link to='/subAdmins'>
+        <Sidebutton $selected={isSelected === 6} >
+          <FaUser />
+          <h1>Sub Admins</h1>
+        </Sidebutton>
+        </Link>
+
+        <Link to='/addsubadmin'>
+            <Sidebutton $selected={isSelected === 7} >
+                <FaUserPlus />
+                <h1>Add Sub Admins</h1>
+            </Sidebutton>
         </Link>
 
       </div>
