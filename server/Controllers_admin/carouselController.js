@@ -8,7 +8,7 @@ dotenv.config();
 export const showCarousel = async (req, res) => {
     try {
         const result = await db.query(
-            `SELECT id, title, image_path, img_discription, link, status, updated_at 
+            `SELECT id, title, image_path, img_description, link, status, updated_at 
              FROM carousel 
              ORDER BY updated_at DESC`
         );
@@ -30,11 +30,11 @@ export const showCarousel = async (req, res) => {
 
 export const createCarousel = async (req, res) => {
     try {
-        const { title, img_discription, link, status } = req.body;
+        const { title, img_description, link, status } = req.body;
         const image_path = req.files?.image ? req.files.image[0].filename : null;
 
         // Input validation
-        if (!title || !img_discription||!status) {
+        if (!title || !img_description||!status) {
             // If there's an uploaded image, delete it since we're not going to use it
             if (image_path) {
                 try {
@@ -58,10 +58,10 @@ export const createCarousel = async (req, res) => {
         }
 
         const result = await db.query(
-            `INSERT INTO carousel (title, image_path, img_discription, link, status) 
+            `INSERT INTO carousel (title, image_path, img_description, link, status) 
              VALUES ($1, $2, $3, $4, $5) 
-             RETURNING id, title, image_path, img_discription, link, status, created_at`,
-            [title, "uploads/images"+image_path, img_discription, link, status ]
+             RETURNING id, title, image_path, img_description, link, status, created_at`,
+            [title, "uploads/images"+image_path, img_description, link, status ]
         );
 
         return res.status(201).json({
@@ -177,7 +177,7 @@ export const suspendCarousel = async (req, res) => {
 export const updateCarousel = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, img_discription, link, status } = req.body;
+        const { title, img_description, link, status } = req.body;
         const image_path = req.files?.image ? req.files.image[0].filename : null;
 
         if (!id) {
@@ -231,9 +231,9 @@ export const updateCarousel = async (req, res) => {
             paramCount++;
         }
 
-        if (img_discription) {
-            updates.push(`img_discription = $${paramCount}`);
-            values.push(img_discription);
+        if (img_description) {
+            updates.push(`img_description = $${paramCount}`);
+            values.push(img_description);
             paramCount++;
         }
 
@@ -256,7 +256,7 @@ export const updateCarousel = async (req, res) => {
             `UPDATE carousel 
              SET ${updates.join(', ')} 
              WHERE id = $${paramCount} 
-             RETURNING id, title, image_path, img_discription, link, status, updated_at`,
+             RETURNING id, title, image_path, img_description, link, status, updated_at`,
             values
         );
 
