@@ -342,7 +342,7 @@
   }
   .app-container {
     /* display: flex; */
-    min-height: 10vh;
+    min-height: 15vh;
     /* position: relative; */
     /* background-color: var(--secondary-bg); */
   }
