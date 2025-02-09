@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react"
 import axios from "axios"
-import "../styling/Dashboard.css"
 import { MyContext } from "../context/context"
-import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes } from "react-icons/fa"
+import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes, FaImage } from "react-icons/fa"
 
 export const Dashboard = () => {
   const { userId } = useContext(MyContext)
@@ -15,7 +14,10 @@ export const Dashboard = () => {
     bio: "",
     profilePicture: "",
   })
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [message, setMessage] = useState({ type: '', text: '' })
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -34,6 +36,7 @@ export const Dashboard = () => {
         setIsLoading(false)
       } catch (error) {
         console.error("Error fetching user data:", error)
+        setMessage({ type: 'error', text: 'Failed to load profile data' })
         setIsLoading(false)
       }
     }
@@ -48,14 +51,52 @@ export const Dashboard = () => {
     setFormData({ ...formData, [name]: value })
   }
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setSelectedImage(file)
+      const previewUrl = URL.createObjectURL(file)
+      setImagePreview(previewUrl)
+    }
+  }
+
   const handleSave = async () => {
     try {
-      await axios.post(`http://localhost:5000/api/user/dashboard/${userId}`, formData)
+      const submitFormData = new FormData()
+      
+      submitFormData.append('firstName', formData.firstName)
+      submitFormData.append('lastName', formData.lastName)
+      submitFormData.append('email', formData.email)
+      submitFormData.append('graduation_year', formData.graduation_year)
+      submitFormData.append('bio', formData.bio)
+      
+      if (selectedImage) {
+        submitFormData.append('image', selectedImage)
+      }
+
+      const response = await axios.post(
+        `http://localhost:5000/api/user/dashboard/${userId}`, 
+        submitFormData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+      // console.log("response",response)
+
+      if (response.data.user) {
+        setFormData(prev => ({
+          ...prev,
+          profilePicture: response.data.user.profile_picture || prev.profilePicture
+        }))
+      }
+
       setIsEditing(false)
-      alert("Profile updated successfully!")
+      setMessage({ type: 'success', text: 'Profile updated successfully!' })
     } catch (error) {
       console.error("Error saving data:", error)
-      alert("Failed to update profile. Please try again.")
+      setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' })
     }
   }
 
@@ -69,12 +110,39 @@ export const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      {message.text && (
+        <div className={`${message.type}-message`}>
+          {message.text}
+        </div>
+      )}
+      
       {isEditing ? (
         <div className="edit-form">
           <h2>
             <FaEdit /> Edit Profile
           </h2>
           <form onSubmit={(e) => e.preventDefault()}>
+            <div className="form-group">
+              <label className="form-label" htmlFor="profilePicture">
+                <FaImage /> Profile Picture
+              </label>
+              <div className="profile-image-container">
+                <img 
+                  src={imagePreview || formData.profilePicture ||"/placeholder.svg"} 
+                  alt="Profile Preview"
+                  className="profile-image"
+                />
+              </div>
+              <input
+                type="file"
+                id="profilePicture"
+                name="profilePicture"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="form-input"
+              />
+            </div>
+
             <div className="form-group">
               <label className="form-label" htmlFor="firstName">
                 <FaUser /> First Name
@@ -163,7 +231,7 @@ export const Dashboard = () => {
       ) : (
         <div className="profile-view">
           <div className="profile-image-container">
-            <img className="profile-image" src={formData.profilePicture || "/placeholder.svg"} alt="Profile" />
+            <img className="profile-image" src={ "http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile" width={300}  />
           </div>
           <div className="profile-details">
             <div className="profile-field">
@@ -207,4 +275,3 @@ export const Dashboard = () => {
 }
 
 export default Dashboard
-

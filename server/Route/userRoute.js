@@ -1,5 +1,6 @@
 import express from "express"
 import { getCurrentUser, updateUser,searchUser } from "../Controllers/userControllers.js";
+import { uploadProjectFiles } from "../middleware/uploadFiles.js";
 
 export const userRouter =express.Router();
 
@@ -11,5 +12,5 @@ export const userRouter =express.Router();
 
 // getcurrentuser
 userRouter.get("/dashboard/:userId",getCurrentUser)
-userRouter.post("/dashboard/:userId",updateUser)
+userRouter.post("/dashboard/:userId",uploadProjectFiles,updateUser)
 userRouter.get("/search/:query",searchUser)

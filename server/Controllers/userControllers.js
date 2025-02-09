@@ -31,13 +31,13 @@ export const getCurrentUser = async (req, res) => {
 export const updateUser = async (req, res) => {
     const { userId } = req.params; // Get user ID from route parameter
     const { firstName, lastName, email, graduation_year, bio } = req.body; // Extract data from request body
-
+    const imagePath = req.files?.image ? req.files.image[0].filename : null;
     try {
         const result = await db.query(
             `UPDATE users
-             SET first_name = $1, last_name = $2, email = $3, graduation_year = $4, bio = $5, updated_at = CURRENT_TIMESTAMP
+             SET first_name = $1, last_name = $2, email = $3, graduation_year = $4, bio = $5, updated_at = CURRENT_TIMESTAMP,profile_picture=$7
              WHERE id2 = $6 RETURNING *`,
-            [firstName, lastName, email, graduation_year, bio, userId]
+            [firstName, lastName, email, graduation_year, bio, userId,"/uploads/images/"+imagePath]
         );
 
         if (result.rows.length === 0) {
