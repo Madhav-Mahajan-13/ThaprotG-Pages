@@ -1,39 +1,379 @@
-import React, { useState, useEffect } from "react"
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import '../styling/alum2.css';
+
+// const AlumProject = () => {
+//   const [projects, setProjects] = useState([]);
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [totalPages, setTotalPages] = useState(1);
+//   const [searchParams, setSearchParams] = useState({
+//     title: '',
+//     description: '',
+//     technology: '',
+//     openings: ''
+//   });
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     fetchProjects();
+//   }, [currentPage]);
+
+//   const fetchProjects = async (isSearch = false) => {
+//     setLoading(true);
+//     try {
+//       const endpoint = isSearch ? '/api/alumprojects/search' : '/api/alumprojects/allproject';
+//       const response = await axios.post(`http://localhost:5000${endpoint}`, {
+//         ...searchParams,
+//         page: currentPage,
+//         limit: 10
+//       });
+//       setProjects(response.data.data.projects);
+//       setTotalPages(response.data.data.pagination.totalPages);
+//     } catch (error) {
+//       console.error('Error fetching projects:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleInputChange = (e) => {
+//     setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
+//   };
+
+//   const handleSearch = (e) => {
+//     e.preventDefault();
+//     setCurrentPage(1);
+//     fetchProjects(true);
+//   };
+
+//   const ProjectCard = ({ project }) => (
+//     <div className="project-card">
+//       <div className="image-section">
+//         <img src={project.image_path || '/placeholder-image.jpg'} alt={project.title} className="project-image" />
+//       </div>
+//       <div className="details-section">
+//         <h3 className="project-name">{project.title}</h3>
+//         <p className="posted-by"> {project.first_name} {project.last_name} </p>
+//         <p className="description">{project.description}</p>
+//         <p>Technology: {Array.isArray(project.technology) ? project.technology.join(', ') : project.technology}</p>
+//         <p>Openings: {project.openings}</p>
+//         <p>Status: {project.status}</p>
+//         <p>Open Until: {new Date(project.open_until).toLocaleDateString()}</p>
+//         <p>Created at: {new Date(project.created_at).toLocaleDateString()}</p>   
+//         {project.pdf_path && <a href={"http://localhost:5000/"+project.pdf_path} target="_blank" rel="noopener noreferrer">View PDF</a>}
+//       </div>
+//     </div>
+//   );
+
+//   return (
+//     <div className="projects-page">
+//       <h1 className="gallery-title">Alumni Projects</h1>
+//       <form onSubmit={handleSearch} className="search-bar">
+//         <input
+//           type="text"
+//           name="title"
+//           placeholder="Search by title"
+//           value={searchParams.title}
+//           onChange={handleInputChange}
+//           className="search-input"
+//         />
+//         <input
+//           type="text"
+//           name="description"
+//           placeholder="Search by description"
+//           value={searchParams.description}
+//           onChange={handleInputChange}
+//           className="search-input"
+//         />
+//         <input
+//           type="text"
+//           name="technology"
+//           placeholder="Search by technology"
+//           value={searchParams.technology}
+//           onChange={handleInputChange}
+//           className="search-input"
+//         />
+//         <input
+//           type="number"
+//           name="openings"
+//           placeholder="Search by openings"
+//           value={searchParams.openings}
+//           onChange={handleInputChange}
+//           className="search-input"
+//         />
+//         <button type="submit" className="search-button">Search</button>
+//       </form>
+
+//       <div className="projects-list">
+//         {loading ? (
+//           <p>Loading projects...</p>
+//         ) : projects.length === 0 ? (
+//           <p>No projects found.</p>
+//         ) : (
+//           projects.map((project) => <ProjectCard key={project.project_id} project={project} />)
+//         )}
+//       </div>
+
+//       <div className="pagination">
+//         <button 
+//           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+//           disabled={currentPage === 1}
+//         >
+//           Previous
+//         </button>
+//         <span>{currentPage} of {totalPages}</span>
+//         <button 
+//           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+//           disabled={currentPage === totalPages}
+//         >
+//           Next
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AlumProject
+
+"use client"
+
+import { useState, useEffect } from "react"
+import axios from "axios"
 import "../styling/alum2.css"
-import { fetchProjects } from "../services/fakeApi_Project.js"
-import SearchBar from "../components/SearchBar.jsx"
-import ProjectCard from "../components/ProjectCard.jsx"
-import Pagination from "../components/Pagination.jsx"
+
+// const ProjectCard = ({ project }) => (
+//   <div className="project-card">
+//     <div className="image-section">
+//       <img src={project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
+//     </div>
+//     <div className="details-section">
+//       <h3 className="project-name">{project.title}</h3>
+//       <p className="posted-by">
+//         {project.first_name} {project.last_name}
+//       </p>
+//       <p className="description">{project.description}</p>
+//       <p className="technology">
+//         <strong>Technology:</strong>{" "}
+//         {Array.isArray(project.technology) ? project.technology.join(", ") : project.technology}
+//       </p>
+//       <p>
+//         <strong>Openings:</strong> {project.openings}
+//       </p>
+//       <p>
+//         <strong>Status:</strong> {project.status}
+//       </p>
+//       <p>
+//         <strong>Open Until:</strong> {new Date(project.open_until).toLocaleDateString()}
+//       </p>
+//       <p>
+//         <strong>Created at:</strong> {new Date(project.created_at).toLocaleDateString()}
+//       </p>
+//       {project.pdf_path && (
+//         <a
+//           href={`http://localhost:5000/${project.pdf_path}`}
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className="pdf-link"
+//         >
+//           View PDF
+//         </a>
+//       )}
+//     </div>
+//   </div>
+// )
+
+
+// const ProjectCard = ({ project }) => (
+//   <div className="project-card">
+//     <div className="image-section">
+//       <img src={project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
+//     </div>
+//     <div className="details-section">
+//       <h3 className="project-name">{project.title}</h3>
+//       <p className="posted-by">
+//         By {project.first_name} {project.last_name}
+//       </p>
+//       <p className="technology">
+//         <strong>Tech:</strong> {Array.isArray(project.technology) ? project.technology.join(", ") : project.technology}
+//       </p>
+//       <p className="openings">
+//         <strong>Openings:</strong> {project.openings}
+//       </p>
+//       {project.pdf_path && (
+//         <a
+//           href={`http://localhost:5000/${project.pdf_path}`}
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className="pdf-link"
+//         >
+//           View Details
+//         </a>
+//       )}
+//     </div>
+//   </div>
+// )
+
+const ProjectCard = ({ project }) => (
+  <div className="project-card">
+    <div className="image-section">
+      <img src={project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
+    </div>
+    <div className="details-section">
+      <h3 className="project-name">{project.title}</h3>
+      <p className="posted-by">
+        <strong>By:</strong> {project.first_name} {project.last_name}
+      </p>
+      <p className="description">{project.description}</p>
+      <div className="info-grid">
+        <p>
+          <strong>Tech:</strong> {Array.isArray(project.technology) ? project.technology.join(", ") : project.technology}
+        </p>
+        <p>
+          <strong>Openings:</strong> {project.openings}
+        </p>
+        <p>
+          <strong>Status:</strong> {project.status}
+        </p>
+        <p>
+          <strong>Open Until:</strong> {new Date(project.open_until).toLocaleDateString()}
+        </p>
+        <p>
+          <strong>Created:</strong> {new Date(project.created_at).toLocaleDateString()}
+        </p>
+      </div>
+      {project.pdf_path && (
+        <a
+          href={`http://localhost:5000/${project.pdf_path}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pdf-link"
+        >
+          View Details
+        </a>
+      )}
+    </div>
+  </div>
+);
+
+
+const SearchBar = ({ onSearch }) => {
+  const [searchParams, setSearchParams] = useState({
+    title: "",
+    description: "",
+    technology: "",
+    openings: "",
+  })
+
+  const handleInputChange = (e) => {
+    setSearchParams({ ...searchParams, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onSearch(searchParams)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="search-bar">
+      <input
+        type="text"
+        name="title"
+        placeholder="Search by title"
+        value={searchParams.title}
+        onChange={handleInputChange}
+        className="search-input"
+      />
+      <input
+        type="text"
+        name="description"
+        placeholder="Search by description"
+        value={searchParams.description}
+        onChange={handleInputChange}
+        className="search-input"
+      />
+      <input
+        type="text"
+        name="technology"
+        placeholder="Search by technology"
+        value={searchParams.technology}
+        onChange={handleInputChange}
+        className="search-input"
+      />
+      <input
+        type="number"
+        name="openings"
+        placeholder="Search by openings"
+        value={searchParams.openings}
+        onChange={handleInputChange}
+        className="search-input"
+      />
+      <button type="submit" className="search-button">
+        Search
+      </button>
+    </form>
+  )
+}
+
+const Pagination = ({ currentPage, totalPages, onPageChange }) => (
+  <div className="pagination">
+    <button
+      onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
+      disabled={currentPage === 1}
+      className="pagination-button"
+    >
+      Previous
+    </button>
+    <span className="page-info">
+      {currentPage} of {totalPages}
+    </span>
+    <button
+      onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
+      disabled={currentPage === totalPages}
+      className="pagination-button"
+    >
+      Next
+    </button>
+  </div>
+)
 
 const AlumProject = () => {
   const [projects, setProjects] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("")
-  const [categories, setCategories] = useState([])
+  const [searchParams, setSearchParams] = useState({
+    title: "",
+    description: "",
+    technology: "",
+    openings: "",
+  })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const loadProjects = async () => {
-      setLoading(true)
-      try {
-        const data = await fetchProjects(currentPage, searchQuery, selectedCategory)
-        setProjects(data.projects)
-        setTotalPages(data.totalPages)
-        setCategories(data.categories)
-      } catch (error) {
-        console.error("Error fetching projects:", error)
-      } finally {
-        setLoading(false)
-      }
+    fetchProjects()
+  }, [currentPage, searchParams]) //Corrected dependency array
+
+  const fetchProjects = async () => {
+    setLoading(true)
+    try {
+      const endpoint = Object.values(searchParams).some((param) => param !== "")
+        ? "/api/alumprojects/search"
+        : "/api/alumprojects/allproject"
+      const response = await axios.post(`http://localhost:5000${endpoint}`, {
+        ...searchParams,
+        page: currentPage,
+        limit: 10,
+      })
+      setProjects(response.data.data.projects)
+      setTotalPages(response.data.data.pagination.totalPages)
+    } catch (error) {
+      console.error("Error fetching projects:", error)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    loadProjects()
-  }, [currentPage, searchQuery, selectedCategory])
-
-  const handleSearch = (query) => {
-    setSearchQuery(query)
+  const handleSearch = (newSearchParams) => {
+    setSearchParams(newSearchParams)
     setCurrentPage(1)
   }
 
@@ -47,10 +387,10 @@ const AlumProject = () => {
         ) : projects.length === 0 ? (
           <p>No projects found.</p>
         ) : (
-          projects.map((project) => <ProjectCard key={project.id} project={project} />)
+          projects.map((project) => <ProjectCard key={project.project_id} project={project} />)
         )}
       </div>
-      <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
     </div>
   )
 }

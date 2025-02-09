@@ -2,8 +2,8 @@ import express from 'express';
 import { getAlumProjects, searchProjects } from '../Controllers/alumProjectController.js';
 const alumProjectRouter = express.Router();
 
-alumProjectRouter.get("/allproject",getAlumProjects);
-alumProjectRouter.get("/search",searchProjects)
+alumProjectRouter.post("/allproject",getAlumProjects);
+alumProjectRouter.post("/search",searchProjects)
 
 
 
