@@ -6,7 +6,7 @@ import { MyContext } from "../context/context";
 const Landing = () => {
 
     const navigate = useNavigate();
-    const {backendHost} = useContext(MyContext);
+    const {backendHost,userId,setUserId} = useContext(MyContext);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -17,6 +17,9 @@ const Landing = () => {
                 });
 
                 const data = await response.json();
+
+                await setUserId(data.id);
+
 
                 if (!data.success) {
                     console.log("NO ENTRY WITHOUT AUTHTOKEN");

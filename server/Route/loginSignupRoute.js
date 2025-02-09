@@ -236,7 +236,7 @@ router.post('/verify/:email', async (req, res) => {
 });
 
 router.post('/verifyToken', getUser, (req, res) => {
-    return res.status(200).json({ success: true, user: req.user });
+    return res.status(200).json({ success: true, id: req.uid });
 });
 
 router.post('/forgot', async (req, res) => {
