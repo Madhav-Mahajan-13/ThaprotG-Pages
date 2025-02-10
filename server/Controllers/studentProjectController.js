@@ -27,7 +27,7 @@ export const getStudentProjects = async (req, res) => {
                 u.first_name, u.last_name,p.image_path,p.pdf_path,p.open_until
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE u.user_type = 'student'
+            WHERE u.user_type = 'student' and status='approved'
             ORDER BY p.created_at DESC
             LIMIT $1 OFFSET $2
         `;
@@ -124,7 +124,7 @@ export const searchProjects = async (req, res) => {
         }
 
         // Construct WHERE clause
-        const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+        const whereClause = conditions.length ? `WHERE status='approved' ${conditions.join(' AND ')}` : '';
 
         // Get total count
         const countQuery = `
