@@ -231,7 +231,7 @@ export const Dashboard = () => {
       ) : (
         <div className="profile-view">
           <div className="profile-image-container">
-            <img className="profile-image" src={ "http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile" width={300}  />
+            <img className="profile-image" src={"http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile" width={300}/>
           </div>
           <div className="profile-details">
             <div className="profile-field">
