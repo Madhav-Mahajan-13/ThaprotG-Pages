@@ -13,7 +13,7 @@ export const getStudentProjects = async (req, res) => {
         const countQuery = `
             SELECT COUNT(*) FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE u.user_type = 'student' AND STATUS = 'approved'
+            WHERE u.user_type = 'student' AND p.status = 'approved'
         `;
         const totalCount = await db.query(countQuery);
         const totalProjects = parseInt(totalCount.rows[0].count);
@@ -27,7 +27,7 @@ export const getStudentProjects = async (req, res) => {
                 u.first_name, u.last_name,p.image_path,p.pdf_path,p.open_until
             FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE u.user_type = 'student' and status='approved'
+            WHERE u.user_type = 'student' and p.status='approved'
             ORDER BY p.created_at DESC
             LIMIT $1 OFFSET $2
         `;
@@ -124,7 +124,9 @@ export const searchProjects = async (req, res) => {
         }
 
         // Construct WHERE clause
-        const whereClause = conditions.length ? `WHERE status='approved' ${conditions.join(' AND ')}` : '';
+        const whereClause = conditions.length ? `WHERE p.status='approved' AND ${conditions.join(' AND ')}` : "WHERE p.status='approved'";
+
+
 
         // Get total count
         const countQuery = `
@@ -135,7 +137,7 @@ export const searchProjects = async (req, res) => {
         `;
         
         const totalCount = await db.query(countQuery, params);
-        const totalProjects = parseInt(totalCount.rows[0].count);
+        const totalProjects = parseInt(totalCount.rows[0]?.count || 0);
         const totalPages = Math.ceil(totalProjects / validatedLimit);
 
         // Return early if no results
@@ -207,7 +209,6 @@ export const searchProjects = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'An error occurred while searching projects',
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
-        });
+            error: error.message       });
     }
 };
