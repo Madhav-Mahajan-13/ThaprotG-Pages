@@ -41,7 +41,7 @@ const Gallery = () => {
 
     return (
         <div className="gallery-container">
-            <h1 className="gallery-title">Image Gallery</h1>
+            <h1 className="gallery-title">CAMPUS INSIGHT</h1>
             
             {error && <div className="error-message">{error}</div>}
             

@@ -340,7 +340,7 @@ const Sidebar = () => {
               <li>
                 <Link to="/campusgallery" className="sidebar-button">
                   <FaImages className="sidebar-icon" />
-                  <span>Gallery</span>
+                  <span>Insights</span>
                 </Link>
               </li>
               <li>
