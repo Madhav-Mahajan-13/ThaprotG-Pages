@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../styling/Gallery2.css"
@@ -7,7 +5,7 @@ import "../styling/Gallery2.css"
 const Gallery = () => {
     const [images, setImages] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [pagination, setPagination] = useState({});
+    const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -18,11 +16,14 @@ const Gallery = () => {
     const fetchImages = async (page) => {
         try {
             setLoading(true);
-            const response = await axios.post('http://localhost:5000/api/gallery/');
+            const response = await axios.post('http://localhost:5000/api/gallery/', {
+                page,
+                limit: 20 // Add page and limit parameters
+            });
 
             if (response.data.success) {
                 setImages(response.data.data.projects);
-                setPagination(response.data.data.pagination);
+                setTotalPages(response.data.data.pagination.totalPages);
             }
         } catch (err) {
             setError('Failed to fetch images. Please try again later.');
@@ -33,7 +34,7 @@ const Gallery = () => {
     };
 
     const handlePageChange = (newPage) => {
-        if (newPage >= 1 && newPage <= pagination.totalPages) {
+        if (newPage >= 1 && newPage <= totalPages) {
             setCurrentPage(newPage);
             window.scrollTo(0, 0);
         }
@@ -63,21 +64,21 @@ const Gallery = () => {
                         ))}
                     </div>
 
-                    {pagination.totalPages > 1 && (
+                    {totalPages > 1 && (
                         <div className="pagination">
                             <button 
                                 className="pagination-button"
                                 onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={!pagination.hasPreviousPage}
+                                disabled={currentPage === 1}
                             >
                                 Previous
                             </button>
                             
                             <div className="page-numbers">
-                                {Array.from({ length: pagination.totalPages }, (_, i) => i + 1)
+                                {Array.from({ length: totalPages }, (_, i) => i + 1)
                                     .filter(page => (
                                         page === 1 ||
-                                        page === pagination.totalPages ||
+                                        page === totalPages ||
                                         (page >= currentPage - 1 && page <= currentPage + 1)
                                     ))
                                     .map((page, index, array) => (
@@ -98,7 +99,7 @@ const Gallery = () => {
                             <button 
                                 className="pagination-button"
                                 onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={!pagination.hasNextPage}
+                                disabled={currentPage === totalPages}
                             >
                                 Next
                             </button>
