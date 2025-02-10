@@ -6,6 +6,8 @@ import Addevent from './pages/addEvent';
 import Projects from './pages/projects';
 import MyProvider from './context/provider';
 import AddSubAdmin from './pages/addSubAdmin';
+import ProjectsPending from './pages/projectsPending';
+import ProjectsDenied from './pages/projectsDenied';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
       {
         path:'/addsubadmin',
         element:<AddSubAdmin/>
+      },
+      {
+        path:'/pendingprojects',
+        element:<ProjectsPending/>
+      },
+      {
+        path:'/rejectedprojects',
+        element:<ProjectsDenied/>
       }
     ]
   }

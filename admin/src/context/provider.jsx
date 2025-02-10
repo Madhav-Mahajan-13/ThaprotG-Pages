@@ -17,9 +17,11 @@ const MyProvider = ({ children }) => {
     }
     const backendHost = "http://localhost:5000";
     const [approved_projects, setProjects] = useState([]);
+    const [denied_projects,setDeniedProjects] = useState([]);
+    const [pending_projects,setPendingProjects] = useState([]);
 
     return (
-        <MyContext.Provider value={{ backendHost, approved_projects, setProjects,toastOptions }}>
+        <MyContext.Provider value={{ backendHost, approved_projects, setProjects,toastOptions,setDeniedProjects,denied_projects,pending_projects,setPendingProjects }}>
             {children}
         </MyContext.Provider>
     );

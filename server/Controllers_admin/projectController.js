@@ -31,7 +31,7 @@ export const getApprovedProjects = async (req, res) => {
         const result = await db.query(query);
 
         if (!result.rows || result.rows.length === 0) {
-            return res.status(20).json({
+            return res.status(200).json({
                 success: true,
                 message: 'No approved projects found'
             });
@@ -81,8 +81,8 @@ export const getPendingProjects = async (req, res) => {
         const result = await db.query(query);
 
         if (!result.rows || result.rows.length === 0) {
-            return res.status(404).json({
-                success: false,
+            return res.status(200).json({
+                success: true,
                 message: 'No pending projects found'
             });
         }
@@ -132,8 +132,8 @@ export const getDeniedProjects = async (req, res) => {
         const result = await db.query(query);
 
         if (!result.rows || result.rows.length === 0) {
-            return res.status(404).json({
-                success: false,
+            return res.status(200).json({
+                success: true,
                 message: 'No denied projects found'
             });
         }
