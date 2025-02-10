@@ -117,7 +117,9 @@ router.post('/register',
             }
     
             const user = result.rows[0];
-    
+            if(user.suspended){
+                return res.status(400).json({ msg: "User Is Suspended", success: false });
+            }
             // Compare passwords
             const passComp = await bcrypt.compare(password, user.password);
             if (!passComp) {
