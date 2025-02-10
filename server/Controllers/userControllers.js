@@ -80,3 +80,56 @@ export const searchUser = async (req, res) => {
         res.status(500).json({ msg: e.message, success: false });
     }
 };
+
+
+
+export const getUserInfo = async (req, res) => {
+    try {
+        const { username } = req.params;
+
+        // Fetch user info
+        const userQuery = `
+            SELECT first_name, last_name, email, graduation_year, 
+                   profile_picture, bio, suspended, degree, linkedin_url 
+            FROM users 
+            WHERE username = $1
+        `;
+        const userResult = await db.query(userQuery, [username]);
+
+        // If user not found, return 404
+        if (userResult.rowCount === 0) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // Fetch user's projects
+        const projectsQuery = `
+            SELECT 
+                p.project_id,
+                p.title,
+                p.description,
+                p.open_until,
+                p.status,
+                p.technology,
+                p.image_path,
+                p.openings,
+                p.pdf_path
+            FROM projects p
+            JOIN users u ON p.user_id = u.id2
+            WHERE u.username = $1
+            ORDER BY p.updated_at DESC
+        `;
+        const projectsResult = await db.query(projectsQuery, [username]);
+
+        // Send response with user info & projects
+        res.status(200).json({
+            success: true,
+            message: "User info retrieved successfully",
+            user: userResult.rows[0],
+            projects: projectsResult.rows
+        });
+
+    } catch (error) {
+        console.error("Error fetching user info:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
+    }
+};
