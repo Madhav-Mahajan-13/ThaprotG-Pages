@@ -61,7 +61,7 @@ export const createCarousel = async (req, res) => {
             `INSERT INTO carousel (title, image_path, img_description, link, status) 
              VALUES ($1, $2, $3, $4, $5) 
              RETURNING id, title, image_path, img_description, link, status, created_at`,
-            [title, "uploads/images"+image_path, img_description, link, status ]
+            [title, "uploads/images/"+image_path, img_description, link, status ]
         );
 
         return res.status(201).json({

@@ -39,7 +39,7 @@ export const createEvent=async(req,res)=>{
             `INSERT INTO event (title, imgpath, event_description, link, status) 
              VALUES ($1, $2, $3, $4, $5) 
              RETURNING id, title, imgpath, img_description, link, status, created_at`,
-            [title, "uploads/images"+imgpath, img_description, link, status ]
+            [title, "/uploads/images/"+imgpath, img_description, link, status ]
         );
 
         return res.status(201).json({
