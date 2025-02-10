@@ -3,35 +3,40 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Fetch latest images
 export const getImages = async (req, res) => {
     try {
-        const result = await db.query(
-            `SELECT *
-             FROM gallery
-             ORDER BY created_at DESC` // Latest images first
-        );
-        res.status(200).json(result.rows);
+        const { page = 1, limit = 20 } = req.body;
+        const offset = (page - 1) *limit;
+
+        const countQuery =`select count(*) from gallery`;
+
+        const totalCount = await db.query(countQuery);
+        const totalProjects = parseInt(totalCount.rows[0].count);
+        const totalPages = Math.ceil(totalProjects / limit);
+
+        const query = `
+            SELECT id, tag, description, imgsrc 
+            FROM gallery 
+            LIMIT $1 OFFSET $2
+        `;
+        const result = await db.query(query, [limit, offset]);
+
+        return res.status(200).json({
+            success: true,
+            message: result.rows.length ? 'Projects retrieved successfully' : 'No projects found',
+            data: {
+                projects: result.rows,
+                pagination: {
+                    currentPage: page,
+                    totalPages,
+                    totalProjects,
+                    hasNextPage: page < totalPages,
+                    hasPreviousPage: page > 1
+                }
+            }
+        });
     } catch (error) {
         console.error("Error fetching images:", error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-};
-
-// Search images by tag or description (search filter from body)
-export const searchImages = async (req, res) => {
-    const { query } = req.body; // Get the search query from the request body
-    try {
-        const result = await db.query(
-            `SELECT *
-             FROM gallery
-             WHERE tag ILIKE $1 OR description ILIKE $1
-             ORDER BY created_at DESC`, // Latest images first for search as well
-            [`%${query}%`] // Use a parameterized query to prevent SQL injection
-        );
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.error("Error searching images:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 };

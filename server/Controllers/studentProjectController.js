@@ -13,7 +13,7 @@ export const getStudentProjects = async (req, res) => {
         const countQuery = `
             SELECT COUNT(*) FROM projects p
             JOIN users u ON p.user_id = u.id2
-            WHERE u.user_type = 'student'
+            WHERE u.user_type = 'student' AND STATUS = 'approved')
         `;
         const totalCount = await db.query(countQuery);
         const totalProjects = parseInt(totalCount.rows[0].count);
