@@ -3,6 +3,7 @@ import { changeStatus, getApprovedProjects, getDeniedProjects, getPendingProject
 import { activateSubAdmin, createSubAdmin, deleteSubAdmin, suspendSubAdmin, viewAllSubAdmin } from "../Controllers_admin/AdminCreationController.js";
 import { activeCarousel, createCarousel, deleteCarousel, showCarousel, suspendCarousel } from "../Controllers_admin/carouselController.js";
 import { uploadProjectFiles } from "../middleware/uploadFiles.js";
+import { addInsight } from "../Controllers_admin/insightController.js";
 
 const adminRouter = express.Router();
 
@@ -21,4 +22,6 @@ adminRouter.post("/crateCarousel",uploadProjectFiles,createCarousel)
 adminRouter.post("/activeCarousel",activeCarousel)
 adminRouter.post("/suspendCarousel",suspendCarousel)
 adminRouter.post("/deleteCarousel",deleteCarousel)
+
+adminRouter.post("/addInsight",uploadProjectFiles,addInsight)
 export default adminRouter;
