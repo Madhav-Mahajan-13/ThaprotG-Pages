@@ -18,7 +18,26 @@ const port = 5000;
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = [
+    "http://localhost:3000",  // Local React frontend
+    "http://localhost:5173",  // Local React frontend
+];
+
+// CORS Configuration
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true // Allow cookies to be sent
+};
+
+app.use(cors(corsOptions));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
