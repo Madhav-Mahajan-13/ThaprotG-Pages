@@ -46,7 +46,7 @@ export const createCarousel = async (req, res) => {
 
             return res.status(400).json({
                 success: false,
-                message: "Title , status and image description are required"
+                message: "Title,Status and image description are required"
             });
         }
 
@@ -170,8 +170,6 @@ export const suspendCarousel = async (req, res) => {
         });
     }
 };
-
-
 
 // Additional helper function to update carousel item
 export const updateCarousel = async (req, res) => {
