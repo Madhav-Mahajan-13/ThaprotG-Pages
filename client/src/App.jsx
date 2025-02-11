@@ -19,6 +19,7 @@ import MyProvider from './context/provider';
 import UserProfile from './pages/UserPage';
 import Home from './pages/home';
 import { useEffect,useState } from 'react';
+import UserDashboard from './pages/userprofilepage';
 // import io from 'socket.io-client';
 
 
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path:'profile',
         element:<UserProfile></UserProfile>
+      },
+      {
+        path:'userInfo',
+        element:<UserDashboard username='Madhav1739265127be12'></UserDashboard>
       }
     ]
   },
