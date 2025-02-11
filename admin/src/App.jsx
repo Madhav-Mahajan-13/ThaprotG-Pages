@@ -8,6 +8,7 @@ import MyProvider from './context/provider';
 import AddSubAdmin from './pages/addSubAdmin';
 import ProjectsPending from './pages/projectsPending';
 import ProjectsDenied from './pages/projectsDenied';
+import Carousel from './pages/carousel';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path:'/rejectedprojects',
         element:<ProjectsDenied/>
+      },
+      {
+        path:'/carousel',
+        element:<Carousel/>
       }
     ]
   }

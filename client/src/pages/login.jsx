@@ -97,7 +97,7 @@ export default function SignIn(props) {
       return;
     }
 
-    if (data.otp) {
+    if (data.otp){
       setTimeout(() => {
         navigate(`/otp/${email}`);
       }, 800);

@@ -143,7 +143,6 @@ export default function OTP(props) {
       },1500)
 
       } catch (e) {
-        console.log(e.message);
         toast.error(e.message,toastOptions)
       }
     }

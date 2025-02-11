@@ -42,7 +42,7 @@ export default function Sidebar() {
   },[location.pathname])
 
   return (
-    <div className="flex flex-col min-h-screen bg-[rgb(206, 211, 219)] px-5 gap-y-5 py-2 items-center shadow-2xl hidden md:flex">
+    <div className="flex flex-col min-h-screen bg-[rgb(206, 211, 219)] gap-y-5 py-2 items-center shadow-2xl hidden md:flex min-w-[13rem]">
       <div className="w-20">
         <Link to='/'>
         <img src={logo}></img>
