@@ -5,7 +5,7 @@ import "../styling/alum2.css"
 const ProjectCard = ({ project }) => (
   <div className="project-card">
     <div className="image-section">
-      <img src={project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
+      <img src={"http://localhost:5000/"+project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
     </div>
     <div className="details-section">
       <h3 className="project-name">{project.title}</h3>
