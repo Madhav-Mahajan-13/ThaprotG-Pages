@@ -29,6 +29,9 @@ const transporter = mailer.createTransport({
 //     database: process.env.DB_NAME,
 // });
 
+const generateTimeStamp = () => Math.floor(Date.now() / 1000);
+const generateRandomDigits = (length) => Math.random().toString().slice(2, 2 + length);
+
 router.post('/register',
     [
         body('name', "Enter Valid Name").isLength({ min: 3 }),
@@ -63,8 +66,14 @@ router.post('/register',
 
                         const salt = await bcrypt.genSalt(10);
                         const securePass = await bcrypt.hash(req.body.password, salt);
+                        
+                        
+                        // generate username
+                        const timestamp = generateTimeStamp();
+                        const randomDigits = generateRandomDigits(2);
+                        const username = `${first_name}${timestamp}${req.body.degree}${randomDigits}`;
 
-                        db.query(`insert into users(id2,first_name,last_name,email,degree,graduation_year,password) values(gen_random_uuid(),'${first_name}','${last_name}','${req.body.email}','${req.body.degree}',${req.body.year},'${securePass}')`, (err, result) => {
+                        db.query(`insert into users(id2,first_name,last_name,email,degree,graduation_year,password,username) values(gen_random_uuid(),'${first_name}','${last_name}','${req.body.email}','${req.body.degree}',${req.body.year},'${securePass}','${username}')`, (err, result) => {
                             if (err) {
                                 success = false;
                                 console.log("ERROR\n");
@@ -97,7 +106,7 @@ router.post('/register',
         }
     });
 
-    router.post('/login', [
+router.post('/login', [
         body('email', "Enter a valid email").isEmail(),
         body("password", "Password must be at least 8 characters").isLength({ min: 8 })
     ], async (req, res) => {
@@ -160,7 +169,7 @@ router.post('/register',
             console.error("Login Error:", error);
             return res.status(500).json({ msg: "Internal Server Error", success: false });
         }
-    });
+});
     
 
 router.post('/otp/:email', getUser, async (req, res) => {

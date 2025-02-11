@@ -12,7 +12,7 @@ export const getCurrentUser = async (req, res) => {
         const { userId } = req.params; // Retrieve user ID from the request
         const result = await db.query(
             `SELECT id2 AS user_id, first_name, last_name, email, user_type, graduation_year, 
-            profile_picture, bio, suspended 
+            profile_picture, bio, suspended , username,phone_number,additional_phone_number,linkedin_url,personal_email 
             FROM users WHERE id2 = $1`,
             [userId]
         );
@@ -30,21 +30,52 @@ export const getCurrentUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const { userId } = req.params; // Get user ID from route parameter
-    const { firstName, lastName, email, graduation_year, bio } = req.body; // Extract data from request body
-    const imagePath = req.files?.image ? req.files.image[0].filename : null;
+    const { 
+        firstName, 
+        lastName, 
+        personalEmail, 
+        phoneNumber, 
+        additionalPhoneNumber, 
+        linkedinUrl, 
+        graduationYear, 
+        bio 
+    } = req.body; // Extract data from request body
+
+    const imagePath = req.files?.image ? `/uploads/images/${req.files.image[0].filename}` : null;
+
     try {
         const result = await db.query(
             `UPDATE users
-             SET first_name = $1, last_name = $2, email = $3, graduation_year = $4, bio = $5, updated_at = CURRENT_TIMESTAMP,profile_picture=$7
-             WHERE id2 = $6 RETURNING *`,
-            [firstName, lastName, email, graduation_year, bio, userId,"/uploads/images/"+imagePath]
+             SET 
+                first_name = $1, 
+                last_name = $2, 
+                personal_email = $3, 
+                phone_number = $4, 
+                additional_phone_number = $5, 
+                linkedin_url = $6, 
+                graduation_year = $7, 
+                bio = $8,
+                updated_at = CURRENT_TIMESTAMP,
+                profile_picture = COALESCE($9, profile_picture) -- Only update if a new image is uploaded
+             WHERE id2 = $10 
+             RETURNING *`,
+            [
+                firstName, 
+                lastName, 
+                personalEmail, 
+                phoneNumber, 
+                additionalPhoneNumber, 
+                linkedinUrl, 
+                graduationYear, 
+                bio, 
+                imagePath, 
+                userId
+            ]
         );
 
         if (result.rows.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
-
-
 
         return res.status(200).json({ message: "User updated successfully", user: result.rows[0] });
     } catch (error) {
@@ -52,6 +83,7 @@ export const updateUser = async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
 
 
 export const searchUser = async (req, res) => {
