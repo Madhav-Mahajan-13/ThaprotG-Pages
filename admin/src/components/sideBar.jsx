@@ -38,7 +38,8 @@ export default function Sidebar() {
     if(location.pathname == '/pendingprojects') setSelected(4);
     if(location.pathname == '/rejectedprojects') setSelected(5);
     if(location.pathname == '/subadmins') setSelected(6);
-    if (location.pathname == "/addsubadmin") setSelected(7);
+    if(location.pathname == "/addsubadmin") setSelected(7);
+    if(location.pathname == "/users") setSelected(8);
   },[location.pathname])
 
   return (
@@ -105,6 +106,13 @@ export default function Sidebar() {
             <Sidebutton $selected={isSelected === 7} >
                 <FaUserPlus />
                 <h1>Add Sub Admins</h1>
+            </Sidebutton>
+        </Link>
+
+        <Link to='/users'>
+            <Sidebutton $selected={isSelected === 8} >
+              <FaUser />
+                <h1>Users</h1>
             </Sidebutton>
         </Link>
 

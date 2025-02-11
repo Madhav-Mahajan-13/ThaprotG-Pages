@@ -86,7 +86,7 @@ export default function AddSubAdmin() {
           </InpDiv>
 
             <div className='text-center'>
-          <button type='submit' className='bg-blue-600 text-white px-4 py-1 m-auto rounded-md hover:bg-blue-900 focus:ring-2 mt-4'>Submit</button>
+          <button type='submit' className='bg-green-500 text-white px-4 py-1 m-auto rounded-md hover:bg-blue-900 focus:ring-2 mt-4 w-full'>Submit</button>
           </div>
         </form>
       </div>

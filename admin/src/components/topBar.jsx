@@ -42,6 +42,7 @@ export default function TopBar() {
     if (location.pathname == "/rejectedprojects") setSelected(5);
     if (location.pathname == "/subadmins") setSelected(6);
     if (location.pathname == "/addsubadmin") setSelected(7);
+    if (location.pathname == "/users") setSelected(8);
   }, [location.pathname]);
 
   const sidebarRef = useRef(null);
@@ -139,6 +140,13 @@ export default function TopBar() {
             <Sidebutton $selected={isSelected === 7} >
               <FaUserPlus />
               <h1>Add Sub Admins</h1>
+            </Sidebutton>
+        </Link>
+
+        <Link to='/users'>
+            <Sidebutton $selected={isSelected === 7} >
+              <FaUser />
+              <h1>Users</h1>
             </Sidebutton>
         </Link>
 

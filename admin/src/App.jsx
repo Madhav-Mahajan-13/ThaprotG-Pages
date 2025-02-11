@@ -9,6 +9,7 @@ import AddSubAdmin from './pages/addSubAdmin';
 import ProjectsPending from './pages/projectsPending';
 import ProjectsDenied from './pages/projectsDenied';
 import Carousel from './pages/carousel';
+import Users from './pages/users';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path:'/carousel',
         element:<Carousel/>
+      },
+      {
+        path:'/users',
+        element:<Users/>
       }
     ]
   }
