@@ -196,8 +196,8 @@
 .side-window {
   position: fixed;
   top: 0;
-  right: -400px;
-  width: 400px;
+  right: -600px;
+  width: 600px;
   height: 100vh;
   background-color: var(--primary-bg);
   transition: right var(--transition-speed) ease;

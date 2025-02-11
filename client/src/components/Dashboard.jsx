@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { MyContext } from "../context/context";
 import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes, FaImage, FaPhone, FaLink } from "react-icons/fa";
-
+import "../styling/Dashboard.css"
 export const Dashboard = () => {
   const { userId } = useContext(MyContext);
   const [isEditing, setIsEditing] = useState(false);
@@ -227,7 +227,7 @@ export const Dashboard = () => {
       ) : (
         <div className="profile-view">
       <div className="profile-image-container">
-          <img className="profile-image" src={"http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile" width={200} />
+          <img className="profile-image" src={"http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile"  />
         </div>
     
         <div className="profile-details">
