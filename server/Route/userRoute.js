@@ -1,5 +1,5 @@
 import express from "express"
-import { getCurrentUser, updateUser,searchUser } from "../Controllers/userControllers.js";
+import { getCurrentUser, updateUser,searchUser, getUserInfo } from "../Controllers/userControllers.js";
 import { uploadProjectFiles } from "../middleware/uploadFiles.js";
 
 export const userRouter =express.Router();
@@ -14,3 +14,4 @@ export const userRouter =express.Router();
 userRouter.get("/dashboard/:userId",getCurrentUser)
 userRouter.post("/dashboard/:userId",uploadProjectFiles,updateUser)
 userRouter.get("/search/:query",searchUser)
+userRouter.get("/getUser/:username",getUserInfo)
