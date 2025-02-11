@@ -10,6 +10,7 @@ import ProjectsPending from './pages/projectsPending';
 import ProjectsDenied from './pages/projectsDenied';
 import Carousel from './pages/carousel';
 import Users from './pages/users';
+import SubAdmins from './pages/subAdmins';
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path:'/users',
         element:<Users/>
+      },
+      {
+        path:"/subadmins",
+        element:<SubAdmins/>
       }
     ]
   }
