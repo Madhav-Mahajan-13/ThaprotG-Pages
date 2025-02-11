@@ -38,7 +38,7 @@ export const createCarousel = async (req, res) => {
             // If there's an uploaded image, delete it since we're not going to use it
             if (image_path) {
                 try {
-                    await fs.unlink(path.join('uploads', image_path));
+                    await fs.unlink(image_path);
                 } catch (unlinkError) {
                     console.error("Error deleting unused image:", unlinkError);
                 }
@@ -181,7 +181,7 @@ export const updateCarousel = async (req, res) => {
         if (!id) {
             if (image_path) {
                 try {
-                    await fs.unlink(path.join('uploads', image_path));
+                    await fs.unlink(path.join(image_path));
                 } catch (unlinkError) {
                     console.error("Error deleting unused image:", unlinkError);
                 }
@@ -327,7 +327,7 @@ export const deleteCarousel = async (req, res) => {
         const imagePath = imageResult.rows[0].image_path;
         if (imagePath) {
             try {
-                await fs.unlink(path.join('uploads', imagePath));
+                await fs.unlink(imagePath);
             } catch (unlinkError) {
                 console.error("Error deleting image file:", unlinkError);
                 // Continue with the response even if image deletion fails
