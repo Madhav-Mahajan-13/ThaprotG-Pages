@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState,useMemo } from "react";
 import { MyContext } from "../context/myContext";
 import { toast, ToastContainer } from "react-toastify";
 import UserCard from "../components/userCard";
@@ -26,29 +26,32 @@ export default function Users() {
     setSelected(e.target.value);
   };
 
-  useEffect(() => {
-    const filtered = users.filter(
-      (user) =>
-        (selected == "all" ||
-          (selected == "active" && user.suspended == false) ||
-          (selected == "suspended" && user.suspended == true)) 
-          &&
-        // Name Filter
-        (filters.name === "" ||
-          (user.first_name + " " + user.last_name)
-            .toLowerCase()
-            .includes(filters.name.toLowerCase())) 
-            &&
-        // Degree Filter
-        (filters.degree === "" ||
-          user.degree.toLowerCase().includes(filters.degree.toLowerCase())) 
-        &&
-        // Graduation Year Filter
-        (filters.graduation_year === "" ||
-          user.graduation_year.toString().includes(filters.graduation_year))
-    );
-    setToShow(filtered);
-  }, [users, filters, selected]);
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) => (
+        (selected === 'all' || 
+        (selected === 'active' && !user.suspended) || 
+        (selected === 'suspended' && user.suspended)) 
+        
+        && 
+        
+        (filters.name === '' || 
+        (user.first_name + " " + user.last_name).toLowerCase().includes(filters.name.toLowerCase())) 
+        
+        && 
+        
+        (filters.degree === '' || 
+        user.degree.toLowerCase().includes(filters.degree.toLowerCase())) 
+        
+        && 
+        
+        (filters.graduation_year === '' || 
+        user.graduation_year.includes(filters.graduation_year))
+    ));
+}, [users, selected, filters]);
+
+useEffect(() => {
+    setToShow(filteredUsers);
+}, [filteredUsers]);
 
   useEffect(() => {
     const API_CALL = async () => {
@@ -69,6 +72,7 @@ export default function Users() {
 
   return (
     <div className="flex flex-col items-center justify-center mt-24 md:mt-5">
+        <ToastContainer/>
       <div className="flex flex-col md:flex-row gap-x-2 gap-y-2 text-center items-center justify-center">
         <label>Filter Users</label>
         <select
