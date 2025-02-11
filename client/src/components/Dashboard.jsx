@@ -283,7 +283,7 @@ export const Dashboard = () => {
     
           
           <div className="profile-field">
-            <span className="field-label"><FaPhone /> Additional Phone Number</span>
+            <span className="field-label"><FaPhone /> Number 2</span>
             <p className="field-value">{formData.additionalPhoneNumber ? `${countryCode} ${formData.additionalPhoneNumber}` : "Unavailable"}</p>
           </div>
         </div>

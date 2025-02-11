@@ -94,7 +94,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.2rem; /* Increased for better visibility */
+  font-size: 1rem; /* Increased for better visibility */
   font-weight: bold; /* Added bold for emphasis */
   color: var(--text-dark); /* Darker text for more contrast */
   text-transform: uppercase;
@@ -103,7 +103,7 @@
 
 /* Profile Field Values - Ensure Text Doesn't Escape */
 .field-value {
-  font-size: 1.3rem;
+  font-size: 1.03rem;
   color: var(--text-dark);
   font-weight: 500;
   white-space: normal;
