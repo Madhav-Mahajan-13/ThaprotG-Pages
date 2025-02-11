@@ -35,6 +35,7 @@ export default function Carousel() {
 
   const handleStatusChange = async (id, status) => {
     try {
+      console.log("HERE");
       const res = await fetch(
         backendHost + "/api/admin/" + (status === "active" ? "suspendCarousel" : "activeCarousel"),
         {
@@ -89,7 +90,7 @@ export default function Carousel() {
     formData.append("title", e.target.title.value);
     formData.append("img_description", e.target.img_description.value);
     formData.append("image", e.target.image.files[0]); // The actual image file
-    formData.append("status", "active");
+    formData.append("status", e.target.status.checked ? 'active' : 'suspended');
 
     try {
       const res = await fetch(backendHost + "/api/admin/createCarousel", {
@@ -188,6 +189,10 @@ export default function Carousel() {
               <input type="text" name="title" placeholder="Title" className="border p-2 rounded-md" required />
               <input type="text" name="img_description" placeholder="Description" className="border p-2 rounded-md" />
               <input type="file" name="image" accept="image/*" className="border p-2 rounded-md" required />
+              <div className="gap-x-2 flex">
+              <input type="checkbox" name="status" className="border p-2 rounded-md"/>
+              <label htmlFor="status">Active</label>
+              </div>
               <button type="submit" className="bg-green-600 text-white p-2 rounded-md hover:bg-green-700 transition">
                 Upload Image
               </button>

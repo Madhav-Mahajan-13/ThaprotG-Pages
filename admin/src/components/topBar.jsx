@@ -144,7 +144,7 @@ export default function TopBar() {
         </Link>
 
         <Link to='/users'>
-            <Sidebutton $selected={isSelected === 7} >
+            <Sidebutton $selected={isSelected === 8} >
               <FaUser />
               <h1>Users</h1>
             </Sidebutton>

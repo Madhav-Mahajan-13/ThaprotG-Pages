@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useContext, useEffect, useState,useMemo } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { MyContext } from "../context/myContext";
 import { toast, ToastContainer } from "react-toastify";
 import UserCard from "../components/userCard";
@@ -27,31 +27,56 @@ export default function Users() {
   };
 
   const filteredUsers = useMemo(() => {
-    return users.filter((user) => (
-        (selected === 'all' || 
-        (selected === 'active' && !user.suspended) || 
-        (selected === 'suspended' && user.suspended)) 
-        
-        && 
-        
-        (filters.name === '' || 
-        (user.first_name + " " + user.last_name).toLowerCase().includes(filters.name.toLowerCase())) 
-        
-        && 
-        
-        (filters.degree === '' || 
-        user.degree.toLowerCase().includes(filters.degree.toLowerCase())) 
-        
-        && 
-        
-        (filters.graduation_year === '' || 
-        user.graduation_year.includes(filters.graduation_year))
-    ));
-}, [users, selected, filters]);
+    return users.filter(
+      (user) =>
+        (selected === "all" ||
+          (selected === "active" && !user.suspended) ||
+          (selected === "suspended" && user.suspended)) &&
+        (filters.name === "" ||
+          (user.first_name + " " + user.last_name)
+            .toLowerCase()
+            .includes(filters.name.toLowerCase())) &&
+        (filters.degree === "" ||
+          user.degree.toLowerCase().includes(filters.degree.toLowerCase())) &&
+        (filters.graduation_year === "" ||
+          user.graduation_year.includes(filters.graduation_year))
+    );
+  }, [users, selected, filters]);
 
-useEffect(() => {
+  const handleUserChange = async (id,status) => {
+        try {
+            const res = await fetch(backendHost + '/api/admin/' + (status==false ? 'suspendUser' : 'activeUser'),{
+                method:"POST",
+                body:JSON.stringify({
+                    user_id : id
+                }),
+                headers:{
+                    "Content-Type" : "application/json"
+                }
+            })
+
+            const data = await res.json();
+
+            if(!data.success){
+                toast.error(data.message,toastOptions);
+            }
+            else{
+                toast.success("Changed Status Successfully",toastOptions);
+                setUsers(prevList => (
+                    prevList.map((elem) => (
+                        elem.id2 == id ? {...elem,suspended : status==true ? false : true} : elem
+                    ))
+                ))
+            }
+
+        } catch (err) { 
+            toast.error(err.message,toastOptions);
+        }
+  }
+
+  useEffect(() => {
     setToShow(filteredUsers);
-}, [filteredUsers]);
+  }, [filteredUsers]);
 
   useEffect(() => {
     const API_CALL = async () => {
@@ -72,7 +97,7 @@ useEffect(() => {
 
   return (
     <div className="flex flex-col items-center justify-center mt-24 md:mt-5">
-        <ToastContainer/>
+      <ToastContainer />
       <div className="flex flex-col md:flex-row gap-x-2 gap-y-2 text-center items-center justify-center">
         <label>Filter Users</label>
         <select
@@ -113,7 +138,7 @@ useEffect(() => {
       </div>
       <div className="mt-24 md:mt-4 flex items-center justify-center flex-wrap gap-y-5 px-5">
         {toShow.map((elem) => (
-          <UserCard user={elem} key={elem.id2} />
+          <UserCard user={elem} handleUserChange={handleUserChange} key={elem.id2} />
         ))}
       </div>
     </div>
