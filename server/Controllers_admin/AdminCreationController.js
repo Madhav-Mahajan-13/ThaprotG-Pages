@@ -26,7 +26,7 @@ const generatePassword = (name) => {
 export const viewAllSubAdmin = async (req, res) => {
     try {
         const result = await db.query(
-            `SELECT name,id, user_id, type, email, status, department FROM admin WHERE type = 'sub'`
+            `SELECT name,id, user_id, type, email, status, department,created_at FROM admin WHERE type = 'sub'`
         );
 
         return res.status(200).json({

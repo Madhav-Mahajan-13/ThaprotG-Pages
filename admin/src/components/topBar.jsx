@@ -40,7 +40,7 @@ export default function TopBar() {
     if (location.pathname == "/projects") setSelected(3);
     if (location.pathname == "/pendingprojects") setSelected(4);
     if (location.pathname == "/rejectedprojects") setSelected(5);
-    if (location.pathname == "/subadmins") setSelected(6);
+    if (location.pathname == "/subAdmins") setSelected(6);
     if (location.pathname == "/addsubadmin") setSelected(7);
     if (location.pathname == "/users") setSelected(8);
   }, [location.pathname]);

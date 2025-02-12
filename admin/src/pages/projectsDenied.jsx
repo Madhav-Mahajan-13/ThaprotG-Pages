@@ -148,9 +148,9 @@ export default function ProjectsDenied() {
               <td className="border p-2">{project.first_name + " " + project.last_name}</td>
               <td className="border p-2">{project.title}</td>
               <td className="border p-2">{project.description}</td>
-              <td className="border p-2">{project.open_until}</td>
+              <td className="border p-2">{new Date(project.open_until).toDateString()}</td>
               <td className="border p-2">{project.status}</td>
-              <td className="border p-2">{project.created_at}</td>
+              <td className="border p-2">{new Date(project.created_at).toDateString()}</td>
               <td className="border p-2">{project.technology.join(',')}</td>
               <td className="border p-2">
               {project.image_path.slice(-4) != 'null' ? <a href={backendHost + '/' + project.image_path}>Click to Open</a> : "Image not available" }

@@ -8,11 +8,11 @@ dotenv.config();
 
 export const createEvent=async(req,res)=>{
     try {
-        const { title, img_description, link, status } = req.body;
+        const { title, event_description, link, status } = req.body;
         const imgpath = req.files?.image ? req.files.image[0].filename : null;
 
         // Input validation
-        if (!title || !img_description||!status) {
+        if (!title || !event_description||!status) {
             // If there's an uploaded image, delete it since we're not going to use it
             if (imgpath) {
                 try {
@@ -38,8 +38,8 @@ export const createEvent=async(req,res)=>{
         const result = await db.query(
             `INSERT INTO event (title, imgpath, event_description, link, status) 
              VALUES ($1, $2, $3, $4, $5) 
-             RETURNING id, title, imgpath, img_description, link, status, created_at`,
-            [title, "/uploads/images/"+imgpath, img_description, link, status ]
+             RETURNING id, title, imgpath, event_description, link, status, created_at`,
+            [title, "/uploads/images/"+imgpath, event_description, link, status ]
         );
 
         return res.status(201).json({

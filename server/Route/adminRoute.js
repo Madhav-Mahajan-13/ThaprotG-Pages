@@ -5,6 +5,7 @@ import { activeCarousel, createCarousel, deleteCarousel, showCarousel, suspendCa
 import { uploadProjectFiles } from "../middleware/uploadFiles.js";
 import { addInsight } from "../Controllers_admin/insightController.js";
 import { activeUser, deleteUser, getAllUsers, searchUsers, suspendUser } from "../Controllers_admin/userController.js";
+import { activeEvent, createEvent, deleteEvent, showEvent, suspendEvent } from "../Controllers_admin/eventController.js";
 
 const adminRouter = express.Router();
 //projects
@@ -34,4 +35,12 @@ adminRouter.post("/searchUsers",searchUsers)
 adminRouter.post("/activeUser",activeUser)
 adminRouter.post("/suspendUser",suspendUser)
 adminRouter.post("/deleteUser",deleteUser)
+
+adminRouter.get('/viewEvents',showEvent)
+adminRouter.post("/createEvent",uploadProjectFiles,createEvent)
+adminRouter.post("/activeEvent",activeEvent)
+adminRouter.post("/suspendEvent",suspendEvent)
+adminRouter.post("/deleteEvent",deleteEvent)
+
+
 export default adminRouter;

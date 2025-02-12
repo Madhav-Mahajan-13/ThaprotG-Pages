@@ -11,6 +11,7 @@ import ProjectsDenied from './pages/projectsDenied';
 import Carousel from './pages/carousel';
 import Users from './pages/users';
 import SubAdmins from './pages/subAdmins';
+import Events from './pages/events';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path:"/subadmins",
         element:<SubAdmins/>
+      },
+      {
+        path:"/events",
+        element:<Events/>
       }
     ]
   }
