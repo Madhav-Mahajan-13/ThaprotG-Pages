@@ -10,6 +10,7 @@ import userProjectRouter from "./Route/userProjectRoute.js";
 import loginSignupRoute from './Route/loginSignupRoute.js'
 import adminRouter from "./Route/adminRoute.js";
 import studentProjectRouter from "./Route/studentProjectRoute.js";
+import objectRouter from "./Route/objectRoute.js";
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.use("/api/projects",userProjectRouter);
 app.use("/api/auth",loginSignupRoute);
 
 app.use("/api/admin",adminRouter);
+app.use("/api/object",objectRouter);
 
 app.use("/uploads", express.static("uploads"));
 
