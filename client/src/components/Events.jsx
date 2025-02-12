@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import "../styling/Events.css";
+import { MyContext } from "../context/context";
 
 const CampusEvents = () => {
   const [events, setEvents] = useState([]);
   const scrollRef = useRef(null);
+  const {backendHost} = useContext(MyContext)
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/object/getEvent");
+        const response = await fetch(backendHost + "/api/object/getEvent");
         const data = await response.json();
         setEvents([...data.data, ...data.data]); // Duplicate for seamless scrolling
       } catch (error) {
@@ -43,12 +45,12 @@ const CampusEvents = () => {
         {events.map((event, index) => (
           <a 
             key={index} 
-            href={event.link || "#"} 
+            href={event.link.startsWith('https://') ? event.link : `https://${event.link}` || "#"} 
             className="event-card" 
             target="_blank" 
             rel="noopener noreferrer"
           >
-            <img src={event.imgpath} alt={event.title} />
+            <img src={backendHost +'/'+ event.imgpath} alt={event.title} />
             <div className="event-info">
               <h3>{event.title}</h3>
               <p>{event.event_description}</p>

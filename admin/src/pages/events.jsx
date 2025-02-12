@@ -102,7 +102,7 @@ export default function Events() {
       <div className="flex flex-col md:flex-row flex-wrap w-full gap-x-5 items-center justify-center gap-y-5 px-5 md:px-2">
         {imToShow.map((elem) => (
           <EventCard
-            event={{...elem,imgpath:(backendHost+elem.imgpath)}}
+            event={{...elem,imgpath:(backendHost+'/'+elem.imgpath)}}
             key={elem.id}
             handleStatusChange={handleStatusChange}
             handleDelete = {handleDelete}

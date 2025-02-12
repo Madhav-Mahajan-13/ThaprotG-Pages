@@ -325,6 +325,7 @@ export const deleteCarousel = async (req, res) => {
 
         // Delete the associated image file
         const imagePath = imageResult.rows[0].image_path;
+        console.log(imagePath);
         if (imagePath) {
             try {
                 await fs.unlink(imagePath);

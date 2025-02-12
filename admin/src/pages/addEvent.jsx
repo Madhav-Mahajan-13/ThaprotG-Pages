@@ -4,11 +4,6 @@ import { MyContext } from "../context/myContext";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function DynamicForm() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
-  const [link, setLink] = useState("");
-  const [isActive, setIsActive] = useState(false); // For checkbox
 
   const { backendHost, toastOptions } = useContext(MyContext);
 
@@ -18,11 +13,11 @@ export default function DynamicForm() {
       e.preventDefault();
 
       const formData = new FormData();
-      formData.append("title", title);
-      formData.append("event_description", description);
-      formData.append("image", image);
-      formData.append("link", link);
-      formData.append("status", isActive ? "active" : "suspended"); // Using state for checkbox
+      formData.append("title", e.target.title.value);
+      formData.append("event_description", e.target.event_description.value);
+      formData.append("image", e.target.image.files[0]);
+      formData.append("link", e.target.link.value);
+      formData.append("status", e.target.check.checked ? "active" : "suspended"); // Using state for checkbox
 
       const res = await fetch(backendHost + "/api/admin/createEvent", {
         method: "POST",
@@ -49,8 +44,7 @@ export default function DynamicForm() {
           <label className="block font-medium">Title:</label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
             className="p-2 border border-gray-300 rounded w-full"
             placeholder="Event Title"
             required
@@ -60,8 +54,7 @@ export default function DynamicForm() {
         <div>
           <label className="block font-medium">Description:</label>
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="event_description"
             className="p-2 border border-gray-300 rounded w-full"
             placeholder="Event Description"
             required
@@ -73,7 +66,7 @@ export default function DynamicForm() {
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
+            name="image"
             className="p-2 border border-gray-300 rounded w-full"
             required
           />
@@ -83,8 +76,7 @@ export default function DynamicForm() {
           <label className="block font-medium">Add Link</label>
           <input
             type="text"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
+            name="link"
             className="p-2 border border-gray-300 rounded w-full"
             placeholder="Useful Link"
             required
@@ -95,9 +87,7 @@ export default function DynamicForm() {
           <input
             type="checkbox"
             className="p-2 border border-gray-300 rounded"
-            id="check"
-            checked={isActive}
-            onChange={(e) => setIsActive(e.target.checked)}
+            name="check"
           />
           <label>Active</label>
         </div>

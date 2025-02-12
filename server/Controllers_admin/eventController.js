@@ -16,7 +16,7 @@ export const createEvent=async(req,res)=>{
             // If there's an uploaded image, delete it since we're not going to use it
             if (imgpath) {
                 try {
-                    await fs.unlink(path.join('uploads', imgpath));
+                    await fs.unlink(imgpath);
                 } catch (unlinkError) {
                     console.error("Error deleting unused image:", unlinkError);
                 }
@@ -39,7 +39,7 @@ export const createEvent=async(req,res)=>{
             `INSERT INTO event (title, imgpath, event_description, link, status) 
              VALUES ($1, $2, $3, $4, $5) 
              RETURNING id, title, imgpath, event_description, link, status, created_at`,
-            [title, "/uploads/images/"+imgpath, event_description, link, status ]
+            [title, "uploads/images/"+imgpath, event_description, link, status ]
         );
 
         return res.status(201).json({
@@ -203,9 +203,10 @@ export const deleteEvent=async(req,res)=>{
 
         // Delete the associated image file
         const imagePath = imageResult.rows[0].imgpath;
+        console.log(imagePath);
         if (imagePath) {
             try {
-                await fs.unlink(path.join('uploads', imagePath));
+                await fs.unlink(imagePath);
             } catch (unlinkError) {
                 console.error("Error deleting image file:", unlinkError);
                 // Continue with the response even if image deletion fails
