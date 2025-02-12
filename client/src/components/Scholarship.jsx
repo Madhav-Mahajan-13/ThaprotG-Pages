@@ -3,26 +3,16 @@ import "../styling/Scholarship.css"
 
 const Scholarship = () => {
   return (
-    <div className="scholarship">
-      <h2>Scholarships</h2>
-      <p>Explore various scholarship opportunities to support your education.</p>
-      <ul>
-        <li>
-          <a href="#">Merit-based Scholarships</a>
-        </li>
-        <li>
-          <a href="#">Need-based Financial Aid</a>
-        </li>
-        <li>
-          <a href="#">Research Grants</a>
-        </li>
-        <li>
-          <a href="#">International Student Scholarships</a>
-        </li>
-      </ul>
+    <div className="scholarship-container">
+      {["Merit Based", "Need Based", "Sports", "Cultural","Merit Based", "Need Based", "Sports", "Cultural"].map((type) => (
+        <div key={type} className="scholarship-card">
+          <h3>{type} Scholarship</h3>
+          <p>Financial support for deserving students.</p>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
 export default Scholarship
 

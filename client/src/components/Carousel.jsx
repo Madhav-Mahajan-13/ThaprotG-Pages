@@ -1,57 +1,57 @@
-import React, { useState, useEffect } from "react"
-// import "./Carousel.css"
-import "../styling/Carousel.css"
+import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import "../styling/Carousel.css";
 
-const carouselData = [
-  { id: 1, text: "Find internship opportunities", image: "https://picsum.photos/id/36/200/300" },
-  { id: 2, text: "Discover scholarship programs", image: "https://picsum.photos/id/39/200/300" },
-  { id: 3, text: "Connect with industry professionals", image: "https://picsum.photos/id/42/200/300" },
-  { id: 4, text: "One on One chatting", image: "https://picsum.photos/id/45/200/300" },
-  { id: 5, text: "Track your academic progress", image: "https://picsum.photos/id/48/200/300" },
-]
+const DynamicCarousel = () => {
+  const [slides, setSlides] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-const Carousel = () => {
-    const [currentSlide, setCurrentSlide] = useState(0)
-    const [prevSlide, setPrevSlide] = useState(carouselData.length - 1)
-  
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setPrevSlide(currentSlide)
-        setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselData.length)
-      }, 5000)
-  
-      return () => clearInterval(timer)
-    }, [currentSlide])
-  
-    return (
-      <div className="carousel">
-        {carouselData.map((slide, index) => (
-          <div
+  useEffect(() => {
+    const fetchCarousel = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/object/getCarousel");
+        const data = await response.json();
+        setSlides(data.data || []);
+      } catch (error) {
+        console.error("Error fetching carousel data:", error);
+      }
+    };
+    fetchCarousel();
+  }, []);
+
+  useEffect(() => {
+    if (slides.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [slides]);
+
+  return (
+    <div className="carousel-container">
+      {slides.length > 0 &&
+        slides.map((slide, index) => (
+          <a
             key={slide.id}
-            className={`carousel-slide ${index === currentSlide ? "active" : ""} ${index === prevSlide ? "prev" : ""}`}
+            href={slide.link}
+            className={`carousel-slide ${index === currentSlide ? "active" : ""}`}
           >
-            <div className="slide-content">
-              <img src={slide.image || "/placeholder.svg"} alt={`Use ${slide.id}`} />
-              <p className="slide-text">{slide.text}</p>
+            <img src={"http://localhost:5000/"+slide.image_path} alt={slide.title} className="carousel-image" />
+            <div className="carousel-overlay">
+              <h2>{slide.title}</h2>
+              <p>{slide.img_description}</p>
             </div>
-            <div className="torn-effect"></div>
-          </div>
+          </a>
         ))}
-        <div className="carousel-indicators">
-          {carouselData.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${index === currentSlide ? "active" : ""}`}
-              onClick={() => {
-                setPrevSlide(currentSlide)
-                setCurrentSlide(index)
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
+      <button className="carousel-btn left" onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}>
+        <ChevronLeft />
+      </button>
+      <button className="carousel-btn right" onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}>
+        <ChevronRight />
+      </button>
+    </div>
+  );
+};
 
-export default Carousel
-
+export default DynamicCarousel;

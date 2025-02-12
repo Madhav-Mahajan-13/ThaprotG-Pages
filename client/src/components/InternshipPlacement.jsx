@@ -2,27 +2,53 @@ import React from "react"
 import "../styling/InternshipPlacement.css"
 
 const InternshipPlacement = () => {
+  const sections = [
+    {
+      title: "Internship",
+      description: "Gain hands-on experience with top companies.",
+      link: "#",
+    },
+    {
+      title: "Placement",
+      description: "Secure job opportunities in reputed firms.",
+      link: "#",
+    },
+    {
+      title: "Career Guide",
+      description: "Get mentorship and career advice.",
+      link: "#",
+    },
+    {
+      title: "Internship",
+      description: "Gain hands-on experience with top companies.",
+      link: "#",
+    },
+    {
+      title: "Placement",
+      description: "Secure job opportunities in reputed firms.",
+      link: "#",
+    },
+    {
+      title: "Career Guide",
+      description: "Get mentorship and career advice.",
+      link: "#",
+    },
+  ];
+
   return (
     <div className="internship-placement">
-      <h2>Internships and Placements</h2>
-      <p>Discover exciting opportunities to kickstart your career!</p>
-      <ul>
-        <li>
-          <a href="#">Summer Internship Program</a>
-        </li>
-        <li>
-          <a href="#">Campus Placement Drive</a>
-        </li>
-        <li>
-          <a href="#">Industry Partnership Opportunities</a>
-        </li>
-        <li>
-          <a href="#">Career Counseling Services</a>
-        </li>
-      </ul>
+      {sections.map((section) => (
+        <div key={section.title} className="internship-card">
+          <h3>{section.title}</h3>
+          <p>{section.description}</p>
+          <a href={section.link} className="learn-more">
+            Learn More
+          </a>
+        </div>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default InternshipPlacement
+export default InternshipPlacement;
 

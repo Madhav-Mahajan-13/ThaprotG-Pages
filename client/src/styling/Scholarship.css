@@ -1,42 +1,35 @@
-.scholarship {
-  background-color: var(--secondary-bg-color);
-  padding: 2rem;
+.scholarship-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.scholarship-card {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  background: #f8f9fa;
+  padding: 20px;
   border-radius: 8px;
-  margin-bottom: 2rem;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.scholarship h2 {
-  color: var(--primary-color);
-  margin-bottom: 1rem;
+.scholarship-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-.scholarship p {
-  color: var(--text-color);
-  margin-bottom: 1rem;
+.scholarship-card h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
-.scholarship ul {
-  list-style-type: none;
-  padding: 0;
+.scholarship-card p {
+  font-size: 14px;
+  color: #555;
 }
-
-.scholarship li {
-  margin-bottom: 0.5rem;
-}
-
-.scholarship a {
-  color: var(--link-color);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.scholarship a:hover {
-  color: var(--link-hover-color);
-}
-
-@media (max-width: 768px) {
-  .scholarship {
-    padding: 1rem;
-  }
-}
-

@@ -1,0 +1,57 @@
+.events-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.events-scroll {
+  display: flex;
+  overflow-x: hidden;
+  gap: 15px;
+  white-space: nowrap;
+}
+
+.event-card {
+  flex: 0 0 auto;
+  width: 250px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  text-decoration: none; /* Removes link styles */
+  color: black; /* Ensures text is not styled like a link */
+  display: block; /* Ensures the whole card is clickable */
+}
+
+.event-card:hover {
+  transform: scale(1.05);
+}
+
+.event-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.event-info {
+  padding: 10px;
+  text-align: left;
+}
+
+.event-info h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.event-info p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  white-space: normal; /* Allows full text to be visible */
+  word-wrap: break-word;
+  overflow: hidden;
+  display: block;
+}
+
+.event-card h3, .event-card p {
+  pointer-events: none; /* Prevents text from being clickable while keeping the whole card clickable */
+}
