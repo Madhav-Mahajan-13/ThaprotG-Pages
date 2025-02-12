@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react"
+import { Link } from "react-router-dom"
 import { MyContext } from "../context/context.jsx"
 import "../styling/SearchInterface.css"
 
@@ -12,7 +13,9 @@ function UserCard({ user, onConnect }) {
           className="user-avatar"
         />
         <div className="user-name">
-          {user.first_name} {user.last_name}
+        <Link to='/userInfo' state={{username : user.username}}>
+        {user.first_name} {user.last_name}
+        </Link>
         </div>
       </div>
       <button className="connect-button" onClick={() => onConnect(user.id)}>
