@@ -8,11 +8,13 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [toShow, setToShow] = useState([]);
   const [selected, setSelected] = useState("all");
+  const [userType,setUserType] = useState("all");
 
   const [filters, setFilters] = useState({
     name: "",
     graduation_year: "",
     degree: "",
+    user_type:""
   });
 
   const { backendHost, toastOptions } = useContext(MyContext);
@@ -26,12 +28,19 @@ export default function Users() {
     setSelected(e.target.value);
   };
 
+  const handleUserSelect = (e) => {
+    setUserType(e.target.value);
+  }
+
   const filteredUsers = useMemo(() => {
     return users.filter(
       (user) =>
         (selected === "all" ||
           (selected === "active" && !user.suspended) ||
           (selected === "suspended" && user.suspended)) &&
+
+          (userType == user.user_type || userType == 'all') &&
+
         (filters.name === "" ||
           (user.first_name + " " + user.last_name)
             .toLowerCase()
@@ -41,7 +50,7 @@ export default function Users() {
         (filters.graduation_year === "" ||
           user.graduation_year.toString().includes(filters.graduation_year))
     );
-  }, [users, selected, filters]);
+  }, [users, selected, filters,userType]);
 
   const handleUserChange = async (id,status) => {
         try {
@@ -109,6 +118,15 @@ export default function Users() {
           <option value="active">Active</option>
           <option value="suspended">Suspended</option>
         </select>
+        <select
+          value={userType}
+          onChange={handleUserSelect}
+          className="border-2 border-black px-2"
+        >
+          <option value="all">All</option>
+          <option value="student">Student</option>
+          <option value="alumni">Alumni</option>
+        </select>
         <form className="flex flex-col md:flex-row gap-x-2 gap-y-2">
           <input
             type="text"
@@ -134,9 +152,10 @@ export default function Users() {
             placeholder="Degree"
             className="border-2 rounded-sm px-2 py-2"
           />
+         
         </form>
       </div>
-      <div className="mt-24 md:mt-4 flex items-center justify-center flex-wrap gap-y-5 px-5">
+      <div className="mt-24 md:mt-4 flex items-center justify-center flex-wrap gap-y-5 px-7">
         {toShow.map((elem) => (
           <UserCard user={elem} handleUserChange={handleUserChange} key={elem.id2} />
         ))}
