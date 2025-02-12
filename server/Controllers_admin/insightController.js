@@ -17,7 +17,7 @@ export const addInsight = async (req, res) => {
         for (const imgsrc of images) {
             const query = await db.query(
                 `INSERT INTO gallery (tag, description, imgsrc) VALUES ($1, $2, $3) RETURNING *`,
-                [tag, description, +"/uploads/images/"+imgsrc]
+                [tag, description, +"uploads/images/"+imgsrc]
             );
             insertedImages.push(query.rows[0]);
         }
