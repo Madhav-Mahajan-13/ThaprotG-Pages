@@ -3,12 +3,15 @@ import { Link } from "react-router-dom"
 import { MyContext } from "../context/context.jsx"
 import "../styling/SearchInterface.css"
 
+
 function UserCard({ user, onConnect }) {
+  const { backendHost } = useContext(MyContext)
+
   return (
     <div className="user-card">
       <div className="user-info">
         <img
-          src={user.imageUrl || "/placeholder.svg?height=56&width=56"}
+          src={backendHost+user.profile_picture || "/placeholder.svg?height=56&width=56"}
           alt={`${user.first_name}'s profile`}
           className="user-avatar"
         />
