@@ -1,18 +1,63 @@
-import React from "react"
-import "../styling/Scholarship.css"
+import React from 'react';
+import { ArrowRight } from 'lucide-react';
+import '../styling/Scholarship.css';
 
-const Scholarship = () => {
+const ScholarshipCard = ({ title, description, link }) => {
   return (
-    <div className="scholarship-container">
-      {["Merit Based", "Need Based", "Sports", "Cultural","Merit Based", "Need Based", "Sports", "Cultural","Sports"].map((type) => (
-        <div key={type} className="scholarship-card">
-          <h3>{type} Scholarship</h3>
-          <p>Financial support for deserving students.</p>
-        </div>
-      ))}
+    <div className="scholarship-card">
+      <div className="card-icon">
+        <div className="card-icon-inner" />
+      </div>
+      
+      <h3 className="card-title">{title}</h3>
+      <p className="card-description">{description}</p>
+      
+      <a href={link} className="learn-more-link">
+        Learn More
+        <ArrowRight className="arrow-icon" />
+      </a>
     </div>
   );
 };
 
-export default Scholarship
+const Scholarship = () => {
+  const scholarships = [
+    {
+      title: 'AIF ',
+      description: 'Comprehensive financial support for exceptional students pursuing their academic dreams and fostering educational excellence.',
+      link: 'https://www.thapar.edu/academics/centerspages/alumni-in-focus88'
+    },
+    {
+      title: 'ARC Team ',
+      description: 'Supporting innovative research and collaborative projects that push the boundaries of academic achievement.',
+      link: '#'
+    },
+    {
+      title: 'Podcasts ',
+      description: 'Empowering creative voices through digital media, providing resources for storytelling and content creation.',
+      link: '#'
+    },
+    {
+      title: 'ReUnion ',
+      description: `Connecting generations through education, helping alumni children continue their family's legacy of learning.`,
+      link: '#'
+    }
+  ];
 
+  return (
+    <div className="scholarship-container">
+      <div className="scholarship-grid">
+        {scholarships.map((scholarship, index) => (
+          <ScholarshipCard
+            key={index}
+            title={scholarship.title}
+            description={scholarship.description}
+            link={scholarship.link}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Scholarship;
