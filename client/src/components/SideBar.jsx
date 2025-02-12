@@ -328,7 +328,7 @@ const Sidebar = () => {
               <li>
                 <Link to="/alumproject" className="sidebar-button">
                   <FaProjectDiagram className="sidebar-icon" />
-                  <span>Projects</span>
+                  <span>Alumni Projects</span>
                 </Link>
               </li>
               <li>
@@ -357,10 +357,10 @@ const Sidebar = () => {
               <FaUserCircle className="user-icon" />
               <span className="username">{userName}</span>
             </div>
-            <button className="action-button" onClick={() => toggleWindow("chat")}>
+            {/* <button className="action-button" onClick={() => toggleWindow("chat")}>
               <FaComments className="button-icon" />
               <span>Chat</span>
-            </button>
+            </button> */}
             <button className="action-button" onClick={() => toggleWindow("quickPost")}>
               <FaPlusCircle className="button-icon" />
               <span>Quick Post</span>
