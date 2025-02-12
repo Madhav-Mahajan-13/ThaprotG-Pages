@@ -9,7 +9,7 @@ export default function UserCard({ user,handleUserChange }) {
       <div className="flex flex-col items-center p-5 bg-gray-100">
         <img
           src={
-            user.profile_picture != "null"
+            user.profile_picture
               ? user.profile_picture
               : "https://via.placeholder.com/150"
           }

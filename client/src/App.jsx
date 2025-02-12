@@ -51,11 +51,11 @@ const router = createBrowserRouter([
       },
       {
         path:'profile',
-        element:<UserProfile></UserProfile>
+        element:<UserProfile/>
       },
       {
         path:'userInfo',
-        element:<UserDashboard username='Madhav1739265127be12'></UserDashboard>
+        element:<UserDashboard/>
       }
     ]
   },

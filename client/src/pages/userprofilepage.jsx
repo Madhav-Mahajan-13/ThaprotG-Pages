@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Calendar, Linkedin, Mail, GraduationCap, Users, FileText, UserPlus, Briefcase, UsersRound } from 'lucide-react';
 import '../styling/userprofilepage.css';
+import { useLocation } from "react-router-dom";
+import { MyContext } from '../context/context';
 
-const UserDashboard = ({ username }) => {
+const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const location = useLocation();
+  const username = location.state?.username || "Guest";
+  const {backendHost} = useContext(MyContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/user/getUser/${username}`);
+        const response = await fetch(backendHost + `/api/user/getUser/${username}`);
         const data = await response.json();
         
         if (!data.success) {

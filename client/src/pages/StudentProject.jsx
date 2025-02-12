@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { Link } from "react-router-dom";
 import axios from "axios"
 import "../styling/alum2.css"
 
@@ -10,7 +11,10 @@ const ProjectCard = ({ project }) => (
     <div className="details-section">
       <h3 className="project-name">{project.title}</h3>
       <p className="posted-by">
-        <strong>By:</strong> {project.first_name} {project.last_name}
+        <strong>By:</strong> 
+        <Link to='/userInfo' state={{username : project.username}}>
+        {project.first_name} {project.last_name}
+        </Link>
       </p>
       <p className="description">{project.description}</p>
       <div className="info-grid">
