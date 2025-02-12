@@ -39,7 +39,7 @@ export default function Users() {
         (filters.degree === "" ||
           user.degree.toLowerCase().includes(filters.degree.toLowerCase())) &&
         (filters.graduation_year === "" ||
-          user.graduation_year.includes(filters.graduation_year))
+          user.graduation_year.toString().includes(filters.graduation_year))
     );
   }, [users, selected, filters]);
 
