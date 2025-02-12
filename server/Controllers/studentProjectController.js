@@ -24,7 +24,7 @@ export const getStudentProjects = async (req, res) => {
             SELECT 
                 p.project_id, p.title, p.description, p.technology, 
                 p.openings, p.status, p.created_at,
-                u.first_name, u.last_name,p.image_path,p.pdf_path,p.open_until
+                u.first_name, u.last_name,p.image_path,p.pdf_path,p.open_until,u.username
             FROM projects p
             JOIN users u ON p.user_id = u.id2
             WHERE u.user_type = 'student' and p.status='approved'
