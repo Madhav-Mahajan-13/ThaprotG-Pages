@@ -20,6 +20,9 @@ import UserProfile from './pages/UserPage';
 import Home from './pages/home';
 import { useEffect,useState } from 'react';
 import UserDashboard from './pages/userprofilepage';
+import Internships from './pages/Internship';
+import Placements from './pages/Placement';
+import TeamPage from './pages/TeamPage';
 // import io from 'socket.io-client';
 
 
@@ -56,7 +59,19 @@ const router = createBrowserRouter([
       {
         path:'userInfo',
         element:<UserDashboard/>
-      }
+      },
+      {
+        path:'internship',
+        element:<Internships/>
+      },
+      {
+        path:'placement',
+        element:<Placements/>
+      },
+      {
+        path:'team',
+        element:<TeamPage/>
+      },
     ]
   },
   {

@@ -30,7 +30,7 @@ const Scholarship = () => {
     {
       title: 'ARC Team ',
       description: 'Supporting innovative research and collaborative projects that push the boundaries of academic achievement.',
-      link: '#'
+      link: '/team'
     },
     {
       title: 'Podcasts ',
