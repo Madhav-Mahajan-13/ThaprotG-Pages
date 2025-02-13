@@ -56,59 +56,59 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }));
 
 export default function Reset(props) {
-    const {email} = useParams();
-
-    const navigate = useNavigate();
-    const {toastOptions,backendHost} = useContext(MyContext);
-
-    async function handleSubmit(e){
-        e.preventDefault();
-
-        try {
-            const pass = document.getElementById('password').value;
-            if(pass < 8){
-                toast.info("password must be of at least 8 characters",toastOptions)
-                return
-            }
-
-            const cpass = document.getElementById('cpassword').value;
-            if(cpass < 8){
-                toast.info("password must be of at least 8 characters",toastOptions)
-                return
-            }
-
-            if(pass != cpass){
-                toast.error("Both fields must be same",toastOptions);
-                return;
-            }
-
-            const res = await fetch(backendHost + '/api/auth/reset',{
-                method:"POST",
-                body:JSON.stringify({
-                    email : email,
-                    pass : pass,
-                }),
-                headers:{
-                    "Content-Type":"application/json"
-                }
-            })
-
-            const data = await res.json();
-
-            if(!data.success){
-                toast.error(data.msg,toastOptions);
-                return;
-            }
-            toast.success("Success, Redirecting");
-            setTimeout(() => {
-                navigate('/login');
-            },1000);
-
-        } catch (error) {
-            toast.error(error.message,toastOptions)
-        }
-
-    }
+  const navigate = useNavigate();
+  const { email } = useParams();
+  const { toastOptions, backendHost } = useContext(MyContext);
+  const token = sessionStorage.getItem("otpToken"); // 🔥 Retrieve OTP token
+  
+  async function handleSubmit(e) {
+      e.preventDefault();
+  
+      const pass = document.getElementById("password").value;
+      const cpass = document.getElementById("cpassword").value;
+  
+      if (pass.length < 8 || cpass.length < 8) {
+          toast.info("Password must be at least 8 characters", toastOptions);
+          return;
+      }
+  
+      if (pass !== cpass) {
+          toast.error("Both password fields must be the same", toastOptions);
+          return;
+      }
+  
+      if (!token) {
+          toast.error("Session expired. Please request a new OTP.", toastOptions);
+          navigate("/forgot");
+          return;
+      }
+  
+      try {
+          const res = await fetch(`${backendHost}/api/auth/reset`, {
+              method: "POST",
+              body: JSON.stringify({ email, pass,authToken:token }),
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          });
+  
+          const data = await res.json();
+  
+          if (!data.success) {
+              toast.error(data.msg, toastOptions);
+              return;
+          }
+  
+          toast.success("Password reset successful! Redirecting...");
+  
+          setTimeout(() => {
+              sessionStorage.removeItem("otpToken"); // 🔥 Clear OTP token
+              navigate("/login");
+          }, 1000);
+      } catch (error) {
+          toast.error(error.message, toastOptions);
+      }
+  }
     return(
         <>
         <AppTheme {...props}>

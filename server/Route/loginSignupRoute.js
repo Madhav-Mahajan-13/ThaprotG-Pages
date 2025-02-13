@@ -6,6 +6,14 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mailer from 'nodemailer';
 import crypto from 'crypto';
+import rateLimit from "express-rate-limit";
+
+// Rate limiter (max 5 OTP requests per 10 minutes per IP)
+const otpLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 5,
+    message: { msg: "Too many OTP requests. Try again later.", success: false },
+  });
 
 const router = express.Router();
 const d = new Date();
@@ -171,65 +179,103 @@ router.post('/login', [
         }
 });
     
-
-router.post('/otp/:email', getUser, async (req, res) => {
+router.post("/otp/:email", otpLimiter, async (req, res) => {
     try {
-        // Ensure the user is requesting OTP for their own email
-        if (req.email !== req.params.email) {
-            return res.status(403).json({ msg: "Unauthorized request", success: false });
-        }
-
-        console.log("HERE");
-
-        const otp = crypto.randomInt(100000, 999999);
-
-        // Delete any existing OTPs for this user
-        await db.query(`DELETE FROM otp WHERE email = $1`, [req.email]);
-
-        // Insert new OTP
-        await db.query(`INSERT INTO otp (email, otp) VALUES ($1, $2)`, [req.email, otp]);
-
-        // Send OTP via email
-        const info = await transporter.sendMail({
-            from: process.env.sender_email,
-            to: req.email,
-            subject: "OTP for ThaProt-G",
-            text: `Your OTP for ThaProt-G is ${otp}, valid for 5 minutes.`,
-        });
-
-        return res.status(200).json({ msg: "OTP sent successfully", success: true });
-
+      const email = req.params.email;
+  
+      console.log("Processing OTP request for:", email);
+  
+      const otp = crypto.randomInt(100000, 999999);
+  
+      // Remove any expired OTPs
+      await db.query(`DELETE FROM otp WHERE email = $1 AND otp_expires < NOW()`, [email]);
+  
+      // Delete any existing OTPs for this email
+      await db.query(`DELETE FROM otp WHERE email = $1`, [email]);
+  
+      // Insert new OTP with expiration (valid for 5 minutes)
+      await db.query(
+        `INSERT INTO otp (email, otp, otp_expires) VALUES ($1, $2, NOW() + INTERVAL '5 minutes')`,
+        [email, otp]
+      );
+  
+      // Send OTP via email
+      await transporter.sendMail({
+        from: process.env.sender_email,
+        to: email,
+        subject: "OTP for ThaProt-G",
+        text: `Your OTP for ThaProt-G is ${otp}. This code is valid for 5 minutes.`,
+      });
+  
+      return res.status(200).json({ msg: "OTP sent successfully", success: true });
+  
     } catch (e) {
-        console.error("OTP Error:", e.message);
-        return res.status(500).json({ msg: "Internal server error", success: false });
+      console.error("OTP Error:", e.message);
+      return res.status(500).json({ msg: "Internal server error", success: false });
     }
-});
+  });
+
+// router.post('/otp/:email', getUser, async (req, res) => {
+//     try {
+//         // Ensure the user is requesting OTP for their own email
+//         if (req.email !== req.params.email) {
+//             return res.status(403).json({ msg: "Unauthorized request", success: false });
+//         }
+
+//         console.log("HERE");
+
+//         const otp = crypto.randomInt(100000, 999999);
+
+//         // Delete any existing OTPs for this user
+//         await db.query(`DELETE FROM otp WHERE email = $1`, [req.email]);
+
+//         // Insert new OTP
+//         await db.query(`INSERT INTO otp (email, otp) VALUES ($1, $2)`, [req.email, otp]);
+
+//         // Send OTP via email
+//         const info = await transporter.sendMail({
+//             from: process.env.sender_email,
+//             to: req.email,
+//             subject: "OTP for ThaProt-G",
+//             text: `Your OTP for ThaProt-G is ${otp}, valid for 5 minutes.`,
+//         });
+
+//         return res.status(200).json({ msg: "OTP sent successfully", success: true });
+
+//     } catch (e) {
+//         console.error("OTP Error:", e.message);
+//         return res.status(500).json({ msg: "Internal server error", success: false });
+//     }
+// });
 
 
-router.post('/verify/:email', async (req, res) => {
+router.post("/verify/:email", async (req, res) => {
     try {
-        const otp = req.body.otp;
+        const { otp } = req.body;
         const email = req.params.email;
 
         if (!otp) {
             return res.status(400).json({ msg: "OTP is required", success: false });
         }
 
-        // Check if the OTP exists and is still valid
-        const { rows } = await db.query(
-            `SELECT otp FROM otp WHERE email = $1 AND otp_expires > NOW()`,
-            [email]
-        );
+        // Remove expired OTPs before checking
+        await db.query(`DELETE FROM otp WHERE otp_expires < NOW()`);
+
+        // Retrieve the stored OTP for the email
+        const { rows } = await db.query(`SELECT otp FROM otp WHERE email = $1`, [email]);
 
         if (rows.length === 0) {
             return res.status(400).json({ msg: "Invalid or expired OTP", success: false });
         }
 
-        if (otp !== rows[0].otp) {
+        const storedOtp = rows[0].otp;
+        const isMatch = storedOtp == otp;
+        // Compare the hashed OTP securely
+        if (!isMatch) {
             return res.status(401).json({ msg: "Incorrect OTP", success: false });
         }
 
-        // Delete OTP and update user verification in a single transaction
+        // Begin transaction for deleting OTP and updating user status
         await db.query("BEGIN");
 
         await db.query(`DELETE FROM otp WHERE email = $1`, [email]);
@@ -246,47 +292,147 @@ router.post('/verify/:email', async (req, res) => {
     }
 });
 
+
+// router.post('/verify/:email', async (req, res) => {
+//     try {
+//         const otp = req.body.otp;
+//         const email = req.params.email;
+
+//         if (!otp) {
+//             return res.status(400).json({ msg: "OTP is required", success: false });
+//         }
+
+//         // Check if the OTP exists and is still valid
+//         const { rows } = await db.query(
+//             `SELECT otp FROM otp WHERE email = $1 AND otp_expires > NOW()`,
+//             [email]
+//         );
+
+//         if (rows.length === 0) {
+//             return res.status(400).json({ msg: "Invalid or expired OTP", success: false });
+//         }
+
+//         if (otp !== rows[0].otp) {
+//             return res.status(401).json({ msg: "Incorrect OTP", success: false });
+//         }
+
+//         // Delete OTP and update user verification in a single transaction
+//         await db.query("BEGIN");
+
+//         await db.query(`DELETE FROM otp WHERE email = $1`, [email]);
+//         await db.query(`UPDATE users SET otp_verified = true WHERE email = $1`, [email]);
+
+//         await db.query("COMMIT");
+
+//         return res.status(200).json({ msg: "Verification successful", success: true });
+
+//     } catch (error) {
+//         await db.query("ROLLBACK");
+//         console.error("OTP Verification Error:", error.message);
+//         return res.status(500).json({ msg: "Internal Server Error", success: false });
+//     }
+// });
+
 router.post('/verifyToken', getUser, (req, res) => {
     return res.status(200).json({ success: true, id: req.uid });
 });
 
-router.post('/forgot', async (req, res) => {
+router.post("/forgot", async (req, res) => {
     try {
-        const email = req.body.email;
+        const { email } = req.body;
 
-        db.query(`select email from users where email='${email}'`, (err, result) => {
-            if (err) {
-                return res.status(500).json({ msg: err.message, success: false });
-            }
+        if (!email) {
+            return res.status(400).json({ msg: "Email is required", success: false });
+        }
 
-            if (!result.rowCount) {
-                return res.status(400).json({ msg: "User does not exist", "success": false });
-            }
+        // Check if the user exists
+        const { rowCount } = await db.query(`SELECT email FROM users WHERE email = $1`, [email]);
+        if (!rowCount) {
+            return res.status(400).json({ msg: "User does not exist", success: false });
+        }
 
-            const data = {
-                email: email,
-                forgot: true
-            };
+        // Generate a secure 6-digit OTP
+        const otp = crypto.randomInt(100000, 999999);
 
-            const token = jwt.sign(data, process.env.sec_key, { expiresIn: '10m' });
+        // Store OTP in the database with an expiration time (5 minutes)
+        await db.query(
+            `INSERT INTO otp (email, otp, otp_expires) 
+             VALUES ($1, $2, NOW() + INTERVAL '5 minutes') 
+             ON CONFLICT (email) DO UPDATE 
+             SET otp = $2, otp_expires = NOW() + INTERVAL '5 minutes'`,
+            [email, otp]
+        );
 
-            res.cookie('authToken', token, {
-                httpOnly: true,    // Prevents JavaScript access
-                secure: process.env.production == true, // Use secure cookies in production
-                sameSite: 'Strict', // Prevents CSRF
-                maxAge: 10 * 60 * 1000, // 10 minutes
-            });
+        // Generate a one-time-use JWT for verification (OTP Token)
+        const otpToken = jwt.sign({ email, otp }, process.env.sec_key, { expiresIn: "10m" });
 
-            return res.status(200).json({ token: token, success: true });
+        // Send OTP via email (Implement email sending logic)
+        await transporter.sendMail({
+            from: process.env.sender_email,
+            to: email,
+            subject: "Password Reset OTP",
+            text: `Your OTP for password reset is ${otp}. It is valid for 5 minutes.`,
         });
+
+        return res.status(200).json({
+            msg: "OTP sent successfully",
+            otpToken, // This is the token the user needs to verify
+            success: true,
+        });
+
     } catch (error) {
-        res.status(500).json({ msg: error.message, success: false });
+        console.error("Forgot Password Error:", error.message);
+        return res.status(500).json({ msg: "Internal Server Error", success: false });
     }
 });
 
+
+// router.post('/forgot', async (req, res) => {
+//     try {
+//         const email = req.body.email;
+
+//         db.query(`select email from users where email='${email}'`, (err, result) => {
+//             if (err) {
+//                 return res.status(500).json({ msg: err.message, success: false });
+//             }
+
+//             if (!result.rowCount) {
+//                 return res.status(400).json({ msg: "User does not exist", "success": false });
+//             }
+
+//             const data = {
+//                 email: email,
+//                 forgot: true
+//             };
+
+//             const token = jwt.sign(data, process.env.sec_key, { expiresIn: '10m' });
+
+//             res.cookie('authToken', token, {
+//                 httpOnly: true,    // Prevents JavaScript access
+//                 secure: process.env.production == true, // Use secure cookies in production
+//                 sameSite: 'Strict', // Prevents CSRF
+//                 maxAge: 10 * 60 * 1000, // 10 minutes
+//             });
+
+//             return res.status(200).json({ token: token, success: true });
+//         });
+//     } catch (error) {
+//         res.status(500).json({ msg: error.message, success: false });
+//     }
+// });
+
 router.post('/reset', async (req, res) => {
     try {
-        const { email, pass } = req.body;
+        const { email, pass,authToken } = req.body;
+
+        if(!authToken){
+            return res.status(401).json({ msg: "Authentication required", success: false });
+        }
+
+        const data = await jwt.verify(authToken, process.env.sec_key);
+        if (!data) {
+            return res.status(403).json({ msg: "Invalid Token", success: false });
+          }
 
         const salt = await bcrypt.genSalt(10);
         const securePass = await bcrypt.hash(pass, salt);

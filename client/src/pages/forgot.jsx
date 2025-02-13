@@ -62,44 +62,42 @@ export default function Forgot(props) {
     const {toastOptions,backendHost} = useContext(MyContext);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          const email = document.getElementById('email').value;
-          console.log("HERE");
-          const [left,right] = email.split('@');
-          if(left < 3 || right != 'thapar.edu'){
-              toast.info("Not a Valid thapar.edu account",toastOptions)
+      e.preventDefault();
+      try {
+          const email = document.getElementById("email").value.trim();
+          const [left, right] = email.split("@");
+  
+          if (left.length < 3 || right.toLowerCase() !== "thapar.edu") {
+              toast.info("Not a valid thapar.edu account", toastOptions);
               return;
           }
-
-          const res = await fetch(backendHost + '/api/auth/forgot',{
-              method:"POST",
-              body:JSON.stringify({
-                  email : email
-              }),
-              headers:{
-                  "Content-Type":"application/json"
+  
+          const res = await fetch(backendHost + "/api/auth/forgot", {
+              method: "POST",
+              body: JSON.stringify({ email }),
+              headers: {
+                  "Content-Type": "application/json",
               },
-              credentials:"include"
-          })
-
+              credentials: "include", // Ensures cookies are sent
+          });
+  
           const data = await res.json();
-
-          if(!data.success){
-              console.log(data.msg)
-              toast.error(data.msg,toastOptions);
+  
+          if (!data.success) {
+              console.log(data.msg);
+              toast.error(data.msg, toastOptions);
               return;
           }
-
-          toast.success("Redirecting")
+  
+          toast.success("Redirecting...");
+  
+          sessionStorage.setItem("otpToken", data.otpToken);
+  
           setTimeout(() => {
-              sessionStorage.setItem('isForgot','yes');
-              navigate(`/OTP/${data.token}/${email}`);
-          },1000)
-
+              navigate(`/OTP/${data.otpToken}/${email}`);
+          }, 1000);
       } catch (error) {
-          toast.error(error.message,toastOptions);
-          console.log(error.message)
+          toast.error(error.message, toastOptions);
       }
     }
 

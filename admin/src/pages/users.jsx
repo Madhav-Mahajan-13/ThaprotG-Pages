@@ -157,7 +157,7 @@ export default function Users() {
       </div>
       <div className="mt-24 md:mt-4 flex items-center justify-center flex-wrap gap-y-5 px-7">
         {toShow.map((elem) => (
-          <UserCard user={elem} handleUserChange={handleUserChange} key={elem.id2} />
+          <UserCard user={{...elem,profile_picture : elem.profile_picture && elem.profile_picture.startsWith('http') ? elem.profile_picture : backendHost + '/' + elem.profile_picture}} handleUserChange={handleUserChange} key={elem.id2} />
         ))}
       </div>
     </div>

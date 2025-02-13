@@ -13,7 +13,7 @@ import AppTheme from '../theme/AppTheme.jsx';
 import {Audio} from 'react-loader-spinner';
 
 import { useNavigate, useParams } from "react-router-dom"
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
 import { MyContext } from '../context/context.jsx';
 import { toast,ToastContainer } from 'react-toastify';
 
@@ -59,93 +59,77 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }));
 
 export default function OTP(props) {
-    const navigate = useNavigate();
-    const {token,email} = useParams();
-    const {backendHost,toastOptions} = React.useContext(MyContext);
-    const [isLoading,setLoading] = useState(true);
-    const [otp,setOTP] = useState(null);
-    const forgot = sessionStorage.getItem('isForgot')
+  const navigate = useNavigate();
+const { token, email } = useParams(); // Get token & email from URL
+const { backendHost, toastOptions } = React.useContext(MyContext);
+const [isLoading, setLoading] = useState(true);
+const [otp, setOTP] = useState("");
 
-    useEffect(() => {
-        async function API_Call(){
-          try {
-            const res = await fetch(backendHost+`/api/auth/otp/${email}`,{
-              headers:{
-                authToken:token,
-              },
-              method:"POST",
-              credentials:"include"
+const forgot = sessionStorage.getItem("isForgot");
+
+useEffect(() => {
+    async function API_Call() {
+        try {
+            const res = await fetch(`${backendHost}/api/auth/otp/${email}`, {
+                headers: {
+                    authToken: token, // Send token in headers
+                },
+                method: "POST",
+                credentials: "include",
             });
 
             const data = await res.json();
 
-            if(!data.success){
-                toast.error(data.message)
+            if (!data.success) {
+                toast.error(data.message);
                 return;
             }
 
             setTimeout(() => {
                 setLoading(false);
-            },1500)
-
-          }catch(error){
-              toast.error(error.message)
-              return;
-          }
+            }, 1500);
+        } catch (error) {
+            toast.error(error.message);
         }
-        API_Call()
-    },[])
+    }
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
+    API_Call();
+}, []);
 
-      console.log(otp);
-  
-      if(otp.length < 6){
-        console.log("Invalid OTP length");
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (otp.length < 6) {
+        toast.error("Invalid OTP length", toastOptions);
         return;
-      }
+    }
 
-      try {
-        const res = await fetch(backendHost + `/api/auth/verify/${email}`,
-          {
-            method:"POST",
-            body:JSON.stringify({
-              otp : otp
-            }),
-            headers:{
-              'Content-Type' : 'application/json'
-            }
-          }
-        )
+    try {
+        const res = await fetch(`${backendHost}/api/auth/verify/${email}`, {
+            method: "POST",
+            body: JSON.stringify({ otp }),
+            headers: { "Content-Type": "application/json" },
+        });
 
         const data = await res.json();
 
-        if(!data.success){
-          toast.error(data.msg,toastOptions);
-          return;
+        if (!data.success) {
+            toast.error(data.msg, toastOptions);
+            return;
         }
 
-        toast.success("Redirecting...",toastOptions);
+        toast.success("OTP Verified! Redirecting...", toastOptions);
 
-        setTimeout(async () => {
-          sessionStorage.removeItem('isForgot')
-          await fetch(backendHost + '/api/auth/logout',{
-            method:"POST",
-            credentials:'include'
-          })
-          if(!forgot){
-              navigate('/')
-          }
-          else{
-              navigate(`/passreset/${token}/${email}`)
-          }
-      },1500)
+        setTimeout(() => {
+            sessionStorage.setItem("otpToken", token); // 🔥 Store token for reset route
+            sessionStorage.removeItem("isForgot"); // Remove forgot flag
 
-      } catch (e) {
-        toast.error(e.message,toastOptions)
-      }
+            navigate(`/passreset/${token}/${email}`); // Navigate to reset password
+        }, 1500);
+    } catch (e) {
+        toast.error(e.message, toastOptions);
     }
+  }
 
     return(
         <>
