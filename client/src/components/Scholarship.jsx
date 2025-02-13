@@ -28,14 +28,14 @@ const Scholarship = () => {
       link: 'https://www.thapar.edu/academics/centerspages/alumni-in-focus88'
     },
     {
-      title: 'ARC Team ',
+      title: 'ARC Student Team ',
       description: 'Supporting innovative research and collaborative projects that push the boundaries of academic achievement.',
       link: '/team'
     },
     {
       title: 'Podcasts ',
       description: 'Empowering creative voices through digital media, providing resources for storytelling and content creation.',
-      link: '#'
+      link: '/podcast'
     },
     {
       title: 'ReUnion ',

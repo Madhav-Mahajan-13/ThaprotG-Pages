@@ -23,6 +23,7 @@ import UserDashboard from './pages/userprofilepage';
 import Internships from './pages/Internship';
 import Placements from './pages/Placement';
 import TeamPage from './pages/TeamPage';
+import Podcast from './pages/Podcast';
 // import io from 'socket.io-client';
 
 
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
       {
         path:'team',
         element:<TeamPage/>
+      },
+      {
+        path:'podcast',
+        element:<Podcast/>
       },
     ]
   },
