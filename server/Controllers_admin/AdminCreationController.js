@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { randomBytes } from 'crypto';
 import EmailVerifier from 'email-verifier';
 import nodemailer from 'nodemailer';
-
+import bcrypt from 'bcrypt';
 dotenv.config();
 
 
@@ -166,15 +166,6 @@ export const createSubAdmin = async (req, res) => {
             });
         }
 
-        // Verify if the email exists
-        // const emailExists = await isEmailValid(email);
-        // if (!emailExists) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "Invalid email address. This email does not exist."
-        //     });
-        // }
-
         // Check if email already exists in the database
         const existingAdmin = await db.query(
             'SELECT id FROM admin WHERE email = $1',
@@ -194,8 +185,12 @@ export const createSubAdmin = async (req, res) => {
         const cleanName = name.replace(/\s+/g, '');
         const user_id = `${cleanName}${timestamp}${department}${randomDigits}`;
 
-        // Generate password
-        const password = generatePassword(name);
+        // Generate plain text password
+        const plainPassword = generatePassword(name);
+        
+        // Hash the password before storing
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
 
         // Configure Nodemailer
         const transporter = nodemailer.createTransport({
@@ -210,7 +205,7 @@ export const createSubAdmin = async (req, res) => {
             from: process.env.sender_email,
             to: email,
             subject: 'Welcome to ThaProt-G - Your Sub-Admin Credentials',
-            html: generateEmailHTML(name, user_id, password)
+            html: generateEmailHTML(name, user_id, plainPassword) // Send plain password in email
         };
 
         try {
@@ -243,7 +238,7 @@ export const createSubAdmin = async (req, res) => {
                 `INSERT INTO admin (user_id, type, email, password, status, department, name) 
                  VALUES ($1, $2, $3, $4, $5, $6, $7) 
                  RETURNING id, user_id, email, department`,
-                [user_id, 'sub', email, password, 'active', department, name]
+                [user_id, 'sub', email, hashedPassword, 'active', department, name]
             );
 
             // Commit the transaction
@@ -254,11 +249,12 @@ export const createSubAdmin = async (req, res) => {
                 message: "Sub-admin created successfully and credentials sent via email",
                 data: {
                     ...result.rows[0],
-                    password: password
+                    password: plainPassword // Only for initial response
                 }
             });
 
         } catch (emailError) {
+            await db.query('ROLLBACK'); // Make sure to rollback if email fails
             console.error("Email sending failed:", emailError);
             return res.status(400).json({
                 success: false,
@@ -268,6 +264,7 @@ export const createSubAdmin = async (req, res) => {
         }
 
     } catch (error) {
+        await db.query('ROLLBACK'); // Make sure to rollback on any error
         console.error("Error in createSubAdmin:", error);
         return res.status(500).json({
             success: false,
