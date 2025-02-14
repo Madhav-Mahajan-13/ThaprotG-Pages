@@ -6,7 +6,8 @@ import { uploadProjectFiles } from "../middleware/uploadFiles.js";
 import { addInsight } from "../Controllers_admin/insightController.js";
 import { activeUser, deleteUser, getAllUsers, searchUsers, suspendUser } from "../Controllers_admin/userController.js";
 import { activeEvent, createEvent, deleteEvent, showEvent, suspendEvent } from "../Controllers_admin/eventController.js";
-import { loginAdmin } from "../Controllers_admin/loginController.js";
+import { forgotPassword, loginAdmin, resetPassword, verifyOTP } from "../Controllers_admin/loginController.js";
+
 
 const adminRouter = express.Router();
 //projects
@@ -45,4 +46,9 @@ adminRouter.post("/deleteEvent",deleteEvent)
 
 // login
 adminRouter.post("/loginAdmin",loginAdmin)
+adminRouter.post("/forg0tPassword",forgotPassword);
+adminRouter.post("/verifyOtp",verifyOTP);
+adminRouter.post("/resetPassword",resetPassword);
+
+
 export default adminRouter;
