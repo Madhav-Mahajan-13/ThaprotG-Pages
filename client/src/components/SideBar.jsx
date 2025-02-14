@@ -225,9 +225,9 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/campusgallery" className="sidebar-button">
+                <Link to="/alumcard" className="sidebar-button">
                   <FaCalendarAlt className="sidebar-icon" />
-                  <span>Events Showcase</span>
+                  <span>Alum Card</span>
                 </Link>
               </li>
             </ul>

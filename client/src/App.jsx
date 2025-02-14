@@ -24,6 +24,7 @@ import Internships from './pages/Internship';
 import Placements from './pages/Placement';
 import TeamPage from './pages/TeamPage';
 import Podcast from './pages/Podcast';
+import AlumniSystem from './pages/AlumCard';
 // import io from 'socket.io-client';
 
 
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
       {
         path:'podcast',
         element:<Podcast/>
+      },
+      {
+        path:'alumcard',
+        element:<AlumniSystem/>
       },
     ]
   },
