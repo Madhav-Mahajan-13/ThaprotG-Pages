@@ -230,6 +230,12 @@ const Sidebar = () => {
                   <span>Alum Card</span>
                 </Link>
               </li>
+              <li>
+                <Link to="/alumcard" className="sidebar-button">
+                  <FaCalendarAlt className="sidebar-icon" />
+                  <span>Giving Back</span>
+                </Link>
+              </li>
             </ul>
           </nav>
 
