@@ -207,7 +207,7 @@ export const verifyOTP = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        const { email, password, otp } = req.body;
+        const { email, password } = req.body;
 
         if (!email || !password) {
             return res.status(400).json({
@@ -217,17 +217,17 @@ export const resetPassword = async (req, res) => {
         }
 
         // Verify OTP first
-        const otpVerification = await db.query(
-            'SELECT * FROM otp WHERE email = $1 AND otp = $2 AND otp_expires > NOW()',
-            [email, otp]
-        );
+        // const otpVerification = await db.query(
+        //     'SELECT * FROM otp WHERE email = $1 AND otp = $2 AND otp_expires > NOW()',
+        //     [email, otp]
+        // );
 
-        if (!otpVerification.rows || otpVerification.rows.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid or expired OTP'
-            });
-        }
+        // if (!otpVerification.rows || otpVerification.rows.length === 0) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Invalid or expired OTP'
+        //     });
+        // }
 
         // Hash the new password
         const saltRounds = 10;
