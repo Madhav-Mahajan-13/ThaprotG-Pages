@@ -73,10 +73,11 @@ const Footer = () => {
         <div className="footer-section">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/projects">Alumni Projects</a></li>
-            <li><a href="/alumni">Alumni Network</a></li>
-            <li><a href="/resources">Resources</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="/studentproject">Student Projects</a></li>
+            <li><a href="/alumproject">Alumni Projects</a></li>
+           
+            <li><a href="/campusgallery">Insights</a></li>
           </ul>
         </div>
 

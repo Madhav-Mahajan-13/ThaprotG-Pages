@@ -172,7 +172,7 @@ const StudentProject = () => {
 
   return (
     <div className="projects-page">
-      <h1 className="gallery-title">student Projects</h1>
+      <h1 className="gallery-title">Student Projects</h1>
       <SearchBar onSearch={handleSearch} />
       <div className="projects-list">
         {loading ? (
