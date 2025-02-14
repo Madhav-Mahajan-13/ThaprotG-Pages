@@ -18,7 +18,7 @@ export const getApprovedProjects = async (req, res) => {
                 p.created_at,
                 p.technology,
                 p.image_path,
-                p.openings,
+                p.openings,p.department,
                 p.pdf_path,
                 u.first_name,
                 u.last_name
@@ -70,6 +70,7 @@ export const getPendingProjects = async (req, res) => {
                 p.image_path,
                 p.openings,
                 p.pdf_path,
+                p.department,
                 u.first_name,
                 u.last_name
             FROM projects p
@@ -120,6 +121,7 @@ export const getDeniedProjects = async (req, res) => {
                 p.technology,
                 p.image_path,
                 p.openings,
+                p.department,
                 p.pdf_path,
                 u.first_name,
                 u.last_name
@@ -182,6 +184,7 @@ export const searchProjects = async (req, res) => {
                 p.openings,
                 p.pdf_path,
                 u.first_name,
+                p.department,
                 u.last_name
             FROM projects p
             JOIN users u ON p.user_id = u.id2
