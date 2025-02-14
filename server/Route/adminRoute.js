@@ -47,7 +47,10 @@ adminRouter.post("/deleteEvent",deleteEvent)
 // login
 adminRouter.post("/loginAdmin",loginAdmin)
 adminRouter.post("/forgotPassword",forgotPassword);
+
 adminRouter.post("/verifyOTP",verifyOTP);
+adminRouter.post("/verifyOtp",verifyOTP);
+
 adminRouter.post("/resetPassword",resetPassword);
 
 
