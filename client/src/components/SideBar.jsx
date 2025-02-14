@@ -37,12 +37,24 @@ const QuickPostForm = () => {
   const { userId } = useContext(MyContext)
   const uid = userId
 
+  const departments = [
+    "CSED",
+    "MED",
+    "ECED",
+    "CIVIL",
+    "BIO-TECH",
+    "MBA",
+    "LIB-ARTS",
+    "CHEMICAL"
+  ]
+
   const initialFormState = {
     title: "",
     description: "",
     openings: "",
     technology: "",
     openUntil: "",
+    department: "", // Added department field
     pdf: null,
     image: null,
   }
@@ -68,7 +80,8 @@ const QuickPostForm = () => {
     e.preventDefault()
     setError(null)
 
-    if (!formData.title || !formData.description || !formData.openings || !formData.technology || !formData.openUntil) {
+    if (!formData.title || !formData.description || !formData.openings || 
+        !formData.technology || !formData.openUntil || !formData.department) {
       setError("Please fill out all required fields.")
       return
     }
@@ -80,6 +93,7 @@ const QuickPostForm = () => {
     formDataToSend.append("openings", formData.openings)
     formDataToSend.append("technology", formData.technology)
     formDataToSend.append("openUntil", formData.openUntil)
+    formDataToSend.append("department", formData.department) // Added department
     if (formData.pdf) formDataToSend.append("pdf", formData.pdf)
     if (formData.image) formDataToSend.append("image", formData.image)
 
@@ -117,6 +131,24 @@ const QuickPostForm = () => {
       </div>
 
       <div className="form-group">
+        <label htmlFor="department">Department</label>
+        <select
+          id="department"
+          name="department"
+          value={formData.department}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">Select Department</option>
+          {departments.map((dept) => (
+            <option key={dept} value={dept}>
+              {dept}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="form-group">
         <label htmlFor="openings">Openings</label>
         <input type="number" id="openings" name="openings" value={formData.openings} onChange={handleInputChange} required />
       </div>
@@ -133,12 +165,12 @@ const QuickPostForm = () => {
 
       <div className="form-group">
         <label htmlFor="pdf">PDF</label>
-        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} ref={pdfInputRef} />
+        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} ref={pdfInputRef} required  />
       </div>
 
       <div className="form-group">
         <label htmlFor="image">Image</label>
-        <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} ref={imageInputRef} />
+        <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} ref={imageInputRef} required />
       </div>
 
       <div className="form-actions">
@@ -147,6 +179,8 @@ const QuickPostForm = () => {
     </form>
   )
 }
+
+
 
 const Sidebar = () => {
   const { userId,backendHost } = useContext(MyContext)

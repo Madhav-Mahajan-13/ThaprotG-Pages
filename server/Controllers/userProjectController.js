@@ -4,7 +4,7 @@ dotenv.config();
 
 export const postProject = async (req, res) => {
     try {
-        const { id, title, description, openings, technology, openUntil } = req.body;
+        const { id, title, description, openings, technology, openUntil,department } = req.body;
 
         // Handle file uploads
         const pdfPath = req.files?.pdf ? req.files.pdf[0].filename : null;
@@ -41,8 +41,8 @@ export const postProject = async (req, res) => {
         if (userType === 'student') {
             insertResult = await db.query(`
                 INSERT INTO projects 
-                (user_id, title, description, open_until, openings, technology, pdf_path, image_path)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                (user_id, title, description, open_until, openings, technology, pdf_path, image_path,department)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9)
                 RETURNING project_id;
             `,[
                 id,
@@ -53,12 +53,13 @@ export const postProject = async (req, res) => {
                 formattedTechnology,
                 "uploads/pdfs/"+pdfPath,
                 "uploads/images/"+imagePath,
+                department
             ]);
         } else if (userType === 'alumni') {
             const status = "approved";
             insertResult = await db.query(`
                 INSERT INTO projects 
-                (user_id, title, description, open_until, openings, technology, pdf_path, image_path, status)
+                (user_id, title, description, open_until, openings, technology, pdf_path, image_path, status,department)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                 RETURNING project_id;
             `,[
@@ -70,7 +71,8 @@ export const postProject = async (req, res) => {
                 formattedTechnology,
                 "uploads/pdfs/"+pdfPath,
                 "uploads/images/"+imagePath,
-                status
+                status,
+                department
             ]);
         } else {
             return res.status(403).json({ error: 'Only students and alumni can post projects' });
