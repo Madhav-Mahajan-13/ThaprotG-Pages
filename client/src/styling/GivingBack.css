@@ -1,0 +1,164 @@
+/* AlumGiveBack.css */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .main-heading {
+    text-align: center;
+    color: #2d3748;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  
+  .main-heading::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #4299e1;
+    margin: 1rem auto;
+    border-radius: 2px;
+  }
+  
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .card.clickable {
+    cursor: pointer;
+  }
+  
+  .card.clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card.disabled {
+    opacity: 0.8;
+    cursor: default;
+  }
+  
+  .card h2 {
+    color: #2d3748;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .card p {
+    color: #4a5568;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .link-indicator {
+    color: #4299e1;
+    font-weight: 500;
+  }
+  
+  .coming-soon {
+    color: #a0aec0;
+    font-style: italic;
+  }
+  
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-container h2 {
+    color: #2d3748;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+    font-weight: 500;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-group textarea {
+    height: 120px;
+    resize: vertical;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    background: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background: #3182ce;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+  
+    .main-heading {
+      font-size: 2rem;
+    }
+  
+    .cards-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .form-container {
+      padding: 1.5rem;
+    }
+  }

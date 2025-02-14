@@ -25,6 +25,7 @@ import Placements from './pages/Placement';
 import TeamPage from './pages/TeamPage';
 import Podcast from './pages/Podcast';
 import AlumniSystem from './pages/AlumCard';
+import AlumGiveBack from './pages/GivingBack';
 // import io from 'socket.io-client';
 
 
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path:'alumcard',
         element:<AlumniSystem/>
+      },
+      {
+        path:'giveback',
+        element:<AlumGiveBack/>
       },
     ]
   },

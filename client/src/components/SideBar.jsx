@@ -18,6 +18,7 @@ import {
   FaFolderOpen,
   FaUserCircle,
   FaSignOutAlt,
+  FaIdCard, FaHandHoldingHeart
 } from "react-icons/fa"
 
 const SectionWindow = ({ title, show, toggle, children }) => (
@@ -260,13 +261,13 @@ const Sidebar = () => {
               </li>
               <li>
                 <Link to="/alumcard" className="sidebar-button">
-                  <FaCalendarAlt className="sidebar-icon" />
+                  <FaIdCard className="sidebar-icon" />
                   <span>Alum Card</span>
                 </Link>
               </li>
               <li>
-                <Link to="/alumcard" className="sidebar-button">
-                  <FaCalendarAlt className="sidebar-icon" />
+                <Link to="/giveback" className="sidebar-button">
+                  <FaHandHoldingHeart className="sidebar-icon" />
                   <span>Giving Back</span>
                 </Link>
               </li>
