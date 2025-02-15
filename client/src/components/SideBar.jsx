@@ -55,7 +55,7 @@ const QuickPostForm = () => {
     openings: "",
     technology: "",
     openUntil: "",
-    department: "", // Added department field
+    department: "",
     pdf: null,
     image: null,
   }
@@ -63,12 +63,17 @@ const QuickPostForm = () => {
   const [formData, setFormData] = useState(initialFormState)
   const [error, setError] = useState(null)
 
-  // Refs to clear file inputs
   const pdfInputRef = useRef(null)
   const imageInputRef = useRef(null)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
+
+    if (name === "title" && value.length > 100) return
+    if (name === "description" && value.length > 1000) return
+    if (name === "technology" && value.length > 200) return
+    if (name === "openings" && (value < 1 || value > 100)) return
+
     setFormData({ ...formData, [name]: value })
   }
 
@@ -94,7 +99,7 @@ const QuickPostForm = () => {
     formDataToSend.append("openings", formData.openings)
     formDataToSend.append("technology", formData.technology)
     formDataToSend.append("openUntil", formData.openUntil)
-    formDataToSend.append("department", formData.department) // Added department
+    formDataToSend.append("department", formData.department)
     if (formData.pdf) formDataToSend.append("pdf", formData.pdf)
     if (formData.image) formDataToSend.append("image", formData.image)
 
@@ -105,10 +110,8 @@ const QuickPostForm = () => {
       alert("Post successful")
       console.log("Response:", response.data)
 
-      // Reset form state
       setFormData(initialFormState)
 
-      // Reset file inputs manually
       if (pdfInputRef.current) pdfInputRef.current.value = ""
       if (imageInputRef.current) imageInputRef.current.value = ""
 
@@ -123,40 +126,32 @@ const QuickPostForm = () => {
 
       <div className="form-group">
         <label htmlFor="title">Title</label>
-        <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required />
+        <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required maxLength="100" />
       </div>
 
       <div className="form-group">
         <label htmlFor="description">Description</label>
-        <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} required></textarea>
+        <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} required maxLength="1000"></textarea>
       </div>
 
       <div className="form-group">
         <label htmlFor="department">Department</label>
-        <select
-          id="department"
-          name="department"
-          value={formData.department}
-          onChange={handleInputChange}
-          required
-        >
+        <select id="department" name="department" value={formData.department} onChange={handleInputChange} required>
           <option value="">Select Department</option>
           {departments.map((dept) => (
-            <option key={dept} value={dept}>
-              {dept}
-            </option>
+            <option key={dept} value={dept}>{dept}</option>
           ))}
         </select>
       </div>
 
       <div className="form-group">
         <label htmlFor="openings">Openings</label>
-        <input type="number" id="openings" name="openings" value={formData.openings} onChange={handleInputChange} required />
+        <input type="number" id="openings" name="openings" value={formData.openings} onChange={handleInputChange} required min="1" max="100" />
       </div>
 
       <div className="form-group">
         <label htmlFor="technology">Technology</label>
-        <input type="text" id="technology" name="technology" value={formData.technology} onChange={handleInputChange} required />
+        <input type="text" id="technology" name="technology" value={formData.technology} onChange={handleInputChange} required maxLength="200" />
       </div>
 
       <div className="form-group">
@@ -166,7 +161,7 @@ const QuickPostForm = () => {
 
       <div className="form-group">
         <label htmlFor="pdf">PDF</label>
-        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} ref={pdfInputRef} required  />
+        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} ref={pdfInputRef} required />
       </div>
 
       <div className="form-group">
@@ -180,6 +175,7 @@ const QuickPostForm = () => {
     </form>
   )
 }
+
 
 
 
