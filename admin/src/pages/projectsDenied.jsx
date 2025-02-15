@@ -103,7 +103,7 @@ export default function ProjectsDenied() {
               &&
               (formData.openings == '' || project.openings == formData.openings)
 			  &&
-          		(dept == 'ALl' || project.department == dept || project.department == null)
+          		(dept == 'All' || project.department == dept || project.department == null)
             )
           })
     

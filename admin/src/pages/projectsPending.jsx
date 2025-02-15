@@ -108,7 +108,7 @@ export default function ProjectsPending() {
                 .includes(formData.tech.toLowerCase())) &&
             (formData.openings == "" || project.openings == formData.openings)
             &&
-            (dept == 'ALl' || project.department == dept || project.department == null)
+            (dept == 'All' || project.department == dept)
           );
         });
     
@@ -120,7 +120,7 @@ export default function ProjectsPending() {
     <div className="flex flex-row items-center justify-center mt-24 md:mt-5">
         <form className="flex flex-col md:flex-row gap-x-2 gap-y-3">
           <select value={dept} onChange={(e) => {setDept(e.target.value)}} className='border-2 px-2' >
-            <option value='All'>All dept.</option>
+            <option value='All'>All Dept.</option>
             <option value='CSED'>CSED</option>
             <option value='MED'>MED</option>
             <option value='ECED'>ECED</option>
