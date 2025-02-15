@@ -190,7 +190,7 @@ export default function TopBar() {
                   </Link>
                   }
 
-                  <button className="bg-red-500 px-2 py-2 mt-5" onClick={handleLogout}>LOGOUT</button>   
+                  <button className="bg-red-500 px-2 py-2 mt-5 cursor-pointer" onClick={handleLogout}>LOGOUT</button>   
 
         </div>
       </aside>
