@@ -154,7 +154,7 @@ const StudentProject = () => {
       const response = await axios.post(`http://localhost:5000${endpoint}`, {
         ...searchParams,
         page: currentPage,
-        limit: 10,
+        limit: 12,
       })
       setProjects(response.data.data.projects)
       setTotalPages(response.data.data.pagination.totalPages)

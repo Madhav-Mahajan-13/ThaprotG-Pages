@@ -200,7 +200,7 @@ const AlumniSystem = () => {
   
                   <div className="card-footer">
                     <span className="signature">Head Alumni Engagement</span>
-                    <span className="signature">SAIC President</span>
+                    <span className="signature">ARC President</span>
                   </div>
                 </div>
   

@@ -7,77 +7,7 @@ import axios from "axios"
 import "../styling/alum2.css"
 import { Link } from "react-router-dom";
 
-// const ProjectCard = ({ project }) => (
-//   <div className="project-card">
-//     <div className="image-section">
-//       <img src={project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
-//     </div>
-//     <div className="details-section">
-//       <h3 className="project-name">{project.title}</h3>
-//       <p className="posted-by">
-//         {project.first_name} {project.last_name}
-//       </p>
-//       <p className="description">{project.description}</p>
-//       <p className="technology">
-//         <strong>Technology:</strong>{" "}
-//         {Array.isArray(project.technology) ? project.technology.join(", ") : project.technology}
-//       </p>
-//       <p>
-//         <strong>Openings:</strong> {project.openings}
-//       </p>
-//       <p>
-//         <strong>Status:</strong> {project.status}
-//       </p>
-//       <p>
-//         <strong>Open Until:</strong> {new Date(project.open_until).toLocaleDateString()}
-//       </p>
-//       <p>
-//         <strong>Created at:</strong> {new Date(project.created_at).toLocaleDateString()}
-//       </p>
-//       {project.pdf_path && (
-//         <a
-//           href={`http://localhost:5000/${project.pdf_path}`}
-//           target="_blank"
-//           rel="noopener noreferrer"
-//           className="pdf-link"
-//         >
-//           View PDF
-//         </a>
-//       )}
-//     </div>
-//   </div>
-// )
 
-
-// const ProjectCard = ({ project }) => (
-//   <div className="project-card">
-//     <div className="image-section">
-//       <img src={project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
-//     </div>
-//     <div className="details-section">
-//       <h3 className="project-name">{project.title}</h3>
-//       <p className="posted-by">
-//         By {project.first_name} {project.last_name}
-//       </p>
-//       <p className="technology">
-//         <strong>Tech:</strong> {Array.isArray(project.technology) ? project.technology.join(", ") : project.technology}
-//       </p>
-//       <p className="openings">
-//         <strong>Openings:</strong> {project.openings}
-//       </p>
-//       {project.pdf_path && (
-//         <a
-//           href={`http://localhost:5000/${project.pdf_path}`}
-//           target="_blank"
-//           rel="noopener noreferrer"
-//           className="pdf-link"
-//         >
-//           View Details
-//         </a>
-//       )}
-//     </div>
-//   </div>
-// )
 
 const ProjectCard = ({ project }) => (
   <div className="project-card">
@@ -230,7 +160,7 @@ const AlumProject = () => {
       const response = await axios.post(`http://localhost:5000${endpoint}`, {
         ...searchParams,
         page: currentPage,
-        limit: 10,
+        limit: 12,
       })
       setProjects(response.data.data.projects)
       setTotalPages(response.data.data.pagination.totalPages)

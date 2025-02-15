@@ -5,7 +5,7 @@ dotenv.config();
 
 export const getStudentProjects = async (req, res) => {
     try {
-        const { page = 1, limit = 10 } = req.body;
+        const { page = 1, limit = 12 } = req.body;
 
         const offset = (page - 1) * limit;
 
@@ -65,7 +65,7 @@ export const searchProjects = async (req, res) => {
             technology = [],
             openings,
             page = 1,
-            limit = 10
+            limit = 12
         } = req.body;
 
         // Validate pagination parameters
