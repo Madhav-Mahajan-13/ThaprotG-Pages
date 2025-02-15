@@ -25,7 +25,8 @@ export default function ProjectsDenied() {
           'tech' : '',
           'openings' : ''
         })
-        const [filtered_projects,setFilteredProjects] = useState(denied_projects);
+	const [dept,setDept] = useState('All');
+    const [filtered_projects,setFilteredProjects] = useState(denied_projects);
 
     const handleClick = async (e,project_id,action) => {
             e.preventDefault();
@@ -98,16 +99,29 @@ export default function ProjectsDenied() {
               (formData.tech == '' || project.technology.join('').toLowerCase().includes(formData.tech.toLowerCase()))
               &&
               (formData.openings == '' || project.openings == formData.openings)
+			  &&
+          		(dept == 'ALl' || project.department == dept || project.department == null)
             )
           })
     
           setFilteredProjects(filtered)
-         },[denied_projects,formData]);
+         },[denied_projects,formData,dept]);
 
   return (
     <div className="flex flex-col overflow-auto">
     <div className="flex flex-row items-center justify-center mt-24 md:mt-5">
         <form className="flex flex-col md:flex-row gap-x-2 gap-y-3">
+			<select value={dept} onChange={(e) => {setDept(e.target.value)}} className='border-2 px-2' >
+              <option value='All'>All</option>
+              <option value='CSED'>CSED</option>
+              <option value='MED'>MED</option>
+              <option value='ECED'>ECED</option>
+              <option value='CIVIL'>CIVIL</option>
+              <option value='BIO-TECH'>BIO-TECH</option>
+              <option value='MBA'>MBA</option>
+              <option value='LIB-ARTS'>LIB-ARTS</option>
+              <option value='CHEMICAL'>CHEMICAL</option>
+            </select>
             <Input type="text" placeholder="Name" id='name' value={formData.name} onChange={handleChange}  />
             <Input type="text" placeholder="Title" id='title' value={formData.title} onChange={handleChange} />
             <Input type="text" placeholder="Technologies" id='tech' value={formData.tech} onChange={handleChange} />
