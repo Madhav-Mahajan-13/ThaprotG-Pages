@@ -1,17 +1,50 @@
-import { useState } from 'react'
+/* eslint-disable no-unused-vars */
+import { useContext, useState } from "react";
+import {useNavigate} from 'react-router-dom'
+import { toast, ToastContainer } from "react-toastify";
+import { MyContext } from "../context/myContext";
 
 export default function LoginSignup() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { backendHost, toastOptions } = useContext(MyContext);
+  const [hidden, setHidden] = useState(true);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Here you would typically handle the login or signup logic
-    
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await fetch(backendHost + '/api/admin/loginAdmin',{
+          method:"POST",
+          body:JSON.stringify({
+            email : email,
+            password : password
+          }),
+          headers:{
+            "Content-Type" : 'application/json'
+          },
+          "credentials" : "include"
+        });
+
+        const data = await res.json();
+        if(!data.success){
+          toast.error(data.message,toastOptions);
+        }
+        else{
+          toast.success("Authentication Successful")
+          setTimeout(() => {
+            navigate('/');
+          },1000);
+        }
+
+    } catch (e) {
+      toast.error(e.message);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <ToastContainer />
       <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-lg w-full max-w-md">
         <h3 className="text-2xl font-bold text-center text-gray-800">
           Login to your account
@@ -31,19 +64,28 @@ export default function LoginSignup() {
               />
             </label>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 relative">
             <label className="block" htmlFor="password">
               Password
+            </label>
+            <div className="relative">
               <input
-                type="password"
+                type={hidden ? "text" : "password"}
                 placeholder="Your password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600 pr-10"
               />
-            </label>
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                onClick={() => setHidden(!hidden)}
+              >
+                {hidden ? "hide" : "show"}
+              </button>
+            </div>
           </div>
           <div className="flex items-baseline justify-between mt-4">
             <button
@@ -62,5 +104,5 @@ export default function LoginSignup() {
         </form>
       </div>
     </div>
-  )
+  );
 }

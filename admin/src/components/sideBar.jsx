@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import logo from "../assets/logo.png";
 import { TbCarouselHorizontal } from "react-icons/tb";
 import { MdEventSeat } from "react-icons/md";
@@ -11,6 +11,7 @@ import { MdApproval } from "react-icons/md";
 import { ImCross } from "react-icons/im";
 import { FaUser } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa";
+import { MyContext } from "../context/myContext";
 
 const Sidebutton = tw.div`
 cursor-pointer
@@ -28,6 +29,8 @@ px-2
 export default function Sidebar() {
   const [isSelected, setSelected] = useState(null);
   const location = useLocation();
+
+  const {user_type} = useContext(MyContext);
 
   useEffect(() => {
     if(location.pathname == '/') setSelected(null);
@@ -52,27 +55,33 @@ export default function Sidebar() {
 
       <div className="flex flex-col gap-y-4 justify-start">
 
-        <Link to='carousel'>
+        {
+        user_type == 'main' && <Link to='carousel'>
         <Sidebutton $selected={isSelected === 0} >
           <TbCarouselHorizontal />
           <h1>Carousel Images</h1>
         </Sidebutton>
         </Link>
+        }
 
-        <Link to='/events'>
+        {
+        user_type == 'main' && <Link to='/events'>
         <Sidebutton $selected={isSelected === 1} >
           <MdEventSeat />
           <h1>Events</h1>
         </Sidebutton>
         </Link>
+        }
 
 
-        <Link to='/addevent'>
+        {
+        user_type == 'main' && <Link to='/addevent'>
         <Sidebutton $selected={isSelected === 2} >
           <FaCalendarPlus />
           <h1>Add Events</h1>
         </Sidebutton>
         </Link>
+        }
 
         <Link to='/projects'>
         <Sidebutton $selected={isSelected === 3} >
@@ -94,28 +103,33 @@ export default function Sidebar() {
           <h1>Rejected Projects</h1>
         </Sidebutton>
         </Link>
+        
 
-        <Link to='/subAdmins'>
+        {
+        user_type == 'main' && <Link to='/subAdmins'>
         <Sidebutton $selected={isSelected === 6} >
           <FaUser />
           <h1>Sub Admins</h1>
         </Sidebutton>
         </Link>
-
-        <Link to='/addsubadmin'>
+        }
+        {
+        user_type == 'main' && <Link to='/addsubadmin'>
             <Sidebutton $selected={isSelected === 7} >
                 <FaUserPlus />
                 <h1>Add Sub Admins</h1>
             </Sidebutton>
         </Link>
+        }
 
-        <Link to='/users'>
+        {
+        user_type == 'main' && <Link to='/users'>
             <Sidebutton $selected={isSelected === 8} >
               <FaUser />
                 <h1>Users</h1>
             </Sidebutton>
         </Link>
-
+        }
       </div>
     </div>
   );

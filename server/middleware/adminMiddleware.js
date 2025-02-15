@@ -1,0 +1,33 @@
+const jwt  = require('jsonwebtoken');
+
+const verifyToken = async (req,res,next) => {
+    try {
+        const token = req.cookies.authToken
+        if(!token){
+            return res.status(401).json({
+                success:false,
+                message:"Unauthorized Access"
+            })
+        }
+
+        const data = await jwt.decode(token,process.env.sec_key);
+        if(!data){
+            return res.status(401).json({
+                success:false,
+                message:"Unauthorized Access"
+            })
+        }
+
+        req.user_type = data.type
+
+        next();
+
+    } catch (e) {
+        return res.status(400).json({
+            success:false,
+            message:e.message
+        })
+    }
+}
+
+export default verifyToken

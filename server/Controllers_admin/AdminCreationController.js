@@ -44,6 +44,130 @@ const generatePassword = (name) => {
     return `${namePrefix}@${randomNums}arc`;
 };
 
+export const registerSiteAdmin = async (req,res) => {
+    try {   
+        const { email,name,password } = req.body;
+
+        // Input validation
+        if (!email || !password || !name) {
+            return res.status(400).json({
+                success: false,
+                message: "Email, password and name are required"
+            });
+        }
+
+        // Validate Thapar institutional email
+        if (!email.toLowerCase().endsWith('@thapar.edu')) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter an official Thapar institutional email address (@thapar.edu)"
+            });
+        }
+
+        // Check if email already exists in the database
+        const existingAdmin = await db.query(
+            'SELECT id FROM admin WHERE email = $1',
+            [email]
+        );
+
+        if (existingAdmin.rows.length > 0) {
+            return res.status(409).json({
+                success: false,
+                message: "Email already registered"
+            });
+        }
+
+        // Generate user_id - remove spaces from name
+        const timestamp = generateTimeStamp();
+        const randomDigits = generateRandomDigits(4);
+        const cleanName = name.replace(/\s+/g, '');
+        const user_id = `${cleanName}${timestamp}${"ARC"}${randomDigits}`;
+        
+        // Hash the password before storing
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Configure Nodemailer
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.sender_email,
+                pass: process.env.sender_pass
+            }
+        });
+
+        const mailOptions = {
+            from: process.env.sender_email,
+            to: email,
+            subject: 'Welcome to ThaProt-G - Your Admin Credentials',
+            html: generateEmailHTML(email,name, user_id, password,"Admin") // Send plain password in email
+        };
+
+        try {
+            // Send email first, then insert into DB
+            const info = await transporter.sendMail(mailOptions);
+
+            // If email fails to send, return an error
+            if (!info.accepted || info.accepted.length === 0) {
+                throw new Error("Email could not be delivered.");
+            }
+
+            // Start database transaction after email is successfully sent
+            await db.query('BEGIN');
+
+            // Double-check if the email still doesn't exist in the database
+            const finalCheck = await db.query(
+                'SELECT id FROM admin WHERE email = $1',
+                [email]
+            );
+
+            if (finalCheck.rows.length > 0) {
+                await db.query('ROLLBACK');
+                return res.status(409).json({
+                    success: false,
+                    message: "Email already registered (Race condition handled)."
+                });
+            }
+
+            const result = await db.query(
+                `INSERT INTO admin (user_id, type, email, password, status, department, name) 
+                 VALUES ($1, $2, $3, $4, $5, $6, $7) 
+                 RETURNING id, user_id, email, department`,
+                [user_id, 'main', email, hashedPassword, 'active', "ARC",name]
+            );
+
+            // Commit the transaction
+            await db.query('COMMIT');
+
+            return res.status(201).json({
+                success: true,
+                message: "Site-admin created successfully and credentials sent via email",
+                data: {
+                    ...result.rows[0],
+                    password: password // Only for initial response
+                }
+            });
+
+        } catch (emailError) {
+            await db.query('ROLLBACK'); // Make sure to rollback if email fails
+            console.error("Email sending failed:", emailError);
+            return res.status(400).json({
+                success: false,
+                message: "Email delivery failed. Please check the email address.",
+                error: emailError.message
+            });
+        }
+
+    } catch (error) {
+        await db.query('ROLLBACK'); // Make sure to rollback on any error
+        console.error("Error in registerSiteAdmin:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to create site-admin",
+        })
+    }
+}
+
 export const viewAllSubAdmin = async (req, res) => {
     try {
         const result = await db.query(
@@ -68,7 +192,7 @@ export const viewAllSubAdmin = async (req, res) => {
 
 
 // Email template function
-const generateEmailHTML = (name, user_id, password) => `
+const generateEmailHTML = (email,name, user_id, password,post) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -123,10 +247,11 @@ const generateEmailHTML = (name, user_id, password) => `
         </div>
         <div class="content">
             <h2>Congratulations ${name}!</h2>
-            <p>You have been appointed as a Sub-Admin at ThaProt-G. We're excited to have you on board!</p>
+            <p>You have been appointed as ${post} at ThaProt-G. We're excited to have you on board!</p>
             
             <div class="credentials">
                 <h3>Your Login Credentials</h3>
+                <p><strong>Email:</strong> ${email}</p>
                 <p><strong>User ID:</strong> ${user_id}</p>
                 <p><strong>Password:</strong> ${password}</p>
             </div>
@@ -205,7 +330,7 @@ export const createSubAdmin = async (req, res) => {
             from: process.env.sender_email,
             to: email,
             subject: 'Welcome to ThaProt-G - Your Sub-Admin Credentials',
-            html: generateEmailHTML(name, user_id, plainPassword) // Send plain password in email
+            html: generateEmailHTML(email,name, user_id, plainPassword,"Sub-Admin") // Send plain password in email
         };
 
         try {

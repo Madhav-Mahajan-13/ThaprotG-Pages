@@ -1,12 +1,13 @@
 import express from "express";
 import { changeStatus, getApprovedProjects, getDeniedProjects, getPendingProjects, searchProjects } from "../Controllers_admin/projectController.js";
-import { activateSubAdmin, createSubAdmin, deleteSubAdmin, suspendSubAdmin, viewAllSubAdmin } from "../Controllers_admin/AdminCreationController.js";
+import { activateSubAdmin, createSubAdmin, deleteSubAdmin, registerSiteAdmin, suspendSubAdmin, viewAllSubAdmin } from "../Controllers_admin/AdminCreationController.js";
 import { activeCarousel, createCarousel, deleteCarousel, showCarousel, suspendCarousel } from "../Controllers_admin/carouselController.js";
 import { uploadProjectFiles } from "../middleware/uploadFiles.js";
 import { addInsight } from "../Controllers_admin/insightController.js";
 import { activeUser, deleteUser, getAllUsers, searchUsers, suspendUser } from "../Controllers_admin/userController.js";
 import { activeEvent, createEvent, deleteEvent, showEvent, suspendEvent } from "../Controllers_admin/eventController.js";
 import { forgotPassword, loginAdmin, resetPassword, verifyOTP } from "../Controllers_admin/loginController.js";
+import verifyToken from "../middleware/adminMiddleware.js";
 
 
 const adminRouter = express.Router();
@@ -45,6 +46,7 @@ adminRouter.post("/suspendEvent",suspendEvent)
 adminRouter.post("/deleteEvent",deleteEvent)
 
 // login
+adminRouter.post("/createAdmin",registerSiteAdmin)
 adminRouter.post("/loginAdmin",loginAdmin)
 adminRouter.post("/forgotPassword",forgotPassword);
 
@@ -53,5 +55,30 @@ adminRouter.post("/verifyOtp",verifyOTP);
 
 adminRouter.post("/resetPassword",resetPassword);
 
+adminRouter.get("/verifyToken",verifyToken,async (req,res) => {
+    const user_type = req.user_type;
+    return res.status(200).json({
+        success:true,
+        user_type : user_type
+    })
+})
+
+adminRouter.get("/logout",async (req,res) => {
+    try {
+        req.clearCookie("authToken");
+
+        return res.status(200).json({
+            succcess:true,
+            message:"Logged Out Successfully"
+        })
+    } catch (e) {
+        return res.status(400).json({
+            success:false,
+            message:e.message
+        })
+    }
+    
+
+})
 
 export default adminRouter;

@@ -21,9 +21,9 @@ const transporter = mailer.createTransport({
 
 export const loginAdmin = async (req, res) => {
     try {
-        const { user_id, password } = req.body;
+        const { email, password } = req.body;
         
-        if (!user_id || !password) {
+        if (!email || !password) {
             return res.status(400).json({
                 success: false,
                 message: 'User ID and password are required'
@@ -33,16 +33,16 @@ export const loginAdmin = async (req, res) => {
         // First get the admin without checking password
         const query = `
             SELECT 
-                user_id,
+                email,
                 password,
                 type,
                 name,
                 status
             FROM admin 
-            WHERE user_id = $1
+            WHERE email = $1
         `;
 
-        const result = await db.query(query, [user_id]);
+        const result = await db.query(query, [email]);
 
         if (!result.rows || result.rows.length === 0) {
             return res.status(401).json({
@@ -72,14 +72,14 @@ export const loginAdmin = async (req, res) => {
         }
 
         // Generate JWT token
-        // const token = jwt.sign(
-        //     { 
-        //         user_id: admin.user_id,
-        //         type: admin.type 
-        //     },
-        //     process.env.JWT_SECRET,
-        //     { expiresIn: '24h' }
-        // );
+        const token = jwt.sign(
+            { 
+                user_id: admin.user_id,
+                type: admin.type 
+            },
+            process.env.sec_key,
+            { expiresIn: '24h' }
+        );
 
         const adminResponse = {
             user_id: admin.user_id,
@@ -88,11 +88,23 @@ export const loginAdmin = async (req, res) => {
             status: admin.status
         };
 
+        res.cookie('authToken',token,{
+            httpOnly: true,
+            secure: process.env.production == true,
+            sameSite: 'Strict',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        })
+
+        res.cookie('user_type',adminResponse.type,{
+            httpOnly: true,
+            secure: process.env.production == true,
+            sameSite: 'Strict',
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        })
+
         return res.status(200).json({
             success: true,
             message: 'Login successful',
-            admin: adminResponse,
-            token
         });
 
     } catch (error) {
