@@ -22,6 +22,7 @@ const MyProvider = ({ children }) => {
     const [pending_projects,setPendingProjects] = useState([]);
     const [user_type,setUserType] = useState("")
 
+
     return (
         <MyContext.Provider value={{ backendHost, approved_projects, setProjects,toastOptions,setDeniedProjects,denied_projects,pending_projects,setPendingProjects,user_type,setUserType }}>
             {children}

@@ -88,7 +88,7 @@ export const loginAdmin = async (req, res) => {
             status: admin.status
         };
 
-        res.cookie('authToken',token,{
+        res.cookie('token',token,{
             httpOnly: true,
             secure: process.env.production == true,
             sameSite: 'Strict',

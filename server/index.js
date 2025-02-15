@@ -11,6 +11,8 @@ import loginSignupRoute from './Route/loginSignupRoute.js'
 import adminRouter from "./Route/adminRoute.js";
 import studentProjectRouter from "./Route/studentProjectRoute.js";
 import objectRouter from "./Route/objectRoute.js";
+const {createServer} = require('http');
+import socketSetup from "./socket.js";
 
 dotenv.config();
 
@@ -19,6 +21,10 @@ const port = 5000;
 
 const app = express();
 app.use(express.json());
+
+const server = createServer(app);
+socketSetup(server);
+
 
 const allowedOrigins = [
     "http://localhost:3000",  // Local React frontend
@@ -58,6 +64,6 @@ app.use("/api/object",objectRouter);
 
 app.use("/uploads", express.static("uploads"));
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server running on port: ${port}`);
 });

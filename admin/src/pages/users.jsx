@@ -3,6 +3,7 @@ import { useContext, useEffect, useState, useMemo } from "react";
 import { MyContext } from "../context/myContext";
 import { toast, ToastContainer } from "react-toastify";
 import UserCard from "../components/userCard";
+import socket from "../socket.js";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -70,6 +71,7 @@ export default function Users() {
                 toast.error(data.message,toastOptions);
             }
             else{
+                socket.emit(status == false ? "suspend" : "active",{id})
                 toast.success("Changed Status Successfully",toastOptions);
                 setUsers(prevList => (
                     prevList.map((elem) => (

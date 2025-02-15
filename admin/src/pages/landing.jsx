@@ -1,14 +1,14 @@
-import { Outlet } from "react-router-dom";
+import {Outlet, useLocation} from "react-router-dom";
 import Sidebar from "../components/sideBar";
 import TopBar from "../components/topBar";
 import { useContext, useEffect } from "react";
 import { MyContext } from "../context/myContext";
 import { ToastContainer,toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
 export default function Landing(){
     const {backendHost,toastOptions,setUserType} = useContext(MyContext);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const API_CALL = async () => {
@@ -29,7 +29,7 @@ export default function Landing(){
         }
 
         API_CALL();
-    },[])
+    },[location.pathname])
 
     return(
         <div className="flex flex-col md:flex-row gap-x-2 gap-y-10 h-screen">
