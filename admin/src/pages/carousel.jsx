@@ -13,7 +13,9 @@ export default function Carousel() {
 
   useEffect(() => {
     const API_CALL = async () => {
-      const res = await fetch(backendHost + "/api/admin/viewCarousel");
+      const res = await fetch(backendHost + "/api/admin/viewCarousel",{
+        'credentials' : 'include'
+      });
       const data = await res.json();
       if (!data.success) {
         toast.error(data.message, toastOptions);
@@ -42,7 +44,8 @@ export default function Carousel() {
           method: "POST",
           body: JSON.stringify({ id }),
           headers: { "Content-Type": "application/json" },
-        }
+          'credentials' : 'include'
+        },
       );
 
       const data = await res.json();
@@ -68,6 +71,7 @@ export default function Carousel() {
         method: "POST",
         body: JSON.stringify({ id }),
         headers: { "Content-Type": "application/json" },
+        'credentials' : 'include'
       });
 
       const data = await res.json();
@@ -96,6 +100,7 @@ export default function Carousel() {
       const res = await fetch(backendHost + "/api/admin/createCarousel", {
         method: "POST",
         body: formData,
+        'credentials' : 'include'
       });
 
       const data = await res.json();

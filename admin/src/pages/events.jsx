@@ -12,7 +12,9 @@ export default function Events() {
 
   useEffect(() => {
     const API_CALL = async () => {
-      const res = await fetch(backendHost + "/api/admin/viewEvents");
+      const res = await fetch(backendHost + "/api/admin/viewEvents",{
+        credentials : "include"
+      });
       const data = await res.json();
       if (!data.success) {
         toast.error(data.message, toastOptions);
@@ -42,6 +44,7 @@ export default function Events() {
           method: "POST",
           body: JSON.stringify({ id }),
           headers: { "Content-Type": "application/json" },
+          credentials : 'include'
         }
       );
 

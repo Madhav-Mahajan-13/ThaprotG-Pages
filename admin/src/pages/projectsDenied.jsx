@@ -39,7 +39,8 @@ export default function ProjectsDenied() {
                     }),
                     headers:{
                       "Content-Type" : 'application/json'
-                    }
+                    },
+					credentials : 'include'
                 })
     
                 const data = await res.json();
@@ -61,7 +62,9 @@ export default function ProjectsDenied() {
 
     useEffect(() => {
       const API_CALL = async () => {
-          const res = await fetch(backendHost + '/api/admin/projects_denied',{}) // ADD AUTH HEADERS LATER
+          const res = await fetch(backendHost + '/api/admin/projects_denied',{
+				credentials : "include"
+			}) // ADD AUTH HEADERS LATER
 
           const data = await res.json();
           if(data.success){

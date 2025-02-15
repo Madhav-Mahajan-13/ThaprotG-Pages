@@ -22,6 +22,7 @@ export default function DynamicForm() {
       const res = await fetch(backendHost + "/api/admin/createEvent", {
         method: "POST",
         body: formData,
+        "credentials" : 'include'
       });
 
       const data = await res.json();

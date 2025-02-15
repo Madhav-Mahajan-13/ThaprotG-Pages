@@ -29,13 +29,6 @@ const transporter = mailer.createTransport({
     },
 });
 
-// const pool = new Pool({
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     host: process.env.DB_HOST,
-//     port: process.env.DB_PORT,
-//     database: process.env.DB_NAME,
-// });
 
 const generateTimeStamp = () => Math.floor(Date.now() / 1000);
 const generateRandomDigits = (length) => Math.random().toString().slice(2, 2 + length);
@@ -215,38 +208,6 @@ router.post("/otp/:email", otpLimiter, async (req, res) => {
     }
   });
 
-// router.post('/otp/:email', getUser, async (req, res) => {
-//     try {
-//         // Ensure the user is requesting OTP for their own email
-//         if (req.email !== req.params.email) {
-//             return res.status(403).json({ msg: "Unauthorized request", success: false });
-//         }
-
-//         console.log("HERE");
-
-//         const otp = crypto.randomInt(100000, 999999);
-
-//         // Delete any existing OTPs for this user
-//         await db.query(`DELETE FROM otp WHERE email = $1`, [req.email]);
-
-//         // Insert new OTP
-//         await db.query(`INSERT INTO otp (email, otp) VALUES ($1, $2)`, [req.email, otp]);
-
-//         // Send OTP via email
-//         const info = await transporter.sendMail({
-//             from: process.env.sender_email,
-//             to: req.email,
-//             subject: "OTP for ThaProt-G",
-//             text: `Your OTP for ThaProt-G is ${otp}, valid for 5 minutes.`,
-//         });
-
-//         return res.status(200).json({ msg: "OTP sent successfully", success: true });
-
-//     } catch (e) {
-//         console.error("OTP Error:", e.message);
-//         return res.status(500).json({ msg: "Internal server error", success: false });
-//     }
-// });
 
 
 router.post("/verify/:email", async (req, res) => {
@@ -291,47 +252,6 @@ router.post("/verify/:email", async (req, res) => {
         return res.status(500).json({ msg: "Internal Server Error", success: false });
     }
 });
-
-
-// router.post('/verify/:email', async (req, res) => {
-//     try {
-//         const otp = req.body.otp;
-//         const email = req.params.email;
-
-//         if (!otp) {
-//             return res.status(400).json({ msg: "OTP is required", success: false });
-//         }
-
-//         // Check if the OTP exists and is still valid
-//         const { rows } = await db.query(
-//             `SELECT otp FROM otp WHERE email = $1 AND otp_expires > NOW()`,
-//             [email]
-//         );
-
-//         if (rows.length === 0) {
-//             return res.status(400).json({ msg: "Invalid or expired OTP", success: false });
-//         }
-
-//         if (otp !== rows[0].otp) {
-//             return res.status(401).json({ msg: "Incorrect OTP", success: false });
-//         }
-
-//         // Delete OTP and update user verification in a single transaction
-//         await db.query("BEGIN");
-
-//         await db.query(`DELETE FROM otp WHERE email = $1`, [email]);
-//         await db.query(`UPDATE users SET otp_verified = true WHERE email = $1`, [email]);
-
-//         await db.query("COMMIT");
-
-//         return res.status(200).json({ msg: "Verification successful", success: true });
-
-//     } catch (error) {
-//         await db.query("ROLLBACK");
-//         console.error("OTP Verification Error:", error.message);
-//         return res.status(500).json({ msg: "Internal Server Error", success: false });
-//     }
-// });
 
 router.post('/verifyToken', getUser, (req, res) => {
     return res.status(200).json({ success: true, id: req.uid });

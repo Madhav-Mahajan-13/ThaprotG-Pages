@@ -50,7 +50,8 @@ export default function SubAdmins() {
                 }),
                 headers:{
                     "Content-Type" : "application/json"
-                }
+                },
+                credentials : "include"
             })
 
             const data = await res.json();
@@ -78,7 +79,9 @@ export default function SubAdmins() {
 
   useEffect(() => {
     const API_CALL = async () => {
-      const res = await fetch(backendHost + "/api/admin/viewSubAdmins", {});
+      const res = await fetch(backendHost + "/api/admin/viewSubAdmins", {
+        credentials : "include"
+      });
 
       const data = await res.json();
       if (!data.success) {

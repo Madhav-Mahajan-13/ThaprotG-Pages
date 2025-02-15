@@ -62,7 +62,8 @@ export default function Users() {
                 }),
                 headers:{
                     "Content-Type" : "application/json"
-                }
+                },
+                credentials : "include"
             })
 
             const data = await res.json();
@@ -91,7 +92,9 @@ export default function Users() {
 
   useEffect(() => {
     const API_CALL = async () => {
-      const res = await fetch(backendHost + "/api/admin/users", {});
+      const res = await fetch(backendHost + "/api/admin/users", {
+        credentials : 'include'
+      });
 
       const data = await res.json();
       if (!data.success) {

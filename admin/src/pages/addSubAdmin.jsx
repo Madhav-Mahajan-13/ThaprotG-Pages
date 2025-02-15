@@ -45,8 +45,9 @@ export default function AddSubAdmin() {
             }),
             headers:{
                 "Content-Type" : 'application/json'
-            }
-        }) //IMPLEMENT AUTH HEADERS
+            },
+			'credentials' : 'include'
+        })
 
         const data = await res.json();
 

@@ -28,7 +28,9 @@ export default function Projects() {
 
     useEffect(() => {
       const API_CALL = async () => {
-          const res = await fetch(backendHost + '/api/admin/projects_approved',{}) // ADD AUTH HEADERS LATER
+          const res = await fetch(backendHost + '/api/admin/projects_approved',{
+          credentials : 'include'
+        }) // ADD AUTH HEADERS LATER
 
           const data = await res.json();
           if(data.success){
