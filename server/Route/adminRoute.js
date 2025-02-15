@@ -51,8 +51,6 @@ adminRouter.post("/loginAdmin",loginAdmin)
 adminRouter.post("/forgotPassword",forgotPassword);
 
 adminRouter.post("/verifyOTP",verifyOTP);
-adminRouter.post("/verifyOtp",verifyOTP);
-
 adminRouter.post("/resetPassword",resetPassword);
 
 adminRouter.get("/verifyToken",verifyToken,async (req,res) => {
@@ -65,10 +63,10 @@ adminRouter.get("/verifyToken",verifyToken,async (req,res) => {
 
 adminRouter.get("/logout",async (req,res) => {
     try {
-        req.clearCookie("authToken");
+        res.clearCookie("authToken");
 
         return res.status(200).json({
-            succcess:true,
+            success:true,
             message:"Logged Out Successfully"
         })
     } catch (e) {

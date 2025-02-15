@@ -4,7 +4,7 @@ import { TbCarouselHorizontal } from "react-icons/tb";
 import { MdEventSeat } from "react-icons/md";
 import { FaCalendarPlus } from "react-icons/fa";
 import tw from "tailwind-styled-components";
-import {Link,useLocation} from 'react-router-dom';
+import {Link,useLocation, useNavigate} from 'react-router-dom';
 import { useEffect } from "react";
 import { IoDocumentText } from "react-icons/io5";
 import { MdApproval } from "react-icons/md";
@@ -12,6 +12,7 @@ import { ImCross } from "react-icons/im";
 import { FaUser } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa";
 import { MyContext } from "../context/myContext";
+import {toast} from 'react-toastify'
 
 const Sidebutton = tw.div`
 cursor-pointer
@@ -29,8 +30,33 @@ px-2
 export default function Sidebar() {
   const [isSelected, setSelected] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const {user_type} = useContext(MyContext);
+  const {user_type,toastOptions,backendHost} = useContext(MyContext);
+
+  const handleLogout = async () => {
+    try {
+        const res = await fetch(backendHost + '/api/admin/logout',{
+          "credentials" : 'include'
+        })
+
+        const data = await res.json();
+        if(!data.success){
+          toast.error(data.message,toastOptions);
+        }
+        else
+        {
+          console.log("HERE");
+          toast.success(data.message,toastOptions);
+          setTimeout(() => {
+            navigate('/login')
+          },500)
+        }
+
+    } catch (e) {
+      toast.error(e.message,toastOptions)
+    }
+  }
 
   useEffect(() => {
     if(location.pathname == '/') setSelected(null);
@@ -131,6 +157,7 @@ export default function Sidebar() {
         </Link>
         }
       </div>
+      <button className="bg-red-500 px-2 py-2 mt-5" onClick={handleLogout}>LOGOUT</button>
     </div>
   );
 }

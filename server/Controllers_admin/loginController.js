@@ -95,13 +95,6 @@ export const loginAdmin = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000 // 24 hours
         })
 
-        res.cookie('user_type',adminResponse.type,{
-            httpOnly: true,
-            secure: process.env.production == true,
-            sameSite: 'Strict',
-            maxAge: 24 * 60 * 60 * 1000 // 24 hours
-        })
-
         return res.status(200).json({
             success: true,
             message: 'Login successful',

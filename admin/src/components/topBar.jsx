@@ -13,8 +13,9 @@ import { FaCalendarPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { FaUserPlus } from "react-icons/fa";
+import { toast } from "react-toastify";
 import { MyContext } from "../context/myContext";
-
+import { useNavigate } from "react-router-dom";
 const Sidebutton = tw.div`
 cursor-pointer
 flex
@@ -32,7 +33,31 @@ export default function TopBar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isSelected, setSelected] = useState(null);
     const location = useLocation();
-    const {user_type} = useContext(MyContext);
+    const {user_type,backendHost,toastOptions} = useContext(MyContext);
+    const navigate = useNavigate();
+  const handleLogout = async () => {
+      try {
+          const res = await fetch(backendHost + '/api/admin/logout',{
+            "credentials" : 'include'
+          })
+  
+          const data = await res.json();
+          if(!data.success){
+            toast.error(data.message,toastOptions);
+          }
+          else
+          {
+            console.log("HERE");
+            toast.success(data.message,toastOptions);
+            setTimeout(() => {
+              navigate('/login')
+            },500)
+          }
+  
+      } catch (e) {
+        toast.error(e.message,toastOptions)
+      }
+    }
 
   useEffect(() => {
     if (location.pathname == "/") setSelected(null);
@@ -163,7 +188,9 @@ export default function TopBar() {
                           <h1>Users</h1>
                       </Sidebutton>
                   </Link>
-                }   
+                  }
+
+                  <button className="bg-red-500 px-2 py-2 mt-5" onClick={handleLogout}>LOGOUT</button>   
 
         </div>
       </aside>
