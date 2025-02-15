@@ -6,6 +6,17 @@ import { Github, Linkedin, Instagram } from 'lucide-react';
   const TeamPage = () => {
   const ebMembers = [
     {
+      name: "Mansi Bhargava",
+      position: "Head Of Alumni Relations",
+      image: "https://picsum.photos/id/1025/300/300",
+      description: "Leading with vision and passion to drive innovation.",
+      social: {
+        instagram: "https://instagram.com/kushal",
+        linkedin: "https://linkedin.com/in/kushal",
+        github: "https://github.com/kushal"
+      }
+    },
+    {
       name: "Kushal Preet Sallan",
       position: "President",
       image: "https://picsum.photos/id/1/300/300",

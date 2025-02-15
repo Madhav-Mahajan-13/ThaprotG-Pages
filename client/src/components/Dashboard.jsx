@@ -195,18 +195,7 @@ export const Dashboard = () => {
 
             
 
-            {/* <div className="form-group">
-              <label className="form-label"><FaPhone /> Phone Number</label>
-              <div className="phone-input">
-                <select value={countryCode} onChange={handleCountryCodeChange}>
-                  <option value="+1">+1 (USA)</option>
-                  <option value="+91">+91 (India)</option>
-                  <option value="+44">+44 (UK)</option>
-                  <option value="+61">+61 (Australia)</option>
-                </select>
-                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handlePhoneChange} />
-              </div>
-            </div> */}
+        
 
             <div className="form-group">
               <label className="form-label"><FaPhone /> Additional Phone Number</label>
@@ -284,7 +273,7 @@ export const Dashboard = () => {
           
           <div className="profile-field">
             <span className="field-label"><FaPhone /> Number 2</span>
-            <p className="field-value">{formData.additionalPhoneNumber ? `${countryCode} ${formData.additionalPhoneNumber}` : "Unavailable"}</p>
+            <p className="field-value">{formData.additionalPhoneNumber ? `${formData.additionalPhoneNumber}` : "Unavailable"}</p>
           </div>
         </div>
 
