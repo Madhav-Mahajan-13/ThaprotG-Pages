@@ -1,30 +1,12 @@
 import db from "../dbConnection.js";
 import dotenv from "dotenv";
 import { randomBytes } from 'crypto';
-import EmailVerifier from 'email-verifier';
+// import EmailVerifier from 'email-verifier';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 dotenv.config();
 
 
-
-// const verifier = new EmailVerifier({
-//     verifyMailbox: true, // Enables mailbox verification
-//     timeout: 5000 // Timeout in milliseconds
-// });
-
-// async function isEmailValid(email) {
-//     return new Promise((resolve, reject) => {
-//         verifier.verify(email, (err, info) => {
-//             if (err) {
-//                 console.error("Email verification error:", err);
-//                 resolve(false); // Assume invalid if there's an error
-//             } else {
-//                 resolve(info.success); // Returns true if email exists
-//             }
-//         });
-//     });
-// }
 // Helper function to generate random digits
 const generateRandomDigits = (length) => {
     return Math.floor(Math.random() * Math.pow(10, length))
@@ -251,6 +233,7 @@ const generateEmailHTML = (email,name, user_id, password,post) => `
             
             <div class="credentials">
                 <h3>Your Login Credentials</h3>
+            
                 <p><strong>Email:</strong> ${email}</p>
                 <p><strong>User ID:</strong> ${user_id}</p>
                 <p><strong>Password:</strong> ${password}</p>
