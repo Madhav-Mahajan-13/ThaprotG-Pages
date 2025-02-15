@@ -11,7 +11,8 @@ import loginSignupRoute from './Route/loginSignupRoute.js'
 import adminRouter from "./Route/adminRoute.js";
 import studentProjectRouter from "./Route/studentProjectRoute.js";
 import objectRouter from "./Route/objectRoute.js";
-const {createServer} = require('http');
+// const {createServer} = require('http');
+import {createServer} from "http"
 import socketSetup from "./socket.js";
 
 dotenv.config();
