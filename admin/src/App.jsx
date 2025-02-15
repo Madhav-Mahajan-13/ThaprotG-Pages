@@ -12,11 +12,21 @@ import Carousel from './pages/carousel';
 import Users from './pages/users';
 import SubAdmins from './pages/subAdmins';
 import Events from './pages/events';
+import Forgot from "./pages/forgot.jsx";
+import OTP from "./pages/OTP.jsx";
 
 const router = createBrowserRouter([
   {
     path:"/login",
     element:<LoginSignup/>,
+  },
+  {
+    path:"/forgot",
+    element:<Forgot/>
+  },
+  {
+    path:"/OTP/:email",
+    element:<OTP/>
   },
   {
     path:"/",

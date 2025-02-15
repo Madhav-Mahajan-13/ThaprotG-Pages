@@ -11,7 +11,7 @@ import rateLimit from "express-rate-limit";
 // Rate limiter (max 5 OTP requests per 10 minutes per IP)
 const otpLimiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
-    max: 5,
+    max: process.env.otp_limits,
     message: { msg: "Too many OTP requests. Try again later.", success: false },
   });
 

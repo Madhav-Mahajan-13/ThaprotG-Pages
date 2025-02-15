@@ -8,6 +8,13 @@ import { activeUser, deleteUser, getAllUsers, searchUsers, suspendUser } from ".
 import { activeEvent, createEvent, deleteEvent, showEvent, suspendEvent } from "../Controllers_admin/eventController.js";
 import { forgotPassword, loginAdmin, resetPassword, verifyOTP } from "../Controllers_admin/loginController.js";
 import verifyToken from "../middleware/adminMiddleware.js";
+import rateLimit from "express-rate-limit";
+
+const otpLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: process.env.otp_limits,
+    message: { msg: "Too many OTP requests. Try again later.", success: false },
+  });
 
 
 const adminRouter = express.Router();
@@ -48,7 +55,7 @@ adminRouter.post("/deleteEvent",deleteEvent)
 // login
 adminRouter.post("/createAdmin",registerSiteAdmin)
 adminRouter.post("/loginAdmin",loginAdmin)
-adminRouter.post("/forgotPassword",forgotPassword);
+adminRouter.post("/forgotPassword",otpLimiter,forgotPassword);
 
 adminRouter.post("/verifyOTP",verifyOTP);
 adminRouter.post("/resetPassword",resetPassword);

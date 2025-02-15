@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { toast, ToastContainer } from "react-toastify";
 import { MyContext } from "../context/myContext";
 
@@ -31,7 +31,7 @@ export default function LoginSignup() {
           toast.error(data.message,toastOptions);
         }
         else{
-          toast.success("Authentication Successful")
+          toast.success("Authentication Successful",toastOptions)
           setTimeout(() => {
             navigate('/');
           },1000);
@@ -80,7 +80,7 @@ export default function LoginSignup() {
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
                 onClick={() => setHidden(!hidden)}
               >
                 {!hidden ? "hide" : "show"}
@@ -94,12 +94,14 @@ export default function LoginSignup() {
             >
               Login
             </button>
+            <Link to='/forgot'>
             <button
               type="button"
               className="text-sm text-blue-600 hover:underline focus:outline-none"
             >
               Forgot Password ?
             </button>
+            </Link>
           </div>
         </form>
       </div>
