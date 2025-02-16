@@ -180,7 +180,7 @@ const QuickPostForm = () => {
 
 
 const Sidebar = () => {
-  const { userId,backendHost } = useContext(MyContext)
+  const { userId,backendHost,isAlum } = useContext(MyContext)
   const [userName, setUserName] = useState("")
   const [openWindow, setOpenWindow] = useState(null)
   const navigate = useNavigate();
@@ -255,6 +255,8 @@ const Sidebar = () => {
                   <span>Insights</span>
                 </Link>
               </li>
+              { isAlum &&
+              <>
               <li>
                 <Link to="/alumcard" className="sidebar-button">
                   <FaIdCard className="sidebar-icon" />
@@ -267,6 +269,8 @@ const Sidebar = () => {
                   <span>Giving Back</span>
                 </Link>
               </li>
+              </>
+              }
             </ul>
           </nav>
 

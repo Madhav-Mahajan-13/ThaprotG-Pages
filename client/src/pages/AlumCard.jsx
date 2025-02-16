@@ -1,9 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import html2canvas from 'html2canvas';
 import JsBarcode from 'jsbarcode';
 import '../styling/AlumniCard.css';
+import { MyContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify';
 
 const AlumniSystem = () => {
+    const navigate = useNavigate();
+    const {isAlum} = useContext(MyContext)
     const [showCard, setShowCard] = useState(false);
     const [formData, setFormData] = useState({
       membershipNo: '',
@@ -16,6 +21,16 @@ const AlumniSystem = () => {
     
     const cardRef = useRef(null);
     const barcodeRef = useRef(null);
+
+    useEffect(() => {
+      if(!isAlum){
+        toast.info("NOT AN ALUMNI");
+        setTimeout(() => {
+            navigate("/");
+        },500)
+      }
+
+    },[])
   
     useEffect(() => {
       if (showCard && formData.membershipNo) {

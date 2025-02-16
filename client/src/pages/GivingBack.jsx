@@ -1,8 +1,24 @@
 // AlumGiveBack.jsx
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../styling/GivingBack.css';
+import { MyContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const AlumGiveBack = () => {
+
+  const {isAlum}  = useContext(MyContext);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if(!isAlum){
+      toast.info("NOT AN ALUMNI");
+      setTimeout(() => {
+        navigate("/");
+      },100)
+    }
+  },[])
+
   const [formData, setFormData] = useState({
     name: '',
     date: '',

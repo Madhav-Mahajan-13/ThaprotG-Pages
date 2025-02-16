@@ -8,7 +8,7 @@ import {ToastContainer,toast} from "react-toastify";
 const Landing = () => {
 
     const navigate = useNavigate();
-    const {backendHost,userId,setUserId,toastOptions,setUserType} = useContext(MyContext);
+    const {backendHost,userId,setUserId,toastOptions,setIsAlum} = useContext(MyContext);
     const location = useLocation();
 
     socket.on('suspend',async (msg) => {
@@ -37,20 +37,21 @@ const Landing = () => {
             try {
                 const response = await fetch(`${backendHost}/api/auth/verifyToken`, {
                     method: "POST",
-                    credentials: "include", // 🔥 Ensures cookies are sent
+                    credentials: "include",
                 });
 
                 const data = await response.json();
 
                 await setUserId(data.id);
+                await setIsAlum(data.user_type == 'alumni');
 
                 if (!data.success) {
                     toast.info("NOT AUTHENTICATED",toastOptions);
-                    navigate("/login"); // ❌ Not authenticated, redirect to login
+                    navigate("/login");
                 }
             } catch (error) {
                 toast.error(error.message,toastOptions);
-                navigate("/login"); // Redirect on error
+                navigate("/login");
             }
         };
 
