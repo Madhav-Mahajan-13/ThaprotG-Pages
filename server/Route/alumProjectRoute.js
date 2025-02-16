@@ -8,5 +8,3 @@ alumProjectRouter.post("/search",searchProjects)
 
 
 export default alumProjectRouter; // For ES6 syntax
-
-
