@@ -29,7 +29,6 @@ const transporter = mailer.createTransport({
     },
 });
 
-
 const generateTimeStamp = () => Math.floor(Date.now() / 1000);
 const generateRandomDigits = (length) => Math.random().toString().slice(2, 2 + length);
 
@@ -254,7 +253,7 @@ router.post("/verify/:email", async (req, res) => {
 });
 
 router.post('/verifyToken', getUser, (req, res) => {
-    return res.status(200).json({ success: true, id: req.uid });
+    return res.status(200).json({ success: true, id: req.uid,user_type:req.type });
 });
 
 router.post("/forgot", async (req, res) => {
@@ -305,41 +304,6 @@ router.post("/forgot", async (req, res) => {
         return res.status(500).json({ msg: "Internal Server Error", success: false });
     }
 });
-
-
-// router.post('/forgot', async (req, res) => {
-//     try {
-//         const email = req.body.email;
-
-//         db.query(`select email from users where email='${email}'`, (err, result) => {
-//             if (err) {
-//                 return res.status(500).json({ msg: err.message, success: false });
-//             }
-
-//             if (!result.rowCount) {
-//                 return res.status(400).json({ msg: "User does not exist", "success": false });
-//             }
-
-//             const data = {
-//                 email: email,
-//                 forgot: true
-//             };
-
-//             const token = jwt.sign(data, process.env.sec_key, { expiresIn: '10m' });
-
-//             res.cookie('authToken', token, {
-//                 httpOnly: true,    // Prevents JavaScript access
-//                 secure: process.env.production == true, // Use secure cookies in production
-//                 sameSite: 'Strict', // Prevents CSRF
-//                 maxAge: 10 * 60 * 1000, // 10 minutes
-//             });
-
-//             return res.status(200).json({ token: token, success: true });
-//         });
-//     } catch (error) {
-//         res.status(500).json({ msg: error.message, success: false });
-//     }
-// });
 
 router.post('/reset', async (req, res) => {
     try {

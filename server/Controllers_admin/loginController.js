@@ -210,6 +210,7 @@ export const verifyOTP = async (req, res) => {
     }
 };
 
+
 export const resetPassword = async (req, res) => {
     try {
         const { email, password } = req.body;

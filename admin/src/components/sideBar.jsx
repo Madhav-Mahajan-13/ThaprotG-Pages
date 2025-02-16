@@ -89,7 +89,7 @@ export default function Sidebar() {
         </Sidebutton>
         </Link>
         }
-
+        
         {
         user_type == 'main' && <Link to='/events'>
         <Sidebutton $selected={isSelected === 1} >

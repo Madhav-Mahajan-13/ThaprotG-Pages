@@ -45,6 +45,7 @@ export async function getUser(req, res, next) {
     // Attach user data based on token type
     req.uid = data.id;
     req.email = data.email;
+    req.type = data.type;
     req.body.email = data.email;
     req.tokenType = tokenType;
 

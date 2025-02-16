@@ -8,7 +8,7 @@ import {ToastContainer,toast} from "react-toastify";
 const Landing = () => {
 
     const navigate = useNavigate();
-    const {backendHost,userId,setUserId,toastOptions} = useContext(MyContext);
+    const {backendHost,userId,setUserId,toastOptions,setUserType} = useContext(MyContext);
     const location = useLocation();
 
     socket.on('suspend',async (msg) => {

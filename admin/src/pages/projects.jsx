@@ -76,7 +76,7 @@ export default function Projects() {
      },[approved_projects,formData,dept]);
 
   return (
-    <div className="flex flex-col overflow-auto">
+    <div className="flex flex-col overflor-auto">
     <div className="flex flex-row items-center justify-center mt-24 md:mt-5">
         <form className="flex flex-col md:flex-row gap-x-2 gap-y-3">
           <select value={dept} onChange={(e) => {setDept(e.target.value)}} className='border-2 px-2' >
