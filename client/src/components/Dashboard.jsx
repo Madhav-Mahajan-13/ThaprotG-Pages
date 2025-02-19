@@ -95,7 +95,7 @@ export const Dashboard = () => {
       submitFormData.append("lastName", formData.lastName);
       submitFormData.append("personalEmail", formData.personalEmail);
       submitFormData.append("phoneNumber", `${countryCode} ${formData.phoneNumber}`);
-      submitFormData.append("additionalPhoneNumber", `${countryCode} ${formData.additionalPhoneNumber}`);
+      submitFormData.append("additionalPhoneNumber", `${formData.additionalPhoneNumber}`);
       submitFormData.append("linkedinUrl", formData.linkedinUrl);
       submitFormData.append("graduationYear", formData.graduationYear);
       submitFormData.append("bio", formData.bio);
