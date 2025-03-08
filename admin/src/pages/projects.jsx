@@ -98,7 +98,6 @@ export default function Projects() {
       </div>
     <div className="overflow-x-auto w-full">
       
-      <ToastContainer/>
       <table className="table-auto border-collapse border border-gray-400 w-1/2 text-left mx-auto my-24 md:my-5">
         <thead className="bg-gray-200">
           <tr>

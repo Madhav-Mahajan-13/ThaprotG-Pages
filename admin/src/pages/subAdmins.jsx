@@ -98,7 +98,6 @@ export default function SubAdmins() {
 
   return (
     <div className="flex flex-col items-center justify-center mt-24 md:mt-5">
-      <ToastContainer />
       <div className="flex flex-col md:flex-row gap-x-2 gap-y-2 text-center items-center justify-center">
         <label>Filter Users</label>
         <select

@@ -38,7 +38,6 @@ export default function DynamicForm() {
 
   return (
     <div className="max-w-lg mx-auto mt-24 p-10 md:p-16 md:mt-12 bg-white shadow-2xl rounded-lg">
-      <ToastContainer />
       <h2 className="text-xl font-bold mb-4">Create Event</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
