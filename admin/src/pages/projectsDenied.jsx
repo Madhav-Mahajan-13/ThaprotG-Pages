@@ -157,7 +157,6 @@ export default function ProjectsDenied() {
                 <td className="border p-2">
                 <div className="flex flex-row items-center gap-x-3">
                     <TiTick size={50} onClick={(e) => { handleClick(e,project.project_id,'approve') }}/>
-                    <ImCross size={25} onClick={(e) => { handleClick(e,project.project_id,'deny') }}/>
                 </div>
               </td>
               <td className="border p-2">{project.project_id}</td>

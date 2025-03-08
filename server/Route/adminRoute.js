@@ -3,7 +3,7 @@ import { changeStatus, getApprovedProjects, getDeniedProjects, getPendingProject
 import { activateSubAdmin, createSubAdmin, deleteSubAdmin, registerSiteAdmin, suspendSubAdmin, viewAllSubAdmin } from "../Controllers_admin/AdminCreationController.js";
 import { activeCarousel, createCarousel, deleteCarousel, showCarousel, suspendCarousel } from "../Controllers_admin/carouselController.js";
 import { uploadProjectFiles } from "../middleware/uploadFiles.js";
-import { addInsight } from "../Controllers_admin/insightController.js";
+import { addInsight, getAllInsights } from "../Controllers_admin/insightController.js";
 import { activeUser, deleteUser, getAllUsers, searchUsers, suspendUser } from "../Controllers_admin/userController.js";
 import { activeEvent, createEvent, deleteEvent, showEvent, suspendEvent } from "../Controllers_admin/eventController.js";
 import { forgotPassword, loginAdmin, resetPassword, verifyOTP } from "../Controllers_admin/loginController.js";
@@ -38,6 +38,7 @@ adminRouter.post("/suspendCarousel",verifyToken,suspendCarousel)
 adminRouter.post("/deleteCarousel",verifyToken,deleteCarousel)
 // insight
 adminRouter.post("/addInsight",verifyToken,uploadProjectFiles,addInsight)
+adminRouter.get("/getInsights",verifyToken,uploadProjectFiles,getAllInsights)
 
 // users
 adminRouter.get("/users",verifyToken,getAllUsers)
