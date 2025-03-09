@@ -54,7 +54,7 @@ const Gallery = () => {
                         {images.map((image) => (
                             <div key={image.id} className="gallery-item">
                                 <div className="image-wrapper">
-                                    <img src={image.imgsrc} alt={image.description} />
+                                    <img src={"http://localhost:5000/"+image.imgsrc} alt={image.description} />
                                 </div>
                                 <div className="image-info">
                                     <div className="tag">{image.tag}</div>

@@ -11,6 +11,8 @@
 /admin/node_modules
 /server/uploads/pdfs
 /server/uploads/images
+/server/uploads/team
+
 
 
 #vscode
