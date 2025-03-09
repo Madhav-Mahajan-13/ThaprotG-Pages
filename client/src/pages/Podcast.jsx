@@ -3,8 +3,18 @@ import '../styling/Podcast.css';
 
 const Podcast = () => {
   const podcasts = [
+    
     {
-      id: 1,
+      id: 3,
+      title: "Podcast 3",
+      host: "Sara Agnihotri",
+      guest: "Mr. Ram Narula",
+      description:` We at Thapar Alumni Relations Cell present another inspiring episode of "Engineers Beyond Engineering", featuring Mr. Ram Narula, a proud TIET alumnus with 50 years of experience in engineering, power generation, and innovation. Having spent 38 years at Bechtel Power Corporation as VP & CTO, he has led over 150 senior technical experts and driven groundbreaking projects.`,
+      youtubeLink: "https://www.youtube.com/embed/IOrGZwNKx6M", // 🔄 Replace with a valid YouTube ID
+      date: "2025-02-26"
+    },
+    {
+      id: 2,
       title: "Podcast 2",
       host: "Kushal Preet Sallan ",
       guest: "MR. Anil Sharma",
@@ -13,7 +23,7 @@ const Podcast = () => {
       date: "2024-07-10"
     },
     {
-      id: 2,
+      id: 1,
       title: "Podcast 1",
       host: "Veni Tiwari",
       guest: "Dr. Seema Bawa",
@@ -21,6 +31,7 @@ const Podcast = () => {
       youtubeLink: "https://www.youtube.com/embed/95ACDs6vm5w", // 🔄 Replace with a valid YouTube ID
       date: "2024-04-12"
     },
+    
   ];
 return (
     <div className="main-content">

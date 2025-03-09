@@ -118,26 +118,36 @@
     ];
     const departments = {
       tech: [
-          { name: "Anjali Kumari", linkedin: "https://www.linkedin.com/in/anjali-kumari-aa7668323", github: "https://github.com/Anjalikumari990" }
+          { name: "Anjali Kumari", linkedin: "https://www.linkedin.com/in/anjali-kumari-aa7668323", github: "https://github.com/Anjalikumari990" },
+          { name: "Jidugu Sriharisesh", linkedin: "https://www.linkedin.com/in/jsrihari", github: "https://github.com/Hari21-Tech" },
+          { name: "Rakshit Dhamija", linkedin: "https://www.linkedin.com/in/rakshit-dhamija-870b39286", github: "https://github.com/Rakshit-Dhamija" }
       ],
       design: [
           { name: "Jahanvi Singhal", linkedin: "https://www.linkedin.com/in/jahanvi-singhal-33981b29a", github: "https://github.com/Jahanvi-15" },
-          { name: "Dishita Bansal", linkedin: "https://www.linkedin.com/in/dishita-bansal", github: "https://github.com/Dishita-Bansal/Dishita-Bansal" }
+          { name: "Dishita Bansal", linkedin: "https://www.linkedin.com/in/dishita-bansal", github: "https://github.com/Dishita-Bansal/Dishita-Bansal" },
+          { name: "Angad Bir Singh", linkedin: "https://www.linkedin.com/in/angad-bir-singh-45507a281", github: "https://github.com/Angadbir101" },
+          { name: "Sharnya Goel", linkedin: "https://www.linkedin.com/in/sharnya-goel-b96697284", github: "https://github.com/sharnyagoel19" },
+          { name: "Kushagrh Rohilla", linkedin: "https://www.linkedin.com/in/kushagrhrohilla/", github: "https://github.com/Infurnux" },
+          { name: "Bani", linkedin: "https://www.linkedin.com/in/bani-b42658327", github: "https://github.com/Bani-229" }
       ],
       media: [
           { name: "Agami", linkedin: "https://www.linkedin.com/in/agami-garg-608692308/", github: "https://github.com/agamigarg" },
           { name: "Mehakdeep Singh", linkedin: "https://www.linkedin.com/in/mehakdeep-singh-086042215", github: "NA" },
           { name: "Arpita Bhalla", linkedin: "https://www.linkedin.com/in/arpita-bhalla-14310b352", github: "NA" },
           { name: "Ansh Bansal", linkedin: "https://www.linkedin.com/in/anshbansal1002", github: "https://github.com/That-GeekyGuy" },
-          { name: "Tanish Puri", linkedin: "https://www.linkedin.com/in/tanish-puri-b195252a6", github: "https://github.com/tanishh18" }
+          { name: "Tanish Puri", linkedin: "https://www.linkedin.com/in/tanish-puri-b195252a6", github: "https://github.com/tanishh18" },
+          { name: "Prisha Bharti", linkedin: "www.linkedin.com/in/prisha-bharti-8527b02b9", github: "NA" },
+          { name: "Daksh Agrawal", linkedin: "www.linkedin.com/in/daksh-agrawal-797134216", github: "https://github.com/Dakshya2006" }
       ],
       content: [
           { name: "Anmol Sethi", linkedin: "https://www.linkedin.com/in/anmol-sethi-79ba03228/", github: "https://github.com/Anmolas1402" },
           { name: "Harshil Jain", linkedin: "https://www.linkedin.com/in/harshil-jain-13a87731a/", github: "https://github.com/jainharshil34" },
           { name: "Parnika Bharadvaja", linkedin: "https://www.linkedin.com/in/parnika-bharadvaja-14029b343", github: "NA" },
-          { name: "Khusboo Gaur", linkedin: "https://www.linkedin.com/in/khusboo-gaur-5728a9332", github: "https://github.com/itskhusboo" }
+          { name: "Khusboo Gaur", linkedin: "https://www.linkedin.com/in/khusboo-gaur-5728a9332", github: "https://github.com/itskhusboo" },
+          { name: "Nanki Kaur", linkedin: "https://www.linkedin.com/in/nanki-kaur-am8960", github: "NA" }
       ]
   };
+  
   
 
     return (
