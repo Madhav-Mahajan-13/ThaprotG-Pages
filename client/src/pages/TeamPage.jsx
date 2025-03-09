@@ -108,39 +108,28 @@ import { Github, Linkedin, Instagram } from 'lucide-react';
 
   const departments = {
     tech: [
-      "Aryan Sharma - Web Developer",
-      "Ishita Gupta - App Developer",
-      "Vansh Kapoor - Backend Developer",
-      "Ananya Singh - UI/UX Developer",
-      "Raghav Kumar - DevOps Engineer",
-      "Nandini Jain - Frontend Developer"
-    ],
-    design: [
-      "Khushi Verma - Graphic Designer",
-      "Aarav Patel - UI Designer",
-      "Diya Shah - Motion Designer",
-      "Arnav Gupta - Brand Designer",
-      "Aisha Khan - Visual Designer",
-      "Rohan Mehta - Creative Designer"
-    ],
-    media: [
-      "Yash Singh - Photography Lead",
-      "Riya Sharma - Social Media Manager",
-      "Aditya Kumar - Videographer",
-      "Zara Ali - Content Creator",
-      "Ved Patel - Media Coordinator",
-      "Tanya Reddy - Digital Media Specialist"
-    ],
-    content: [
-      "Mira Kapoor - Content Strategist",
-      "Kabir Singh - Technical Writer",
-      "Avni Shah - Creative Writer",
-      "Neil Patel - Copy Editor",
-      "Sana Khan - Blog Writer",
-      "Arjun Nair - Content Developer"
+      { name: "Jidugu Sriharisesh", linkedin: "https://www.linkedin.com/in/jsrihari", github: "https://github.com/Hari21-Tech" },
+      { name: "Harshil Jain", linkedin: "https://www.linkedin.com/in/harshil-jain-13a87731a/", github: "https://github.com/jainharshil34" },
+      { name: "Kushagrh Rohilla", linkedin: "https://www.linkedin.com/in/kushagrhrohilla/", github: "https://github.com/Infurnux" },
+      { name: "Arpita Bhalla", linkedin: "https://www.linkedin.com/in/arpita-bhalla-14310b352", github: "NA" },
+      { name: "Anjali Kumari", linkedin: "https://www.linkedin.com/in/anjali-kumari-aa7668323", github: "https://github.com/Anjalikumari990" },
+      { name: "Dishita Bansal", linkedin: "https://www.linkedin.com/in/dishita-bansal", github: "https://github.com/Dishita-Bansal/Dishita-Bansal" },
+      { name: "Prisha Bharti", linkedin: "https://www.linkedin.com/in/prisha-bharti-8527b02b9", github: "NA" },
+      { name: "Ansh Bansal", linkedin: "https://www.linkedin.com/in/anshbansal1002", github: "https://github.com/That-GeekyGuy" },
+      { name: "Jahanvi Singhal", linkedin: "https://www.linkedin.com/in/jahanvi-singhal-33981b29a", github: "https://github.com/Jahanvi-15" },
+      { name: "Sharnya Goel", linkedin: "https://www.linkedin.com/in/sharnya-goel-b96697284", github: "https://github.com/sharnyagoel19" },
+      { name: "Kushal Preet Sallan", linkedin: "https://www.linkedin.com/in/kushal-preet-sallan", github: "NA" },
+      { name: "Angad Bir Singh", linkedin: "https://www.linkedin.com/in/angad-bir-singh-45507a281", github: "https://github.com/Angadbir101" },
+      { name: "Parnika Bharadvaja", linkedin: "https://www.linkedin.com/in/parnika-bharadvaja-14029b343", github: "NA" },
+      { name: "Khusboo Gaur", linkedin: "https://www.linkedin.com/in/khusboo-gaur-5728a9332", github: "https://github.com/itskhusboo" },
+      { name: "Tanish Puri", linkedin: "https://www.linkedin.com/in/tanish-puri-b195252a6", github: "https://github.com/tanishh18" },
+      { name: "Anmol Sethi", linkedin: "https://www.linkedin.com/in/anmol-sethi-79ba03228/", github: "https://github.com/Anmolas1402" },
+      { name: "Daksh Agrawal", linkedin: "https://www.linkedin.com/in/daksh-agrawal-797134216", github: "https://github.com/Dakshya2006" }
     ]
   };
-
+departments.design = [...departments.tech];
+departments.media = [...departments.tech];
+departments.content = [...departments.tech];
   return (
     <div className='main-content'>
          <div className="team-page">
@@ -188,39 +177,24 @@ import { Github, Linkedin, Instagram } from 'lucide-react';
       <section className="departments-section">
         <h2>Our Departments</h2>
         <div className="departments-grid">
-          <div className="department">
-            <h3>Tech Team</h3>
-            <ul>
-              {departments.tech.map((member, index) => (
-                <li key={index}>{member}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="department">
-            <h3>Design Team</h3>
-            <ul>
-              {departments.design.map((member, index) => (
-                <li key={index}>{member}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="department">
-            <h3>Media Team</h3>
-            <ul>
-              {departments.media.map((member, index) => (
-                <li key={index}>{member}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="department">
-            <h3>Content Team</h3>
-            <ul>
-              {departments.content.map((member, index) => (
-                <li key={index}>{member}</li>
-              ))}
-            </ul>
-          </div>
+      {Object.keys(departments).map((dept) => (
+        <div className="department" key={dept}>
+          <h3>{dept.charAt(0).toUpperCase() + dept.slice(1)} Team</h3>
+          <ul>
+            {departments[dept].map((member, index) => (
+              <li key={index}>
+                {member.name} - <a href={member.linkedin} target="_blank">LinkedIn</a>{" "}
+                {member.github !== "NA" && (
+                  <>
+                    | <a href={member.github} target="_blank">GitHub</a>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
+      ))}
+    </div>
       </section>
     </div>
     </div>

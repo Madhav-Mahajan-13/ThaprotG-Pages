@@ -14,6 +14,7 @@ import objectRouter from "./Route/objectRoute.js";
 // const {createServer} = require('http');
 import {createServer} from "http"
 import socketSetup from "./socket.js";
+import givingbackRouter from "./Route/givingbackRoute.js";
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/alumprojects",alumProjectRouter);
 app.use("/api/studentprojects",studentProjectRouter);
 app.use("/api/gallery",galleryRouter);
+app.use("/api/givingback",givingbackRouter)
 
 app.use("/api/user",userRouter);
 app.use("/api/projects",userProjectRouter);
