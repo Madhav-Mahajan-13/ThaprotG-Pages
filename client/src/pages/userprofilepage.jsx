@@ -75,23 +75,23 @@ const UserDashboard = () => {
           <h1 className="profile-name">{user.first_name} {user.last_name}</h1>
           <p className="profile-title">{user.degree}</p>
           
-          <button 
+          {/* <button 
             className={`connect-btn ${isConnected ? 'connected' : ''}`}
             onClick={() => setIsConnected(!isConnected)}
           >
             <UserPlus size={18} />
             {isConnected ? 'Connected' : 'Connect'}
-          </button>
+          </button> */}
 
           {/* Stats Section */}
           <div className="profile-stats">
-            <div className="stat-box">
+            {/* <div className="stat-box">
               <UsersRound size={20} />
               <div>
                 <span className="stat-number">127</span>
                 <span className="stat-label">Connections</span>
               </div>
-            </div>
+            </div> */}
             <div className="stat-box">
               <Briefcase size={20} />
               <div>

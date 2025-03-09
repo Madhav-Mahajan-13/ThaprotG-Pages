@@ -1,8 +1,30 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { MyContext } from "../context/context";
-import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes, FaImage, FaPhone, FaLink } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes, FaImage, FaPhone, FaLink, FaCheckCircle } from "react-icons/fa";
 import "../styling/Dashboard.css"
+
+// Toast component
+const Toast = ({ message, type, visible, onClose }) => {
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [visible, onClose]);
+
+  return (
+    <div className={`dashboard-toast ${visible ? 'toast-visible' : ''} ${type}`}>
+      <div className="toast-content">
+        {type === "success" && <FaCheckCircle className="toast-icon" />}
+        <span className="toast-message">{message}</span>
+      </div>
+    </div>
+  );
+};
+
 export const Dashboard = () => {
   const { userId } = useContext(MyContext);
   const [isEditing, setIsEditing] = useState(false);
@@ -23,7 +45,7 @@ export const Dashboard = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [toast, setToast] = useState({ visible: false, type: "", message: "" });
   const [countryCode, setCountryCode] = useState("+1");
 
   useEffect(() => {
@@ -52,7 +74,7 @@ export const Dashboard = () => {
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setMessage({ type: "error", text: "Failed to load profile data" });
+        showToast("error", "Failed to load profile data");
         setIsLoading(false);
       }
     };
@@ -61,6 +83,14 @@ export const Dashboard = () => {
       fetchUserData();
     }
   }, [userId]);
+
+  const showToast = (type, message) => {
+    setToast({ visible: true, type, message });
+  };
+
+  const hideToast = () => {
+    setToast({ visible: false, type: "", message: "" });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -118,10 +148,10 @@ export const Dashboard = () => {
       }
 
       setIsEditing(false);
-      setMessage({ type: "success", text: "Profile updated successfully!" });
+      showToast("success", "Profile updated successfully!");
     } catch (error) {
       console.error("Error saving data:", error);
-      setMessage({ type: "error", text: "Failed to update profile. Please try again." });
+      showToast("error", "Failed to update profile. Please try again.");
     }
   };
 
@@ -131,7 +161,12 @@ export const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {message.text && <div className={`${message.type}-message`}>{message.text}</div>}
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onClose={hideToast}
+      />
 
       {isEditing ? (
         <div className="edit-form">
@@ -193,10 +228,6 @@ export const Dashboard = () => {
               <input className="form-input" type="text" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleInputChange} />
             </div>
 
-            
-
-        
-
             <div className="form-group">
               <label className="form-label"><FaPhone /> Additional Phone Number</label>
               <input type="text" name="additionalPhoneNumber" value={formData.additionalPhoneNumber} onChange={handleAdditionalPhoneChange} />
@@ -215,69 +246,66 @@ export const Dashboard = () => {
         </div>
       ) : (
         <div className="profile-view">
-      <div className="profile-image-container">
-          <img className="profile-image" src={"http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile"  />
-        </div>
-    
-        <div className="profile-details">
-          <div className="profile-field">
-            <span className="field-label"><FaUser /> Name</span>
-            <p className="field-value">
-              {formData.firstName || "Unavailable"} {formData.lastName || ""}
-            </p>
+          <div className="profile-image-container">
+            <img className="profile-image" src={"http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile"  />
           </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaUser /> Username</span>
-            <p className="field-value">{formData.username || "Unavailable"}</p>
-          </div>
+          <div className="profile-details">
+            <div className="profile-field">
+              <span className="field-label"><FaUser /> Name</span>
+              <p className="field-value">
+                {formData.firstName || "Unavailable"} {formData.lastName || ""}
+              </p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaEnvelope /> Email</span>
-            <p className="field-value">{formData.email || "Unavailable"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaUser /> Username</span>
+              <p className="field-value">{formData.username || "Unavailable"}</p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaEnvelope /> Personal Email</span>
-            <p className="field-value">{formData.personalEmail || "Unavailable"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaEnvelope /> Email</span>
+              <p className="field-value">{formData.email || "Unavailable"}</p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaPhone /> Phone Number</span>
-            <p className="field-value">
-              {formData.phoneNumber ? `${countryCode} ${formData.phoneNumber}` : "Unavailable"}
-            </p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaEnvelope /> Personal Email</span>
+              <p className="field-value">{formData.personalEmail || "Unavailable"}</p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaLink /> LinkedIn</span>
-            <p className="field-value">
-              {formData.linkedinUrl ? (
-                <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer">
-                  {formData.linkedinUrl}
-                </a>
-              ) : "Unavailable"}
-            </p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaPhone /> Phone Number</span>
+              <p className="field-value">
+                {formData.phoneNumber ? `${countryCode} ${formData.phoneNumber}` : "Unavailable"}
+              </p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaGraduationCap /> Graduation Year</span>
-            <p className="field-value">{formData.graduationYear || "Unavailable"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaLink /> LinkedIn</span>
+              <p className="field-value">
+                {formData.linkedinUrl ? (
+                  <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer">
+                    {formData.linkedinUrl}
+                  </a>
+                ) : "Unavailable"}
+              </p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaBook /> Bio</span>
-            <p className="field-value">{formData.bio || "No bio provided"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaGraduationCap /> Graduation Year</span>
+              <p className="field-value">{formData.graduationYear || "Unavailable"}</p>
+            </div>
     
-          
-          <div className="profile-field">
-            <span className="field-label"><FaPhone /> Number 2</span>
-            <p className="field-value">{formData.additionalPhoneNumber ? `${formData.additionalPhoneNumber}` : "Unavailable"}</p>
+            <div className="profile-field">
+              <span className="field-label"><FaBook /> Bio</span>
+              <p className="field-value">{formData.bio || "No bio provided"}</p>
+            </div>
+    
+            <div className="profile-field">
+              <span className="field-label"><FaPhone /> Number 2</span>
+              <p className="field-value">{formData.additionalPhoneNumber ? `${formData.additionalPhoneNumber}` : "Unavailable"}</p>
+            </div>
           </div>
-        </div>
-
-          
 
           <div className="button-group">
             <button className="button primary-button" onClick={() => setIsEditing(true)}><FaEdit /> Edit Profile</button>
@@ -289,4 +317,3 @@ export const Dashboard = () => {
 };
 
 export default Dashboard;
-

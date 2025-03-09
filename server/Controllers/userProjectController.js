@@ -60,7 +60,7 @@ export const postProject = async (req, res) => {
             insertResult = await db.query(`
                 INSERT INTO projects 
                 (user_id, title, description, open_until, openings, technology, pdf_path, image_path, status,department)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9,$10)
                 RETURNING project_id;
             `,[
                 id,

@@ -7,7 +7,7 @@ import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 const Footer = () => {
   const developers = [
     {
-      name: "Developer Name 1",
+      name: "Madhav Mahajan",
       role: "Full Stack Developer",
       image: "/api/placeholder/150/150", // Replace with actual image path
       social: {
@@ -17,8 +17,8 @@ const Footer = () => {
       }
     },
     {
-      name: "Developer Name 2",
-      role: "UI/UX Developer",
+      name: "Inder Mohan Khatri",
+      role: "Full Stack Developer",
       image: "/api/placeholder/150/150", // Replace with actual image path
       social: {
         instagram: "https://instagram.com/dev2",
@@ -78,6 +78,7 @@ const Footer = () => {
             <li><a href="/alumproject">Alumni Projects</a></li>
            
             <li><a href="/campusgallery">Insights</a></li>
+            <li><a href="/team">Team</a></li>
           </ul>
         </div>
 
