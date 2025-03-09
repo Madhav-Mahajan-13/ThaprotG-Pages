@@ -61,7 +61,6 @@ export default function AddSubAdmin() {
 
   return (
     <div className="flex items-center justify-center bg-gray-100 min-h-screen w-full">
-        <ToastContainer/>
       <div className="bg-white px-10 md:pd-20 py-10 w-2xl md:w-3/4 shadow-2xl max-w-md">
         <h3 className="text-3xl font-bold text-center">Add Sub Admin</h3>
         <form className="mt-10" onSubmit={handleSubmit}>

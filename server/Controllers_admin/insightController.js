@@ -17,7 +17,7 @@ export const addInsight = async (req, res) => {
         for (const imgsrc of images) {
             const query = await db.query(
                 `INSERT INTO gallery (tag, description, imgsrc) VALUES ($1, $2, $3) RETURNING *`,
-                [tag, description, +"uploads/images/"+imgsrc]
+                [tag, description, "uploads/images/"+imgsrc]
             );
             insertedImages.push(query.rows[0]);
         }
@@ -25,6 +25,16 @@ export const addInsight = async (req, res) => {
         res.status(201).json({ success: true, message: "Images uploaded successfully", data: insertedImages });
     } catch (error) {
         console.error("Error uploading images:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+export const getAllInsights = async (req, res) => {
+    try {
+        const query = await db.query("SELECT * FROM gallery ORDER BY created_at DESC");
+        res.status(200).json({ success: true, data: query.rows });
+    } catch (error) {
+        console.error("Error fetching insights:", error);
         res.status(500).json({ success: false, message: "Server error" });
     }
 };

@@ -7,7 +7,6 @@ export default function DynamicForm() {
 
   const { backendHost, toastOptions } = useContext(MyContext);
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -17,7 +16,7 @@ export default function DynamicForm() {
       formData.append("event_description", e.target.event_description.value);
       formData.append("image", e.target.image.files[0]);
       formData.append("link", e.target.link.value);
-      formData.append("status", e.target.check.checked ? "active" : "suspended"); // Using state for checkbox
+      formData.append("status", e.target.check.checked ? "active" : "suspended");
 
       const res = await fetch(backendHost + "/api/admin/createEvent", {
         method: "POST",
@@ -38,7 +37,6 @@ export default function DynamicForm() {
 
   return (
     <div className="max-w-lg mx-auto mt-24 p-10 md:p-16 md:mt-12 bg-white shadow-2xl rounded-lg">
-      <ToastContainer />
       <h2 className="text-xl font-bold mb-4">Create Event</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

@@ -70,6 +70,8 @@ export default function TopBar() {
     if (location.pathname == "/subAdmins") setSelected(6);
     if (location.pathname == "/addsubadmin") setSelected(7);
     if (location.pathname == "/users") setSelected(8);
+    if (location.pathname == "/insights") setSelected(9);
+    if (location.pathname == "/addInsight") setSelected(10);
   }, [location.pathname]);
 
   const sidebarRef = useRef(null);
@@ -186,6 +188,24 @@ export default function TopBar() {
                       <Sidebutton $selected={isSelected === 8} >
                         <FaUser />
                           <h1>Users</h1>
+                      </Sidebutton>
+                  </Link>
+                  }
+
+                  {
+                  user_type == 'main' && <Link to='/insights'>
+                      <Sidebutton $selected={isSelected === 9} >
+                        <FaUser />
+                          <h1>Insights</h1>
+                      </Sidebutton>
+                  </Link>
+                  }
+
+                  {
+                  user_type == 'main' && <Link to='/addInsight'>
+                      <Sidebutton $selected={isSelected === 10} >
+                        <FaUser />
+                          <h1>Add Insight</h1>
                       </Sidebutton>
                   </Link>
                   }

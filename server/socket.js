@@ -16,10 +16,8 @@ const socketSetup = (server) => {
     });
 
 	io.on('connection',(socket) => {
-		console.log("A new User connected");
 
 		socket.on('disconnect',() => {
-			console.log("User has disconnected");
 		})
 
 		socket.on('suspend',(msg) => {
@@ -27,7 +25,6 @@ const socketSetup = (server) => {
 		})
 
 		socket.on('active',(msg) => {
-			console.log(`${msg.id} activated`);
 		})
 	})
 

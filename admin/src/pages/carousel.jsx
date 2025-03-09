@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import ImageCard from "../components/imageCard";
 import { MyContext } from "../context/myContext";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function Carousel() {
   const [imList, setImlist] = useState([]);
@@ -134,7 +134,6 @@ export default function Carousel() {
 
   return (
     <div className="flex flex-col gap-y-5 mt-24 md:mt-5">
-      <ToastContainer />
 
       {/* Filter Dropdown */}
       <div className="flex flex-row gap-x-4 items-center justify-center">

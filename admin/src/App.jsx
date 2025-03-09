@@ -14,6 +14,8 @@ import SubAdmins from './pages/subAdmins';
 import Events from './pages/events';
 import Forgot from "./pages/forgot.jsx";
 import OTP from "./pages/OTP.jsx";
+import Insights from './pages/insights.jsx';
+import InsightForm from './pages/addInsights.jsx';
 
 const router = createBrowserRouter([
   {
@@ -67,6 +69,14 @@ const router = createBrowserRouter([
       {
         path:"/events",
         element:<Events/>
+      },
+      {
+        path:"/insights",
+        element:<Insights/>
+      },
+      {
+        path:"/addInsight",
+        element:<InsightForm/>
       }
     ]
   }

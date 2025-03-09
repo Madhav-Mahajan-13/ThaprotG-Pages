@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../context/myContext";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import EventCard from "../components/eventCard";
 
 export default function Events() {
@@ -88,7 +88,6 @@ export default function Events() {
 
   return (
     <div className="flex flex-col gap-y-5 mt-24 md:mt-5">
-      <ToastContainer />
 
       {/* Filter Dropdown */}
       <div className="flex flex-row gap-x-4 items-center justify-center">
