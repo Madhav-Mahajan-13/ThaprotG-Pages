@@ -1,161 +1,103 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
-import AppTheme from '../theme/AppTheme.jsx';
-import { toast, ToastContainer } from "react-toastify";
-
-import { useNavigate, useParams } from "react-router-dom"
-import { useState,useEffect,useContext } from "react";
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { MyContext } from '../context/context.jsx';
-
-
-const Card = styled(MuiCard)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'center',
-    width: '100%',
-    padding: theme.spacing(4),
-    gap: theme.spacing(2),
-    margin: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      maxWidth: '450px',
-    },
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-    ...theme.applyStyles('dark', {
-      boxShadow:
-        'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-    }),
-  }));
-  
-  const EmailContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4),
-    },
-    '&::before': {
-      content: '""',
-      display: 'block',
-      position: 'absolute',
-      zIndex: -1,
-      inset: 0,
-      backgroundImage:
-        'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-      backgroundRepeat: 'no-repeat',
-      ...theme.applyStyles('dark', {
-        backgroundImage:
-          'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-      }),
-    },
-  }));
+import { toast, ToastContainer } from "react-toastify";
+import AppTheme from '../theme/AppTheme.jsx';
+import '../styling/forgot.css'; // Import the CSS file
 
 export default function Forgot(props) {
-    const navigate = useNavigate();
-    const {toastOptions,backendHost} = useContext(MyContext);
+  const navigate = useNavigate();
+  const { toastOptions, backendHost } = useContext(MyContext);
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-          const email = document.getElementById("email").value.trim();
-          const [left, right] = email.split("@");
-  
-          if (left.length < 3 || right.toLowerCase() !== "thapar.edu") {
-              toast.info("Not a valid thapar.edu account", toastOptions);
-              return;
-          }
-  
-          const res = await fetch(backendHost + "/api/auth/forgot", {
-              method: "POST",
-              body: JSON.stringify({ email }),
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              credentials: "include", // Ensures cookies are sent
-          });
-  
-          const data = await res.json();
-  
-          if (!data.success) {
-              console.log(data.msg);
-              toast.error(data.msg, toastOptions);
-              return;
-          }
-  
-          toast.success("Redirecting...");
-  
-          sessionStorage.setItem("otpToken", data.otpToken);
-  
-          setTimeout(() => {
-              navigate(`/OTP/${data.otpToken}/${email}`);
-          }, 1000);
-      } catch (error) {
-          toast.error(error.message, toastOptions);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const email = document.getElementById("email").value.trim();
+      const [left, right] = email.split("@");
+
+      if (left.length < 3 || right.toLowerCase() !== "thapar.edu") {
+        toast.info("Not a valid thapar.edu account", toastOptions);
+        return;
       }
+
+      const res = await fetch(backendHost + "/api/auth/forgot", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Ensures cookies are sent
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        console.log(data.msg);
+        toast.error(data.msg, toastOptions);
+        return;
+      }
+
+      toast.success("Redirecting...");
+
+      sessionStorage.setItem("otpToken", data.otpToken);
+
+      setTimeout(() => {
+        navigate(`/OTP/${data.otpToken}/${email}`);
+      }, 1000);
+    } catch (error) {
+      toast.error(error.message, toastOptions);
     }
+  }
 
-    return(
-        <>
-        <ToastContainer/>
-        <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <EmailContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          {<>
-          <Typography
-            component="h1"
-            variant="h5"
-            sx={{ width: '100%', fontSize: 'clamp(1.5rem, 10vw, 1.75rem)' }}
-          >
-            Enter Your Email ID
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              gap: 2,
-            }}
-          >
-            <FormControl>
+  return (
+    <AppTheme {...props}>
+      <ToastContainer />
+      <div className="forgot-container">
+        <div className="forgot-card">
+          <div className="envelope-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22 4H2v16h20V4zm-2 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+          </div>
 
-              <TextField
-                name="email"
-                placeholder="enter email"
-                
-                id="email"
-                autoComplete="current-password"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                color={'primary'}
-              />
-            </FormControl>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-          </Box>
-          </>
-          }
+          <h1 className="forgot-heading">Forgot Password?</h1>
           
-        </Card>
-      </EmailContainer>
+          <p className="forgot-subheading">
+            Enter your Thapar email address and we'll send you a reset code
+          </p>
+          
+          <form className="forgot-form" noValidate onSubmit={handleSubmit}>
+            <div className="form-control">
+              <div className="text-field">
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="your@thapar.edu"
+                  autoComplete="email"
+                  autoFocus
+                  required
+                />
+              </div>
+            </div>
+            
+            <button
+              type="submit"
+              className="forgot-button"
+            >
+              Send Reset Code
+            </button>
+          </form>
+          
+          <div className="back-link-container">
+            <Link to="/login" className="back-link">
+              Back to Login
+            </Link>
+          </div>
+        </div>
+      </div>
     </AppTheme>
-    </>
-    )
+  );
 }

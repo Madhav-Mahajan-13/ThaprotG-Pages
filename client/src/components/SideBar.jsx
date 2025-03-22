@@ -6,6 +6,7 @@ import axios from "axios"
 import { MyContext } from "../context/context"
 import UserProjects from "./UserProjectsCard.jsx"
 import MobileNav from "./MobileNav.jsx"
+import logo from "../assets/LOGO.png";
 import {
   FaHome,
   FaProjectDiagram,
@@ -20,6 +21,7 @@ import {
   FaIdCard, FaHandHoldingHeart,
   FaCheckCircle
 } from "react-icons/fa"
+
 
 const SectionWindow = ({ title, show, toggle, children }) => (
   <div className={`side-window ${show ? "open" : ""}`}>
@@ -256,7 +258,7 @@ const Sidebar = () => {
       <aside className="sidebar">
         <div className="sidebar-container">
           <Link to="/" className="sidebar-logo">
-            <img src="https://picsum.photos/id/237/200/300" alt="logo" className="logo-image" />
+            <img src={logo} alt="logo" className="logo-image" />
             <div className="project-name">ThaProt-G</div>
           </Link>
 

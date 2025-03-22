@@ -1,72 +1,22 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import {Link} from 'react-router-dom';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
-import AppTheme from '../theme/AppTheme.jsx';
-import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { MyContext } from '../context/context.jsx';
-import { toast,ToastContainer } from 'react-toastify';
-import { useEffect } from 'react';
-import { userid } from '../context/userid.jsx';
-
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'center',
-  width: '100%',
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: 'auto',
-  [theme.breakpoints.up('sm')]: {
-    maxWidth: '450px',
-  },
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
-}));
-
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
+import { toast, ToastContainer } from 'react-toastify';
+import { Eye, EyeOff } from "lucide-react";
+import AppTheme from '../theme/AppTheme.jsx';
+import '../styling/login.css'; // Import the CSS file
 
 export default function SignIn(props) {
-
   const navigate = useNavigate();
   const [check, setCheck] = useState(false);
-  const { toastOptions, backendHost, setUserId, setIsAlum,userId} = useContext(MyContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const { toastOptions, backendHost, setUserId, setIsAlum } = useContext(MyContext);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,7 +37,7 @@ export default function SignIn(props) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include",  // 🚀 Allow cookies to be sent with requests
+      credentials: "include",  // Allow cookies to be sent with requests
     });
 
     const data = await res.json();
@@ -104,7 +54,6 @@ export default function SignIn(props) {
       return;
     }
 
-    // ✅ Remove manual token storage
     await setUserId(data.id);
     await setIsAlum(data.is_alum);
 
@@ -118,7 +67,7 @@ export default function SignIn(props) {
       try {
         const res = await fetch(`${backendHost}/api/auth/verifyToken`, {
           method: "POST",
-          credentials: "include",  // 🚀 Allow cookies
+          credentials: "include",
         });
 
         const data = await res.json();
@@ -131,106 +80,102 @@ export default function SignIn(props) {
     };
 
     checkAuth();
-  }, []);
-
+  }, [backendHost, navigate]);
 
   return (
     <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <ToastContainer/>
-      <SignInContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
-          >
-            Sign in
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              gap: 2,
-            }}
-          >
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                id="email"
-                type="email"
-                name="email"
-                placeholder="your@email.com"
-                autoComplete="email"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                color={'primary'}
-                sx={{ ariaLabel: 'email' }}
-              />
-            </FormControl>
-            <FormControl>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <span>
+      <ToastContainer />
+      <div className="sign-in-container">
+        <div className="waves-background"></div>
+        <div className="login-card">
+          <div className="logo-box">
+            <div className="logo-text">ThaProt-G</div>
+          </div>
+          
+          <h1 className="welcome-heading">Welcome Back</h1>
+          
+          <p className="welcome-subheading">
+            Connect with students and alumni to collaborate on projects
+          </p>
+          
+          <form className="login-form" noValidate>
+            <div className="form-control">
+              <label className="form-label" htmlFor="email">Email Address</label>
+              <div className="text-field">
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="your@email.com"
+                  autoComplete="email"
+                  autoFocus
+                  required
+                />
+              </div>
+            </div>
+            
+            <div className="form-control">
+              <div className="password-header">
+                <label className="form-label" htmlFor="password">Password</label>
                 <Link
                   to="/forgot"
-                  component="button"
-                  type="button"
-                  variant="body2"
-                  sx={{ alignSelf: 'baseline' }}
+                  className="forgot-link"
                 >
-                  Forgot your password ?
+                  Forgot password?
                 </Link>
-                </span>
-              </Box>
-              <TextField
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                color={'primary'}
+              </div>
+              <div className="text-field password-field">
+                <input
+                  name="password"
+                  placeholder="••••••"
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  autoComplete="current-password"
+                  required
+                />
+                <button 
+                  type="button" 
+                  className="password-toggle" 
+                  onClick={handleClickShowPassword}
+                  aria-label="toggle password visibility"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+            
+            <div className="checkbox-container">
+              <input
+                type="checkbox"
+                id="remember"
+                className="checkbox"
+                onChange={() => setCheck(!check)}
               />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-              onClick={() => {
-                check?setCheck(false):setCheck(true);
-              }}
-            />
-            <Button
+              <label htmlFor="remember" className="checkbox-label">
+                Remember me
+              </label>
+            </div>
+            
+            <button
               type="submit"
-              fullWidth
-              variant="contained"
+              className="login-button"
               onClick={handleSubmit}
             >
-              Sign in
-            </Button>
-            <Typography sx={{ textAlign: 'center' }}>
+              Sign In
+            </button>
+            
+            <p className="signup-text">
               Don&apos;t have an account?{' '}
-              <span>
-                <Link
-                 to="/register"
-                  variant="body2"
-                  sx={{ alignSelf: 'center' }}
-                >
-                  Sign up
-                </Link>
-              </span>
-            </Typography>
-          </Box>
-        </Card>
-      </SignInContainer>
+              <Link
+                to="/register"
+                className="signup-link"
+              >
+                Sign up
+              </Link>
+            </p>
+          </form>
+        </div>
+      </div>
     </AppTheme>
   );
 }

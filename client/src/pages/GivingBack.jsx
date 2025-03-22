@@ -53,12 +53,10 @@ const AlumGiveBack = () => {
         },
         body: JSON.stringify(formData)
       });
-      
+  
       if (response.ok) {
         toast.success("Visit request submitted successfully!");
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
+        setFormData({ name: '', email: '', date: '', reason: '' }); // Reset form fields
       } else {
         toast.error("Failed to submit request. Please try again.");
       }
@@ -66,6 +64,7 @@ const AlumGiveBack = () => {
       toast.error("An error occurred. Please check your connection and try again.");
     }
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

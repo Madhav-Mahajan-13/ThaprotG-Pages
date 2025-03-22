@@ -1,0 +1,172 @@
+/* OTP Page CSS - Matching Login Theme */
+
+/* Variables */
+:root {
+    --deep-navy: #1A5F7A;     /* More vibrant blue */
+    --muted-green: #4B8673;   /* Refreshed teal-green */
+    --cream: #FFF8E8;         /* Brighter cream */
+    --beige: #E6D9B8;         /* Warmer beige */
+    --off-white: #FAFAF0;     /* Brighter off-white */
+    --charcoal: #2E3A47;      /* Slightly bluer charcoal */
+    --gold: #D4AF37;          /* Brighter gold */
+    --accent: #8C5E58;        /* New warm accent color */
+    --highlight: #D1E8E2;     /* Subtle highlight color */
+  }
+  
+  /* Background */
+  .otp-container {
+    min-height: 100%;
+    padding: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  @media (min-width: 600px) {
+    .otp-container {
+      padding: 32px;
+    }
+  }
+  
+  .otp-container::before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-image: linear-gradient(135deg, var(--cream) 0%, var(--highlight) 50%, var(--off-white) 100%);
+    background-repeat: no-repeat;
+  }
+  
+  /* Card */
+  .otp-card {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 100%;
+    padding: 32px;
+    gap: 16px;
+    margin: auto;
+    background-color: var(--off-white);
+    border: 1px solid var(--beige);
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(46, 53, 62, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  @media (min-width: 600px) {
+    .otp-card {
+      max-width: 450px;
+    }
+  }
+  
+  /* Heading */
+  .otp-heading {
+    width: 100%;
+    font-size: clamp(1.5rem, 10vw, 1.75rem);
+    font-family: "Cormorant Garamond", "Times New Roman", serif;
+    background-image: linear-gradient(135deg, var(--deep-navy), var(--accent));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  
+  .otp-email {
+    font-weight: bold;
+    color: var(--accent);
+  }
+  
+  /* Form */
+  .otp-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+  
+  .form-control {
+    width: 100%;
+  }
+  
+  /* Input Field */
+  .text-field {
+    width: 100%;
+    position: relative;
+  }
+  
+  .text-field input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--beige);
+    background-color: rgba(249, 247, 242, 0.7);
+    font-family: "Cormorant Garamond", "Times New Roman", serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-align: center;
+    color: var(--charcoal);
+    transition: all 0.3s ease;
+  }
+  
+  .text-field input:hover {
+    border-color: var(--gold);
+  }
+  
+  .text-field input:focus {
+    outline: none;
+    border-color: var(--muted-green);
+    box-shadow: 0 0 0 3px rgba(75, 134, 115, 0.15);
+  }
+  
+  /* Button */
+  .otp-button {
+    background-image: linear-gradient(to right, var(--deep-navy), var(--muted-green));
+    color: var(--off-white);
+    font-family: "Cormorant Garamond", "Times New Roman", serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 12px 22px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(46, 53, 62, 0.15);
+    text-transform: none;
+    font-size: 1rem;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .otp-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .otp-button:hover {
+    background-image: linear-gradient(to right, var(--muted-green), var(--deep-navy));
+    box-shadow: 0 4px 12px rgba(26, 95, 122, 0.25);
+  }
+  
+  .otp-button:hover::after {
+    left: 100%;
+  }
+  
+  /* Loader */
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }

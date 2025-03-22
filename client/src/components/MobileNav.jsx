@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes, FaHome, FaProjectDiagram, FaUserGraduate, FaImages, FaCalendarAlt, FaComments, FaPlusCircle, FaFolderOpen, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import "../styling/MobileNav.css";
+import logo from "../assets/LOGO.png";
+
+
+
 
 const MobileNav = ({ userName, onLogout, toggleChat, toggleQuickPost, toggleYourProject, toggleYourProfile }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +21,7 @@ const MobileNav = ({ userName, onLogout, toggleChat, toggleQuickPost, toggleYour
     <nav className="mobile-nav">
       <div className="mobile-nav-container">
         <Link to="/" className="mobile-nav-logo">
-          <img src="/assets/images/logo-text.svg" alt="logo" className="mobile-logo" />
+        <img src={logo} alt="logo" className="mobile-logo" />
           <span className="mobile-project-name">ThaProt-G</span>
         </Link>
         <button className="mobile-nav-toggle" onClick={toggleMenu}>
