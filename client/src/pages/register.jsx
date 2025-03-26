@@ -23,14 +23,14 @@ export default function SignUp(props) {
       }
 
       const degree = document.getElementById('degree').value;
-      if (degree.length <= 1) {
-        toast.error("Give Valid Degree", toastOptions);
+      if (!degree) {
+        toast.error("Please select a valid degree", toastOptions);
         return;
       }
 
       const year = Number(document.getElementById('graduation').value);
-      if (year > date.getFullYear() + 10 || year < 1947) {
-        toast.error("Invalid Year", toastOptions);
+      if (year > date.getFullYear() + 10 || year < 1956) {
+        toast.error(`Graduation year must be between 1956 and ${date.getFullYear() + 10}`, toastOptions);
         return;
       }
 
@@ -41,7 +41,7 @@ export default function SignUp(props) {
       }
 
       const domain = email.slice(-10);
-      if (domain != 'thapar.edu') {
+      if (domain !== 'thapar.edu') {
         toast.error("Please use thapar.edu email", toastOptions);
         return;
       }
@@ -131,15 +131,24 @@ export default function SignUp(props) {
             
             <div className="form-control">
               <label className="form-label" htmlFor="degree">Degree</label>
-              <div className="text-field">
-                <input
+              <div className="select-field">
+                <select
                   id="degree"
-                  type="text"
                   name="degree"
-                  placeholder="B.Tech, M.Tech, etc."
-                  autoComplete="off"
+                  className="form-select"
                   required
-                />
+                  defaultValue=""
+                >
+                  <option value="" disabled>Select your degree</option>
+                  <option value="BE">BE (Bachelor of Engineering)</option>
+                  <option value="BTech">BTech (Bachelor of Technology)</option>
+                  <option value="ME">ME (Master of Engineering)</option>
+                  <option value="MTech">MTech (Master of Technology)</option>
+                  <option value="PhD">PhD (Doctor of Philosophy)</option>
+                  <option value="MBA">MBA (Master of Business Administration)</option>
+                  <option value="MSc">MSc (Master of Science)</option>
+                  <option value="BSc">BSc (Bachelor of Science)</option>
+                </select>
               </div>
             </div>
 
@@ -153,7 +162,10 @@ export default function SignUp(props) {
                   placeholder="2025"
                   autoComplete="off"
                   required
+                  min="1956"
+                  max={date.getFullYear() + 10}
                 />
+                <span className="help-text">Year must be between 1956 and {date.getFullYear() + 10}</span>
               </div>
             </div>
 

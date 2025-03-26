@@ -255,3 +255,70 @@
   .login-link:hover::after {
     width: 100%;
   }
+
+  /* Add these styles to your register.css file */
+
+/* Select Field Styling */
+.select-field {
+  width: 100%;
+  position: relative;
+}
+
+.form-select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 4px;
+  border: 1px solid var(--beige);
+  background-color: rgba(249, 247, 242, 0.7);
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 1rem;
+  color: var(--charcoal);
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232E3A47' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.form-select:hover {
+  border-color: var(--gold);
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--muted-green);
+  box-shadow: 0 0 0 3px rgba(75, 134, 115, 0.15);
+}
+
+/* Styling for the disabled option */
+.form-select option[disabled] {
+  color: #a0aec0;
+}
+
+/* Help text styling */
+.help-text {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--charcoal);
+  opacity: 0.7;
+  margin-top: 4px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+}
+
+/* Number input arrow styling */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  opacity: 1;
+  height: 24px;
+  margin-right: 8px;
+}
+
+/* Input validation styling */
+input:invalid {
+  border-color: #f44336;
+}
+
+input:invalid:focus {
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+}

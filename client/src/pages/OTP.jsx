@@ -14,7 +14,7 @@ export default function OTP(props) {
   const [isLoading, setLoading] = useState(true);
   const [otp, setOTP] = useState("");
 
-  const forgot = sessionStorage.getItem("isForgot");
+  // const forgot = sessionStorage.getItem("isForgot");
 
   useEffect(() => {
     async function API_Call() {
