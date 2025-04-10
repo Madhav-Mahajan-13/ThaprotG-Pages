@@ -47,6 +47,8 @@ export const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState({ visible: false, type: "", message: "" });
   const [countryCode, setCountryCode] = useState("+1");
+  const [additionalCountryCode, setAdditionalCountryCode] = useState("+1");
+  const {backendHost} = useContext(MyContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
