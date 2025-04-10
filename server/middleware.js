@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
-
+import mailer from 'nodemailer'
+import dotenv from "dotenv";
+dotenv.config();
 export async function getUser(req, res, next) {
   try {
     const verify = req.header("verify"); // Optional token verification request
@@ -55,3 +57,15 @@ export async function getUser(req, res, next) {
     return res.status(500).json({ msg: e.message, success: false });
   }
 }
+
+
+export const transporter = mailer.createTransport({
+    service:"Gmail",
+    host:"smtp.gmail.com",
+    port:465,
+    secure:true,
+    auth:{
+        user:process.env.sender_email,
+        pass:process.env.sender_pass
+    }
+});

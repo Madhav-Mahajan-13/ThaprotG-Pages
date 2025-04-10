@@ -1,8 +1,30 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { MyContext } from "../context/context";
-import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes, FaImage, FaPhone, FaLink } from "react-icons/fa";
-import "../styling/Dashboard.css"
+import { FaUser, FaEnvelope, FaGraduationCap, FaBook, FaEdit, FaSave, FaTimes, FaImage, FaPhone, FaLink, FaCheckCircle } from "react-icons/fa";
+import "../styling/Dashboard.css";
+
+// Toast component
+const Toast = ({ message, type, visible, onClose }) => {
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [visible, onClose]);
+
+  return (
+    <div className={`dashboard-toast ${visible ? 'toast-visible' : ''} ${type}`}>
+      <div className="toast-content">
+        {type === "success" && <FaCheckCircle className="toast-icon" />}
+        <span className="toast-message">{message}</span>
+      </div>
+    </div>
+  );
+};
+
 export const Dashboard = () => {
   const { userId } = useContext(MyContext);
   const [isEditing, setIsEditing] = useState(false);
@@ -23,9 +45,8 @@ export const Dashboard = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [toast, setToast] = useState({ visible: false, type: "", message: "" });
   const [countryCode, setCountryCode] = useState("+1");
-  const {backendHost} = useContext(MyContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -35,6 +56,9 @@ export const Dashboard = () => {
 
         const phoneMatch = data.phone_number?.match(/^(\+\d+)\s(.+)/);
         setCountryCode(phoneMatch ? phoneMatch[1] : "+1");
+        
+        const additionalPhoneMatch = data.additional_phone_number?.match(/^(\+\d+)\s(.+)/);
+        setAdditionalCountryCode(additionalPhoneMatch ? additionalPhoneMatch[1] : "+1");
 
         setFormData({
           firstName: data.first_name || "",
@@ -43,7 +67,7 @@ export const Dashboard = () => {
           email: data.email || "",
           personalEmail: data.personal_email || "",
           phoneNumber: phoneMatch ? phoneMatch[2] : data.phone_number || "",
-          additionalPhoneNumber: data.additional_phone_number || "",
+          additionalPhoneNumber: additionalPhoneMatch ? additionalPhoneMatch[2] : data.additional_phone_number || "",
           linkedinUrl: data.linkedin_url || "",
           graduationYear: data.graduation_year || "",
           bio: data.bio || "",
@@ -53,7 +77,7 @@ export const Dashboard = () => {
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setMessage({ type: "error", text: "Failed to load profile data" });
+        showToast("error", "Failed to load profile data");
         setIsLoading(false);
       }
     };
@@ -62,6 +86,14 @@ export const Dashboard = () => {
       fetchUserData();
     }
   }, [userId]);
+
+  const showToast = (type, message) => {
+    setToast({ visible: true, type, message });
+  };
+
+  const hideToast = () => {
+    setToast({ visible: false, type: "", message: "" });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,6 +112,10 @@ export const Dashboard = () => {
     setCountryCode(e.target.value);
   };
 
+  const handleAdditionalCountryCodeChange = (e) => {
+    setAdditionalCountryCode(e.target.value);
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -96,7 +132,7 @@ export const Dashboard = () => {
       submitFormData.append("lastName", formData.lastName);
       submitFormData.append("personalEmail", formData.personalEmail);
       submitFormData.append("phoneNumber", `${countryCode} ${formData.phoneNumber}`);
-      submitFormData.append("additionalPhoneNumber", `${countryCode} ${formData.additionalPhoneNumber}`);
+      submitFormData.append("additionalPhoneNumber", `${additionalCountryCode} ${formData.additionalPhoneNumber}`);
       submitFormData.append("linkedinUrl", formData.linkedinUrl);
       submitFormData.append("graduationYear", formData.graduationYear);
       submitFormData.append("bio", formData.bio);
@@ -119,12 +155,14 @@ export const Dashboard = () => {
       }
 
       setIsEditing(false);
-      setMessage({ type: "success", text: "Profile updated successfully!" });
+      showToast("success", "Profile updated successfully!");
     } catch (error) {
       console.error("Error saving data:", error);
-      setMessage({ type: "error", text: "Failed to update profile. Please try again." });
+      showToast("error", "Failed to update profile. Please try again.");
     }
   };
+
+  const currentYear = new Date().getFullYear();
 
   if (isLoading) {
     return <div className="dashboard-container"><div className="loading">Loading your profile...</div></div>;
@@ -132,13 +170,18 @@ export const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      {message.text && <div className={`${message.type}-message`}>{message.text}</div>}
+      <Toast 
+        message={toast.message}
+        type={toast.type}
+        visible={toast.visible}
+        onClose={hideToast}
+      />
 
       {isEditing ? (
         <div className="edit-form">
           <h2><FaEdit /> Edit Profile</h2>
           <form onSubmit={(e) => e.preventDefault()}>
-          <div className="form-group">
+            <div className="form-group">
               <label className="form-label"><FaImage /> Profile Picture</label>
               <div className="profile-image-container">
                 <img src={imagePreview || formData.profilePicture || "/placeholder.svg"} width={200} alt="Profile Preview" className="profile-image" />
@@ -174,19 +217,58 @@ export const Dashboard = () => {
             <div className="form-group">
               <label className="form-label"><FaPhone /> Phone Number</label>
               <div className="phone-input">
-                <select value={countryCode} onChange={handleCountryCodeChange}>
-                  <option value="+1">+1 (USA)</option>
-                  <option value="+91">+91 (India)</option>
-                  <option value="+44">+44 (UK)</option>
-                  <option value="+61">+61 (Australia)</option>
+                <select 
+                  className="country-code-select" 
+                  value={countryCode} 
+                  onChange={handleCountryCodeChange}
+                >
+                  <option value="+1" className="country-option">🇺🇸 +1 (USA)</option>
+                  <option value="+91" className="country-option">🇮🇳 +91 (India)</option>
+                  <option value="+44" className="country-option">🇬🇧 +44 (UK)</option>
+                  <option value="+61" className="country-option">🇦🇺 +61 (Australia)</option>
+                  <option value="+7" className="country-option">🇷🇺 +7 (Russia)</option>
+                  <option value="+33" className="country-option">🇫🇷 +33 (France)</option>
+                  <option value="+49" className="country-option">🇩🇪 +49 (Germany)</option>
+                  <option value="+81" className="country-option">🇯🇵 +81 (Japan)</option>
+                  <option value="+86" className="country-option">🇨🇳 +86 (China)</option>
+                  <option value="+82" className="country-option">🇰🇷 +82 (South Korea)</option>
+                  <option value="+39" className="country-option">🇮🇹 +39 (Italy)</option>
+                  <option value="+34" className="country-option">🇪🇸 +34 (Spain)</option>
+                  <option value="+52" className="country-option">🇲🇽 +52 (Mexico)</option>
+                  <option value="+55" className="country-option">🇧🇷 +55 (Brazil)</option>
+                  <option value="+971" className="country-option">🇦🇪 +971 (UAE)</option>
+                  <option value="+65" className="country-option">🇸🇬 +65 (Singapore)</option>
+                  <option value="+64" className="country-option">🇳🇿 +64 (New Zealand)</option>
+                  <option value="+31" className="country-option">🇳🇱 +31 (Netherlands)</option>
+                  <option value="+46" className="country-option">🇸🇪 +46 (Sweden)</option>
+                  <option value="+47" className="country-option">🇳🇴 +47 (Norway)</option>
                 </select>
-                <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handlePhoneChange} />
+                <input 
+                  type="text" 
+                  name="phoneNumber" 
+                  value={formData.phoneNumber} 
+                  onChange={handlePhoneChange}
+                  placeholder="Phone Number"
+                />
               </div>
             </div>
 
             <div className="form-group">
               <label className="form-label"><FaGraduationCap /> Graduation Year</label>
-              <input className="form-input" type="number" name="graduationYear" value={formData.graduationYear} onChange={handleInputChange} />
+              <div className="graduation-year-container">
+                <input 
+                  className="form-input" 
+                  type="number" 
+                  name="graduationYear" 
+                  value={formData.graduationYear} 
+                  onChange={handleInputChange}
+                  min="1956"
+                  max={currentYear + 10}
+                />
+                <span className="year-helper-text">
+                  Year must be between 1956 and {currentYear + 10}
+                </span>
+              </div>
             </div>
 
             <div className="form-group">
@@ -194,13 +276,43 @@ export const Dashboard = () => {
               <input className="form-input" type="text" name="linkedinUrl" value={formData.linkedinUrl} onChange={handleInputChange} />
             </div>
 
-            
-
-        
-
             <div className="form-group">
               <label className="form-label"><FaPhone /> Additional Phone Number</label>
-              <input type="text" name="additionalPhoneNumber" value={formData.additionalPhoneNumber} onChange={handleAdditionalPhoneChange} />
+              <div className="phone-input">
+                <select 
+                  className="country-code-select" 
+                  value={additionalCountryCode} 
+                  onChange={handleAdditionalCountryCodeChange}
+                >
+                  <option value="+1" className="country-option">🇺🇸 +1 (USA)</option>
+                  <option value="+91" className="country-option">🇮🇳 +91 (India)</option>
+                  <option value="+44" className="country-option">🇬🇧 +44 (UK)</option>
+                  <option value="+61" className="country-option">🇦🇺 +61 (Australia)</option>
+                  <option value="+7" className="country-option">🇷🇺 +7 (Russia)</option>
+                  <option value="+33" className="country-option">🇫🇷 +33 (France)</option>
+                  <option value="+49" className="country-option">🇩🇪 +49 (Germany)</option>
+                  <option value="+81" className="country-option">🇯🇵 +81 (Japan)</option>
+                  <option value="+86" className="country-option">🇨🇳 +86 (China)</option>
+                  <option value="+82" className="country-option">🇰🇷 +82 (South Korea)</option>
+                  <option value="+39" className="country-option">🇮🇹 +39 (Italy)</option>
+                  <option value="+34" className="country-option">🇪🇸 +34 (Spain)</option>
+                  <option value="+52" className="country-option">🇲🇽 +52 (Mexico)</option>
+                  <option value="+55" className="country-option">🇧🇷 +55 (Brazil)</option>
+                  <option value="+971" className="country-option">🇦🇪 +971 (UAE)</option>
+                  <option value="+65" className="country-option">🇸🇬 +65 (Singapore)</option>
+                  <option value="+64" className="country-option">🇳🇿 +64 (New Zealand)</option>
+                  <option value="+31" className="country-option">🇳🇱 +31 (Netherlands)</option>
+                  <option value="+46" className="country-option">🇸🇪 +46 (Sweden)</option>
+                  <option value="+47" className="country-option">🇳🇴 +47 (Norway)</option>
+                </select>
+                <input 
+                  type="text" 
+                  name="additionalPhoneNumber" 
+                  value={formData.additionalPhoneNumber} 
+                  onChange={handleAdditionalPhoneChange}
+                  placeholder="Additional Phone Number"
+                />
+              </div>
             </div>
 
             <div className="form-group">
@@ -217,68 +329,67 @@ export const Dashboard = () => {
       ) : (
         <div className="profile-view">
       <div className="profile-image-container">
-          <img className="profile-image" src={backendHost+formData.profilePicture || "/placeholder.svg"} alt="Profile"  />
+          <img className="profile-image" src={"http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile"  />
         </div>
     
-        <div className="profile-details">
-          <div className="profile-field">
-            <span className="field-label"><FaUser /> Name</span>
-            <p className="field-value">
-              {formData.firstName || "Unavailable"} {formData.lastName || ""}
-            </p>
-          </div>
+          <div className="profile-details">
+            <div className="profile-field">
+              <span className="field-label"><FaUser /> Name</span>
+              <p className="field-value">
+                {formData.firstName || "Unavailable"} {formData.lastName || ""}
+              </p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaUser /> Username</span>
-            <p className="field-value">{formData.username || "Unavailable"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaUser /> Username</span>
+              <p className="field-value">{formData.username || "Unavailable"}</p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaEnvelope /> Email</span>
-            <p className="field-value">{formData.email || "Unavailable"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaEnvelope /> Email</span>
+              <p className="field-value">{formData.email || "Unavailable"}</p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaEnvelope /> Personal Email</span>
-            <p className="field-value">{formData.personalEmail || "Unavailable"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaEnvelope /> Personal Email</span>
+              <p className="field-value">{formData.personalEmail || "Unavailable"}</p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaPhone /> Phone Number</span>
-            <p className="field-value">
-              {formData.phoneNumber ? `${countryCode} ${formData.phoneNumber}` : "Unavailable"}
-            </p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaPhone /> Phone Number</span>
+              <p className="field-value">
+                {formData.phoneNumber ? `${countryCode} ${formData.phoneNumber}` : "Unavailable"}
+              </p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaLink /> LinkedIn</span>
-            <p className="field-value">
-              {formData.linkedinUrl ? (
-                <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer">
-                  {formData.linkedinUrl}
-                </a>
-              ) : "Unavailable"}
-            </p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaLink /> LinkedIn</span>
+              <p className="field-value">
+                {formData.linkedinUrl ? (
+                  <a href={formData.linkedinUrl} target="_blank" rel="noopener noreferrer">
+                    {formData.linkedinUrl}
+                  </a>
+                ) : "Unavailable"}
+              </p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaGraduationCap /> Graduation Year</span>
-            <p className="field-value">{formData.graduationYear || "Unavailable"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaGraduationCap /> Graduation Year</span>
+              <p className="field-value">{formData.graduationYear || "Unavailable"}</p>
+            </div>
     
-          <div className="profile-field">
-            <span className="field-label"><FaBook /> Bio</span>
-            <p className="field-value">{formData.bio || "No bio provided"}</p>
-          </div>
+            <div className="profile-field">
+              <span className="field-label"><FaBook /> Bio</span>
+              <p className="field-value">{formData.bio || "No bio provided"}</p>
+            </div>
     
-          
-          <div className="profile-field">
-            <span className="field-label"><FaPhone /> Number 2</span>
-            <p className="field-value">{formData.additionalPhoneNumber ? `${formData.additionalPhoneNumber}` : "Unavailable"}</p>
+            <div className="profile-field">
+              <span className="field-label"><FaPhone /> Additional Phone</span>
+              <p className="field-value">
+                {formData.additionalPhoneNumber ? `${additionalCountryCode} ${formData.additionalPhoneNumber}` : "Unavailable"}
+              </p>
+            </div>
           </div>
-        </div>
-
-          
 
           <div className="button-group">
             <button className="button primary-button" onClick={() => setIsEditing(true)}><FaEdit /> Edit Profile</button>
@@ -290,4 +401,3 @@ export const Dashboard = () => {
 };
 
 export default Dashboard;
-

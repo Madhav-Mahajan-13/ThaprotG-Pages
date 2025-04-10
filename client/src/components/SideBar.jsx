@@ -1,12 +1,12 @@
-
 import { Link, useNavigate } from "react-router-dom"
-import React, { useContext,useRef,  useEffect, useState } from "react"
+import React, { useContext, useRef, useEffect, useState } from "react"
 import "../styling/SideBar3.css"
 import { Dashboard } from "./Dashboard"
 import axios from "axios"
 import { MyContext } from "../context/context"
 import UserProjects from "./UserProjectsCard.jsx"
 import MobileNav from "./MobileNav.jsx"
+import logo from "../assets/LOGO.png";
 import {
   FaHome,
   FaProjectDiagram,
@@ -18,8 +18,10 @@ import {
   FaFolderOpen,
   FaUserCircle,
   FaSignOutAlt,
-  FaIdCard, FaHandHoldingHeart
+  FaIdCard, FaHandHoldingHeart,
+  FaCheckCircle
 } from "react-icons/fa"
+
 
 const SectionWindow = ({ title, show, toggle, children }) => (
   <div className={`side-window ${show ? "open" : ""}`}>
@@ -33,10 +35,31 @@ const SectionWindow = ({ title, show, toggle, children }) => (
   </div>
 )
 
+// Toast component
+const Toast = ({ message, visible, onClose }) => {
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [visible, onClose]);
+
+  return (
+    <div className={`toast-notification ${visible ? 'toast-visible' : ''}`}>
+      <div className="toast-content">
+        <FaCheckCircle className="toast-icon" />
+        <span className="toast-message">{message}</span>
+      </div>
+    </div>
+  );
+};
 
 const QuickPostForm = () => {
   const { userId } = useContext(MyContext)
   const uid = userId
+  const [toast, setToast] = useState({ visible: false, message: '' });
 
   const departments = [
     "CSED",
@@ -84,6 +107,14 @@ const QuickPostForm = () => {
     setFormData({ ...formData, [name]: files[0] })
   }
 
+  const showToast = (message) => {
+    setToast({ visible: true, message });
+  };
+
+  const hideToast = () => {
+    setToast({ visible: false, message: '' });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
@@ -109,7 +140,9 @@ const QuickPostForm = () => {
       const response = await axios.post(backendHost + "/api/projects/postProject", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-      alert("Post successful")
+      
+      // Show toast instead of alert
+      showToast("Project posted successfully!");
       console.log("Response:", response.data)
 
       setFormData(initialFormState)
@@ -123,66 +156,66 @@ const QuickPostForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="quick-post-form">
-      {error && <div className="error-message">{error}</div>}
+    <>
+      <form onSubmit={handleSubmit} className="quick-post-form">
+        {error && <div className="error-message">{error}</div>}
 
-      <div className="form-group">
-        <label htmlFor="title">Title</label>
-        <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required maxLength="100" />
-      </div>
+        <div className="form-group">
+          <label htmlFor="title">Title</label>
+          <input type="text" id="title" name="title" value={formData.title} onChange={handleInputChange} required maxLength="100" />
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="description">Description</label>
-        <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} required maxLength="1000"></textarea>
-      </div>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <textarea id="description" name="description" value={formData.description} onChange={handleInputChange} required maxLength="1000"></textarea>
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="department">Department</label>
-        <select id="department" name="department" value={formData.department} onChange={handleInputChange} required>
-          <option value="">Select Department</option>
-          {departments.map((dept) => (
-            <option key={dept} value={dept}>{dept}</option>
-          ))}
-        </select>
-      </div>
+        <div className="form-group">
+          <label htmlFor="department">Department</label>
+          <select id="department" name="department" value={formData.department} onChange={handleInputChange} required>
+            <option value="">Select Department</option>
+            {departments.map((dept) => (
+              <option key={dept} value={dept}>{dept}</option>
+            ))}
+          </select>
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="openings">Openings</label>
-        <input type="number" id="openings" name="openings" value={formData.openings} onChange={handleInputChange} required min="1" max="100" />
-      </div>
+        <div className="form-group">
+          <label htmlFor="openings">Openings</label>
+          <input type="number" id="openings" name="openings" value={formData.openings} onChange={handleInputChange} required min="1" max="100" />
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="technology">Technology</label>
-        <input type="text" id="technology" name="technology" value={formData.technology} onChange={handleInputChange} required maxLength="200" />
-      </div>
+        <div className="form-group">
+          <label htmlFor="technology">Technology</label>
+          <input type="text" id="technology" name="technology" value={formData.technology} onChange={handleInputChange} required maxLength="200" />
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="openUntil">Open Until</label>
-        <input type="date" id="openUntil" name="openUntil" value={formData.openUntil} onChange={handleInputChange} required />
-      </div>
+        <div className="form-group">
+          <label htmlFor="openUntil">Open Until</label>
+          <input type="date" id="openUntil" name="openUntil" value={formData.openUntil} onChange={handleInputChange} required />
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="pdf">PDF</label>
-        <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} ref={pdfInputRef} required />
-      </div>
+        <div className="form-group">
+          <label htmlFor="pdf">PDF</label>
+          <input type="file" id="pdf" name="pdf" accept="application/pdf" onChange={handleFileChange} ref={pdfInputRef} required />
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="image">Image</label>
-        <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} ref={imageInputRef} required />
-      </div>
+        <div className="form-group">
+          <label htmlFor="image">Image</label>
+          <input type="file" id="image" name="image" accept="image/*" onChange={handleFileChange} ref={imageInputRef} required />
+        </div>
 
-      <div className="form-actions">
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+        <div className="form-actions">
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+      <Toast message={toast.message} visible={toast.visible} onClose={hideToast} />
+    </>
   )
 }
 
-
-
-
 const Sidebar = () => {
-  const { userId,backendHost,isAlum } = useContext(MyContext)
+  const { userId, backendHost, isAlum } = useContext(MyContext)
   const [userName, setUserName] = useState("")
   const [openWindow, setOpenWindow] = useState(null)
   const navigate = useNavigate();
@@ -227,7 +260,7 @@ const Sidebar = () => {
       <aside className="sidebar">
         <div className="sidebar-container">
           <Link to="/" className="sidebar-logo">
-            <img src="https://picsum.photos/id/237/200/300" alt="logo" className="logo-image" />
+            <img src={logo} alt="logo" className="logo-image" />
             <div className="project-name">ThaProt-G</div>
           </Link>
 
@@ -332,4 +365,3 @@ const Sidebar = () => {
 }
 
 export default Sidebar
-

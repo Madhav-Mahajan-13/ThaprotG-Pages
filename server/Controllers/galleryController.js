@@ -8,15 +8,16 @@ export const getImages = async (req, res) => {
         const { page = 1, limit = 20 } = req.body;
         const offset = (page - 1) *limit;
 
-        const countQuery =`select count(*) from gallery`;
+        const countQuery =`select count(*) from gallery `;
 
         const totalCount = await db.query(countQuery);
         const totalProjects = parseInt(totalCount.rows[0].count);
         const totalPages = Math.ceil(totalProjects / limit);
 
         const query = `
-            SELECT id, tag, description, imgsrc 
+           SELECT id, tag, description, imgsrc 
             FROM gallery 
+            order by created_at desc
             LIMIT $1 OFFSET $2
         `;
         const result = await db.query(query, [limit, offset]);

@@ -1,59 +1,10 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
-import AppTheme from '../theme/AppTheme.jsx';
-import { useNavigate, useParams } from "react-router-dom"
-import { useState,useEffect,useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext } from "react";
 import { MyContext } from '../context/context.jsx';
-import { toast,ToastContainer } from 'react-toastify';
-
-const Card = styled(MuiCard)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'center',
-    width: '100%',
-    padding: theme.spacing(4),
-    gap: theme.spacing(2),
-    margin: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      maxWidth: '450px',
-    },
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-    ...theme.applyStyles('dark', {
-      boxShadow:
-        'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-    }),
-  }));
-  
-  const passContainer = styled(Stack)(({ theme }) => ({
-    minHeight: '100%',
-    padding: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      padding: theme.spacing(4),
-    },
-    '&::before': {
-      content: '""',
-      display: 'block',
-      position: 'absolute',
-      zIndex: -1,
-      inset: 0,
-      backgroundImage:
-        'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-      backgroundRepeat: 'no-repeat',
-      ...theme.applyStyles('dark', {
-        backgroundImage:
-          'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-      }),
-    },
-  }));
+import { toast, ToastContainer } from 'react-toastify';
+import AppTheme from '../theme/AppTheme.jsx';
+import '../styling/reset.css'; // Import the CSS file
 
 export default function Reset(props) {
   const navigate = useNavigate();
@@ -62,117 +13,102 @@ export default function Reset(props) {
   const token = sessionStorage.getItem("otpToken"); // 🔥 Retrieve OTP token
   
   async function handleSubmit(e) {
-      e.preventDefault();
+    e.preventDefault();
   
-      const pass = document.getElementById("password").value;
-      const cpass = document.getElementById("cpassword").value;
+    const pass = document.getElementById("password").value;
+    const cpass = document.getElementById("cpassword").value;
   
-      if (pass.length < 8 || cpass.length < 8) {
-          toast.info("Password must be at least 8 characters", toastOptions);
-          return;
+    if (pass.length < 8 || cpass.length < 8) {
+      toast.info("Password must be at least 8 characters", toastOptions);
+      return;
+    }
+  
+    if (pass !== cpass) {
+      toast.error("Both password fields must be the same", toastOptions);
+      return;
+    }
+  
+    if (!token) {
+      toast.error("Session expired. Please request a new OTP.", toastOptions);
+      navigate("/forgot");
+      return;
+    }
+  
+    try {
+      const res = await fetch(`${backendHost}/api/auth/reset`, {
+        method: "POST",
+        body: JSON.stringify({ email, pass, authToken: token }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const data = await res.json();
+  
+      if (!data.success) {
+        toast.error(data.msg, toastOptions);
+        return;
       }
   
-      if (pass !== cpass) {
-          toast.error("Both password fields must be the same", toastOptions);
-          return;
-      }
+      toast.success("Password reset successful! Redirecting...");
   
-      if (!token) {
-          toast.error("Session expired. Please request a new OTP.", toastOptions);
-          navigate("/forgot");
-          return;
-      }
-  
-      try {
-          const res = await fetch(`${backendHost}/api/auth/reset`, {
-              method: "POST",
-              body: JSON.stringify({ email, pass,authToken:token }),
-              headers: {
-                  "Content-Type": "application/json",
-              },
-          });
-  
-          const data = await res.json();
-  
-          if (!data.success) {
-              toast.error(data.msg, toastOptions);
-              return;
-          }
-  
-          toast.success("Password reset successful! Redirecting...");
-  
-          setTimeout(() => {
-              sessionStorage.removeItem("otpToken"); // 🔥 Clear OTP token
-              navigate("/login");
-          }, 1000);
-      } catch (error) {
-          toast.error(error.message, toastOptions);
-      }
+      setTimeout(() => {
+        sessionStorage.removeItem("otpToken"); // 🔥 Clear OTP token
+        navigate("/login");
+      }, 1000);
+    } catch (error) {
+      toast.error(error.message, toastOptions);
+    }
   }
-    return(
-        <>
-        <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-      <ToastContainer/>
-      <passContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <>
-          <Typography
-            component="h1"
-            variant="h5"
-            sx={{ width: '100%', fontSize: 'clamp(1.5rem, 10vw, 1.75rem)' }}
-          >
-            Enter new password to set
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              gap: 2,
-            }}
-          >
-            <FormControl>
-              <TextField
-                name="pass"
-                placeholder="••••••"
-                type='password'
-                id="password"
-                autoComplete="new password"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                color={'primary'}
-              />
-              <TextField
-                name="rePass"
-                placeholder="••••••"
-                type='password'
-                id="cpassword"
-                autoComplete="retype new password"
-                autoFocus
-                required
-                fullWidth
-                variant="outlined"
-                color={'primary'}
-              />
-            </FormControl>
-            <Button
+
+  return (
+    <AppTheme {...props}>
+      <ToastContainer />
+      <div className="reset-container">
+        <div className="reset-card">
+          <div className="lock-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1C8.676 1 6 3.676 6 7v2H4v14h16V9h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v2H8V7c0-2.276 1.724-4 4-4zm-6 8h12v10H6V11z"/>
+            </svg>
+          </div>
+
+          <h1 className="reset-heading">Reset Your Password</h1>
+          
+          <form className="reset-form" noValidate onSubmit={handleSubmit}>
+            <div className="form-control">
+              <div className="password-field">
+                <input
+                  name="pass"
+                  placeholder="New Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  autoFocus
+                  required
+                />
+              </div>
+              
+              <div className="password-field">
+                <input
+                  name="rePass"
+                  placeholder="Confirm New Password"
+                  type="password"
+                  id="cpassword"
+                  autoComplete="new-password"
+                  required
+                />
+              </div>
+            </div>
+            
+            <button
               type="submit"
-              fullWidth
-              variant="contained"
-              onClick={handleSubmit}
+              className="reset-button"
             >
-              Submit
-            </Button>
-          </Box>
-          </>
-        </Card>
-      </passContainer>
+              Reset Password
+            </button>
+          </form>
+        </div>
+      </div>
     </AppTheme>
-    </>
-    )
+  );
 }
