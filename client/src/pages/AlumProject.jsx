@@ -2,17 +2,18 @@
 
 
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import axios from "axios"
 import "../styling/alum2.css"
 import { Link } from "react-router-dom";
+import { MyContext } from "../context/context";
 
 
 
-const ProjectCard = ({ project }) => (
+const ProjectCard = ({ project,backendHost }) => (
   <div className="project-card">
     <div className="image-section">
-      <img src={"http://localhost:5000/"+project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
+      <img src={backendHost+project.image_path || "/placeholder-image.jpg"} alt={project.title} className="project-image" />
     </div>
     <div className="details-section">
       <h3 className="project-name">{project.title}</h3>
@@ -42,7 +43,7 @@ const ProjectCard = ({ project }) => (
       </div>
       {project.pdf_path && (
         <a
-          href={`http://localhost:5000/${project.pdf_path}`}
+          href={backendHost`/${project.pdf_path}`}
           target="_blank"
           rel="noopener noreferrer"
           className="pdf-link"
@@ -55,7 +56,9 @@ const ProjectCard = ({ project }) => (
 );
 
 
+
 const SearchBar = ({ onSearch }) => {
+  const {backendHost} = useContext(MyContext);
   const [searchParams, setSearchParams] = useState({
     title: "",
     description: "",
@@ -136,6 +139,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => (
 )
 
 const AlumProject = () => {
+  const {backendHost} = useContext(MyContext);
   const [projects, setProjects] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -157,7 +161,7 @@ const AlumProject = () => {
       const endpoint = Object.values(searchParams).some((param) => param !== "")
         ? "/api/alumprojects/search"
         : "/api/alumprojects/allproject"
-      const response = await axios.post(`http://localhost:5000${endpoint}`, {
+      const response = await axios.post(backendHost + `${endpoint}`, {
         ...searchParams,
         page: currentPage,
         limit: 12,
@@ -186,7 +190,7 @@ const AlumProject = () => {
         ) : projects.length === 0 ? (
           <p>No projects found.</p>
         ) : (
-          projects.map((project) => <ProjectCard key={project.project_id} project={project} />)
+          projects.map((project) => <ProjectCard key={project.project_id} project={project} backendHost={backendHost} />)
         )}
       </div>
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />

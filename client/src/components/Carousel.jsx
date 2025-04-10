@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../styling/Carousel.css";
+import { useContext } from "react";
+import { MyContext } from "../../../admin/src/context/myContext";
 
 const DynamicCarousel = () => {
   const [slides, setSlides] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const{backendHost} = useContext(MyContext);
 
   useEffect(() => {
     const fetchCarousel = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/object/getCarousel");
+        const response = await fetch(backendHost + "/api/object/getCarousel");
         const data = await response.json();
         setSlides(data.data || []);
       } catch (error) {
@@ -37,7 +40,7 @@ const DynamicCarousel = () => {
             href={slide.link}
             className={`carousel-slide ${index === currentSlide ? "active" : ""}`}
           >
-            <img src={"http://localhost:5000/"+slide.image_path} alt={slide.title} className="carousel-image" />
+            <img src={backendHost+slide.image_path} alt={slide.title} className="carousel-image" />
             <div className="carousel-overlay">
               <h2>{slide.title}</h2>
               <p>{slide.img_description}</p>

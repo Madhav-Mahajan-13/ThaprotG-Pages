@@ -25,11 +25,12 @@ export const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [countryCode, setCountryCode] = useState("+1");
+  const {backendHost} = useContext(MyContext);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`);
+        const response = await axios.get(backendHost + `/api/user/dashboard/${userId}`);
         const data = response.data;
 
         const phoneMatch = data.phone_number?.match(/^(\+\d+)\s(.+)/);
@@ -105,7 +106,7 @@ export const Dashboard = () => {
       }
 
       const response = await axios.post(
-        `http://localhost:5000/api/user/dashboard/${userId}`,
+        backendHost +  `/api/user/dashboard/${userId}`,
         submitFormData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -216,7 +217,7 @@ export const Dashboard = () => {
       ) : (
         <div className="profile-view">
       <div className="profile-image-container">
-          <img className="profile-image" src={"http://localhost:5000"+formData.profilePicture || "/placeholder.svg"} alt="Profile"  />
+          <img className="profile-image" src={backendHost+formData.profilePicture || "/placeholder.svg"} alt="Profile"  />
         </div>
     
         <div className="profile-details">

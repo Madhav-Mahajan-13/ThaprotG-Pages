@@ -63,6 +63,8 @@ const QuickPostForm = () => {
   const [formData, setFormData] = useState(initialFormState)
   const [error, setError] = useState(null)
 
+  const {backendHost} = useContext(MyContext);
+
   const pdfInputRef = useRef(null)
   const imageInputRef = useRef(null)
 
@@ -104,7 +106,7 @@ const QuickPostForm = () => {
     if (formData.image) formDataToSend.append("image", formData.image)
 
     try {
-      const response = await axios.post("http://localhost:5000/api/projects/postProject", formDataToSend, {
+      const response = await axios.post(backendHost + "/api/projects/postProject", formDataToSend, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       alert("Post successful")
@@ -192,7 +194,7 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/user/dashboard/${userId}`)
+        const response = await axios.get(backendHost +  `/api/user/dashboard/${userId}`)
         setUserName(`${response.data.first_name} ${response.data.last_name}`)
       } catch (error) {
         console.error("Error fetching user data:", error)

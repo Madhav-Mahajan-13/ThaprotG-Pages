@@ -17,7 +17,7 @@ const getStatusColor = (status) => {
 };
 
 const UserProjects = () => {
-    const { userId } = useContext(MyContext);
+    const { userId , backendHost } = useContext(MyContext);
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,7 @@ const UserProjects = () => {
 
         const fetchProjects = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/projects/getUserProject', {
+                const response = await fetch(backendHost +  '/api/projects/getUserProject', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId })
@@ -54,7 +54,7 @@ const UserProjects = () => {
 
     const handleOpenPdf = (pdfPath) => {
         if (pdfPath) {
-            window.open(`http://localhost:5000/${pdfPath}`, '_blank');
+            window.open(backendHost + `/${pdfPath}`, '_blank');
         } else {
             alert('PDF not available.');
         }
@@ -75,7 +75,7 @@ const UserProjects = () => {
                         onClick={() => handleOpenPdf(project.pdf_path)}
                     >
                         <img
-                            src={"http://localhost:5000/"+project.image_path} 
+                            src={backendHost+project.image_path} 
                             alt={project.title}
                             className="project-image"
                         />

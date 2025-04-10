@@ -28,9 +28,14 @@ socketSetup(server);
 
 
 const allowedOrigins = [
-    "http://localhost:3000",  // Local React frontend
-    "http://localhost:5173",  // Local React frontend
-];
+    "http://localhost:3000",        // Local client
+    "http://localhost:5173",        // Local Vite (admin)
+    "http://thaprotg.thapar.edu",   // Deployed client
+    "https://thaprotg.thapar.edu",
+    "http://adminthaprotg.thapar.edu", // Deployed admin
+    "https://adminthaprotg.thapar.edu"
+  ];
+  
 
 // CORS Configuration
 const corsOptions = {

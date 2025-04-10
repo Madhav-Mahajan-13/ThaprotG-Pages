@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import "../styling/Gallery2.css"
+import { MyContext } from '../context/context';
 
 const Gallery = () => {
     const [images, setImages] = useState([]);
@@ -8,6 +9,7 @@ const Gallery = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const {backendHost} = useContext(MyContext); 
 
     useEffect(() => {
         fetchImages(currentPage);
@@ -16,7 +18,7 @@ const Gallery = () => {
     const fetchImages = async (page) => {
         try {
             setLoading(true);
-            const response = await axios.post('http://localhost:5000/api/gallery/', {
+            const response = await axios.post(backendHost + '/api/gallery/', {
                 page,
                 limit: 20 // Add page and limit parameters
             });
