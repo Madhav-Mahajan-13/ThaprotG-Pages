@@ -144,24 +144,24 @@ router.post('/login', [
     
                 const token = jwt.sign(data, process.env.sec_key);
     
-                res.cookie('authToken', token, {
+                res.cookie('authToken',token,{
                     httpOnly: true,
                     secure: process.env.production == true,
-                    sameSite: 'Strict',
-                    maxAge: 60 * 60 * 1000 // 1 hour
-                });
+                    SameSite :'None',
+                    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+                })
     
                 return res.status(200).json({ success: true, otp: false, id: user.id2, is_alum: user.user_type === 'alum' });
             } else {
                 // User is not verified, generate OTP token
                 const otpToken = jwt.sign({ email: user.email }, process.env.sec_key, { expiresIn: "10m" });
     
-                res.cookie('authToken', otpToken, {
+                res.cookie('authToken',otpToken,{
                     httpOnly: true,
                     secure: process.env.production == true,
-                    sameSite: 'Strict',
-                    maxAge: 5 * 60 * 1000 // 5 minutes
-                });
+                    SameSite :'None',
+                    maxAge: 5 * 60 * 1000 
+                })
     
                 return res.status(200).json({ success: true, otp: true });
             }

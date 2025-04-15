@@ -91,7 +91,7 @@ export const loginAdmin = async (req, res) => {
         res.cookie('token',token,{
             httpOnly: true,
             secure: process.env.production == true,
-            sameSite: 'Strict',
+            SameSite :'None',
             maxAge: 24 * 60 * 60 * 1000 // 24 hours
         })
 

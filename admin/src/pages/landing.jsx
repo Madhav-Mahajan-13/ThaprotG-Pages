@@ -11,25 +11,30 @@ export default function Landing(){
     const location = useLocation();
 
     useEffect(() => {
-        const API_CALL = async () => {
-            const res = await fetch(backendHost + '/api/admin/verifyToken',{
-                "credentials" : "include",
-            })
-
-            const data = await res.json();
-            if(!data.success){
-                toast.error(data.message,toastOptions);
-                setTimeout(() => {
-                    navigate('/login');
-                },1000)
-            }
-            else{
-                setUserType(data.user_type);
-            }
-        }
-
-        API_CALL();
-    },[location.pathname])
+        const timeout = setTimeout(() => {
+            const API_CALL = async () => {
+                const res = await fetch(backendHost + '/api/admin/verifyToken', {
+                    credentials: 'include',
+                });
+    
+                const data = await res.json();
+                if (!data.success) {
+                    toast.error(data.message, toastOptions);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 1000);
+                } else {
+                    setUserType(data.user_type);
+                }
+            };
+    
+            API_CALL();
+        }, 2000); // 2 seconds delay
+    
+        // Cleanup in case the component unmounts or location changes before timeout
+        return () => clearTimeout(timeout);
+    }, [location.pathname]);
+    
 
     return(
         <div className="flex flex-col md:flex-row gap-x-2 gap-y-10 h-screen">

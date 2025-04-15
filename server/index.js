@@ -21,13 +21,11 @@ dotenv.config();
 
 const port = 5000;
 
-
 const app = express();
 app.use(express.json());
 
 const server = createServer(app);
 socketSetup(server);
-
 
 const allowedOrigins = [
     "http://localhost:3000",        // Local client

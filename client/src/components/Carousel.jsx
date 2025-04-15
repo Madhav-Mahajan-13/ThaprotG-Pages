@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../styling/Carousel.css";
 import { useContext } from "react";
-import { MyContext } from "../../../admin/src/context/myContext";
+import { MyContext } from "../context/context";
 
 const DynamicCarousel = () => {
   const [slides, setSlides] = useState([]);
