@@ -43,7 +43,7 @@ const ProjectCard = ({ project,backendHost }) => (
       </div>
       {project.pdf_path && (
         <a
-          href={backendHost`/${project.pdf_path}`}
+          href={backendHost + `/${project.pdf_path}`}
           target="_blank"
           rel="noopener noreferrer"
           className="pdf-link"
