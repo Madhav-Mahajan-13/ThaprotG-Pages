@@ -15,8 +15,8 @@ const MyProvider = ({ children }) => {
         theme: "light",
         transition: Bounce,
     }
-    const backendHost = "http://172.31.4.32:5000";
-    // const backendHost = 'https://malpractice-reflections-bother-dictionaries.trycloudflare.com';
+    const backendHost = "insert IP here";
+    
     const [approved_projects, setProjects] = useState([]);
     const [denied_projects,setDeniedProjects] = useState([]);
     const [pending_projects,setPendingProjects] = useState([]);
