@@ -19,8 +19,7 @@ const MyProvider = ({children}) => {
     const [isAlum,setIsAlum] = useState(null);
     const [authToken,setToken] = useState(null);
 
-    // const backendHost = 'https://1213-117-203-246-41.ngrok-free.app'
-    const backendHost = 'http://172.31.4.32:5000'
+    const backendHost = 'input IP here'
 
     return (
         <MyContext.Provider value={{toastOptions,backendHost,userId,setUserId,isAlum,setIsAlum,authToken,setToken}}>
