@@ -1,1 +1,1 @@
-export const backendHost = 'http://172.31.4.32:5000';
+export const backendHost = 'input IP here';
